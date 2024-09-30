@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "artist.h"
 
-typedef struct artist {
+struct artist {
     int id;
     char* name;
     char* description;
@@ -11,7 +12,7 @@ typedef struct artist {
     int num_constituent;
     char* country;
     char* type;
-}
+};
 
 // Função para criar uma estrutura da entidade artista parametrizada.
 Artist* createArtist(int id, char* name, char* description, float recipe_per_stream, int* id_constituent, int num_constituent, char* country, char* type) {

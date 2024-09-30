@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
+#include <stdlib.h>
 #include "music.h"
 
-typedef struct music {
+struct music {
     int id;
     char* title;
     int* artist_id;
@@ -12,7 +13,7 @@ typedef struct music {
     char* genre;
     int year;
     char* lyrics;
-}
+};
 
 // Função para criar uma estrutura da entidade música parametrizada.
 Music* createMusic(int id, char* title, int* artist_id, int num_artists, int duration, char* genre, int year, char* lyrics){
@@ -42,7 +43,7 @@ Music* createMusic(int id, char* title, int* artist_id, int num_artists, int dur
     for(int i = 0; i < num_artists; i++){
         music -> artist_id[i] = artist_id[i];
     }
-    music -> num_artist = num_artist;
+    music -> num_artists = num_artists;
     music -> duration = duration;
     
     music -> genre = malloc(strlen(genre) + 1);
