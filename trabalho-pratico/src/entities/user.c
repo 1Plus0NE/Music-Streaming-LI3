@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include "user.h"
 
-struct user {
+typedef struct user {
     char* username;
     char* email;
     char* first_name;

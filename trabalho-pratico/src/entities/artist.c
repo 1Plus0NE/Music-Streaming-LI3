@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include "artist.h"
 
-struct artist {
+typedef struct artist {
     int id;
     char* name;
     char* description;

@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include "music.h"
 
-struct music {
+typedef struct music {
     int id;
     char* title;
     int* artist_id;
