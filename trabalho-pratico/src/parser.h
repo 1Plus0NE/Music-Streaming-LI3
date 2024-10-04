@@ -1,6 +1,9 @@
 #ifndef PARSER_H
 #define PARSER_H
 
+// Função que cria uma diretoria com os ficheiros de erros, com os headers
+void errosDir();
+
 // Função responsável por remover as aspas.
 char* remove_aspas(char* str);
 
