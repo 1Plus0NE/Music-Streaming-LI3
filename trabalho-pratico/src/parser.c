@@ -1,7 +1,14 @@
 #include "parser.h"
+#include "artist.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+int verify_musics(){
+
+    return 0;
+}
+
 
 // Função responsável por remover as aspas.
 char* remove_aspas(char* str){
