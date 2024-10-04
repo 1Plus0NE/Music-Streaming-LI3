@@ -1,14 +1,37 @@
 #include "parser.h"
-#include "artist.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h> // utilizada a biblioteca ctype que contem a funcao isdigit que permite verificar se o digito é um numero
 
-int verify_musics(){
+// Função que faz a validação sintática da duração de uma música
+int verify_musics(char* duration) {
+    // se cumpre o formato "hh:mm:ss"
+    if (strlen(duration) != 8 && duration[2] != ':' && duration[5] != ':') {
+        return 0; // invalid format
+    }
 
-    return 0;
+    // verificar se as horas, minutos e segundos sao digitos entre 0 e 9
+    for (int i = 0; i < 8; i++) {
+        if (i != 2 && i != 5) { // nao interessa os ':'
+            if (!isdigit(duration[i])) {
+                return 0; 
+            }
+        }
+    }
+
+    // convertemos as horas, minutos e segundos a inteiros
+    int hours = (duration[0] - '0') * 10 + (duration[1] - '0'); 
+    int minutes = (duration[3] - '0') * 10 + (duration[4] - '0');
+    int seconds = (duration[6] - '0') * 10 + (duration[7] - '0');
+
+    // verificamos se cumprem os intervalos estabelecidos 
+    if (hours < 0 || hours > 100 || minutes < 0 || minutes > 60 || seconds < 0 || seconds > 60) {
+        return 0;
+    }
+
+    return 1; 
 }
-
 
 // Função responsável por remover as aspas.
 char* remove_aspas(char* str){
