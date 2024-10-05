@@ -45,6 +45,7 @@ void errorsDir(){
     fprintf(errors, "\"id\";\"title\";\"artist_id\";\"duration\";\"genre\";\"year\";\"lyrics\"\n");
     fclose(errors);
 }
+
 // Função que faz a validação sintática da duração de uma música
 int verify_musics(char* duration) {
     // se cumpre o formato "hh:mm:ss"
@@ -168,6 +169,7 @@ int parse_user_csv(const char* filename){
     fgets(line, sizeof(line), fp);
 
     // Path para o ficheiro de erros dos users 
+        //Supõe-se que o ficheiro e diretoria ja estejam criados pela função errorsDir
     char* errorsUsers = "../dataset-errors/users.csv";
 
     while(fgets(line, sizeof(line), fp)){
