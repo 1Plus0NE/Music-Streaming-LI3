@@ -7,6 +7,12 @@ void errosDir();
 // Função responsável por remover as aspas.
 char* remove_aspas(char* str);
 
+// Função que faz a validação de uma música.
+int verify_music(Music* music);
+
+// Função que faz a validação de um artista.
+int verify_artist(Artist* artist);
+
 // Função para ler e fazer parse de um arquivo CSV de artistas.
 int parse_artist_csv(const char* filename);
 

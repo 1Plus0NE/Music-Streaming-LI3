@@ -82,6 +82,47 @@ Artist* createArtist(int id, char* name, char* description, float recipe_per_str
     return artist;
 }
 
+// Função que faz a validação de um artista.
+int verify_artist(Artist* artist){
+    if(!artist){
+        return 0;
+    }
+
+    // o id não pode ser negativo.
+    if(artist -> id <= 0){
+        return 0;
+    }
+
+    // o nome do artista não pode ser nulo nem vazio.
+    if(!artist -> name || strlen(artist -> name) == 0){
+        return 0;
+    }
+
+    // a receita não pode ser negativa.
+    if(!artist -> recipe_per_stream < 0){
+        return 0;
+    }
+
+    // o número de constituintes não pode ser nulo, e se não for verificar se coincide com a lista.
+    if(artist -> num_constituent < 0){
+        return 0;
+    }else if(artist -> num_ constituent > 0 && !artist -> id_constituent){
+        return 0;
+    }
+
+    // o país do artista não pode ser nulo nem vazio.
+    if(!artist -> country || strlen(artist -> country) == 0){
+        return 0;
+    }
+
+    // tipo do artista não pode ser nulo e só pode assumir aquelas duas formas.
+    if(!artist -> type || (strcmp(artist -> type, "individual") != 0 && (strcmp(artist -> type, "grupo")) != 0)){
+        return 0;
+    }
+
+    return 1;
+}
+
 // Função para libertar a memória de uma entidade do tipo artista.
 void freeArtist(Artist* artist){
     free(artist -> country);

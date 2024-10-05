@@ -46,35 +46,6 @@ void errorsDir(){
     fclose(errors);
 }
 
-// Função que faz a validação sintática da duração de uma música
-int verify_musics(char* duration) {
-    // se cumpre o formato "hh:mm:ss"
-    if (strlen(duration) != 8 && duration[2] != ':' && duration[5] != ':') {
-        return 0; // invalid format
-    }
-
-    // verificar se as horas, minutos e segundos sao digitos entre 0 e 9
-    for (int i = 0; i < 8; i++) {
-        if (i != 2 && i != 5) { // nao interessa os ':'
-            if (!isdigit(duration[i])) {
-                return 0; 
-            }
-        }
-    }
-
-    // convertemos as horas, minutos e segundos a inteiros
-    int hours = (duration[0] - '0') * 10 + (duration[1] - '0'); 
-    int minutes = (duration[3] - '0') * 10 + (duration[4] - '0');
-    int seconds = (duration[6] - '0') * 10 + (duration[7] - '0');
-
-    // verificamos se cumprem os intervalos estabelecidos 
-    if (hours < 0 || hours > 100 || minutes < 0 || minutes > 60 || seconds < 0 || seconds > 60) {
-        return 0;
-    }
-
-    return 1; 
-}
-
 // Função responsável por remover as aspas.
 char* remove_aspas(char* str){
     if(str[0] == '"' && str[strlen(str) - 1] == '"'){
@@ -96,6 +67,8 @@ int parse_artist_csv(const char* filename) {
     char line[512];
 
     fgets(line, sizeof(line), file);
+
+    char* errorsArtists = "../dataset-errors/artists.csv";
 
     while(fgets(line, sizeof(line), file)){
         int id;
@@ -181,6 +154,7 @@ int parse_user_csv(const char* filename){
         char* first_name = NULL;
         char* last_name = NULL;
         char birth_date [11];
+        char* genre = NULL;
         char* country = NULL;
         char* subscription_type = NULL;
         int* liked_musics_id = NULL;
@@ -210,12 +184,15 @@ int parse_user_csv(const char* filename){
                         // birth_date
                         break;
                     case 5:
-                        strcpy(country, remove_aspas(campo));
+                        strcpy(genre, remove_aspas(campo));
                         break;
                     case 6:
-                        strcpy(subscription_type, remove_aspas(campo));
+                        strcpy(country, remove_aspas(campo));
                         break;
                     case 7:
+                        strcpy(subscription_type, remove_aspas(campo));
+                        break;
+                    case 8:
                         // liked_musics_id
                         // num_liked_musics=?
                         break;
@@ -224,9 +201,15 @@ int parse_user_csv(const char* filename){
                 }
             }
         }
-        // Fim do for e antes do else, cria um user para a hash table
+
+        User* u = createUser(username, email, first_name, last_name, birth_date , genre, country, subscription_type, liked_musics_id, num_liked_musics);
+        
+        //local onde depois será feita o armazenamento na hashtable(estrutura de dados)
 
         // else{escreve erro}
+
+        freeUser(u);
     }
+    fclose(file);
     return 0;
 }
