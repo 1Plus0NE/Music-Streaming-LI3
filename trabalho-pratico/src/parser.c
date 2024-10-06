@@ -129,7 +129,7 @@ int parse_artist_csv(const char* filename) {
 }
 
 //Função responsável por ler e fazer parse de um arquivo CSV de users.
-int parse_user_csv(const char* filename){
+int parse_user_csv(const char *filename){
     FILE *fp = fopen(filename, "r");
 
     if(!fp){
@@ -143,73 +143,81 @@ int parse_user_csv(const char* filename){
 
     // Path para o ficheiro de erros dos users 
         //Supõe-se que o ficheiro e diretoria ja estejam criados pela função errorsDir
-    char* errorsUsers = "../dataset-errors/users.csv";
+    char *errorsUsers = "../dataset-errors/users.csv";
 
     while(fgets(line, sizeof(line), fp)){
-        // Passando a verificação da linha
-        // if(verificaUser(line) == 0){ código abaixo
-            //else {fprintf(errorsUsers, "%s", line);}
-        char* username = NULL;
-        char* email = NULL;
-        char* first_name = NULL;
-        char* last_name = NULL;
-        char birth_date [11];
-        char* genre = NULL;
-        char* country = NULL;
-        char* subscription_type = NULL;
-        int* liked_musics_id = NULL;
-        int num_liked_musics = 0;
         
-        char* token = strsep(&line, "\n");
-        char* campo;
+        if(userLineVerify(&line) == 0){
+            
+            char *username = NULL;
+            char *email = NULL;
+            char *first_name = NULL;
+            char *last_name = NULL;
+            char *birth_date = NULL;
+            char *genre = NULL;
+            char *country = NULL;
+            char *subscription_type = NULL;
+            int *liked_musics_id = NULL;
+            // int num_liked_musics = 0;
+        
+            // char* token = strsep(&line, "\n");
+            char *info = strtok(line, ";");
 
-        for(int i = 0; i <= 7; i++){
-            campo = strsep(&token, ";");
+            for(int i = 0; i <= 7; i++){
 
-            if(campo){
-                switch(i){
-                    case 0:
-                        strcpy(username, remove_aspas(campo));
-                        break;
-                    case 1:
-                        strcpy(email, remove_aspas(campo));
-                        break;
-                    case 2:
-                        strcpy(first_name, remove_aspas(campo));
-                        break;
-                    case 3:
-                        strcpy(last_name, remove_aspas(campo));
-                        break;
-                    case 4:
-                        // birth_date
-                        break;
-                    case 5:
-                        strcpy(genre, remove_aspas(campo));
-                        break;
-                    case 6:
-                        strcpy(country, remove_aspas(campo));
-                        break;
-                    case 7:
-                        strcpy(subscription_type, remove_aspas(campo));
-                        break;
-                    case 8:
-                        // liked_musics_id
-                        // num_liked_musics=?
-                        break;
-                    default:
-                        break;
+                if(info){
+                    switch(i){
+                        case 0:
+                            strcpy(username, remove_aspas(&info));
+                            info = strtok(NULL, ";");
+                            break;
+                        case 1:
+                            strcpy(email, remove_aspas(&info));
+                            info = strtok(NULL, ";");
+                            break;
+                        case 2:
+                            strcpy(first_name, remove_aspas(&info));
+                            info = strtok(NULL, ";");
+                            break;
+                        case 3:
+                            strcpy(last_name, remove_aspas(&info));
+                            info = strtok(NULL, ";");
+                            break;
+                        case 4:
+                            strcpy(birth_date, remove_aspas(&info));
+                            info = strtok(NULL, ";");
+                            break;
+                        case 5:
+                            strcpy(country, remove_aspas(&info));
+                            info = strtok(NULL, ";");
+                            break;
+                        case 6:
+                            strcpy(subscription_type, remove_aspas(&info));
+                            info = strtok(NULL, ";");
+                            break;
+                        case 7:
+                            // liked_musics_id
+                            // num_liked_musics=?
+                
+                            info = strtok(NULL, ";");
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
+
+        //User* user = createUser(username, email, first_name, last_name, birth_date , genre, country, subscription_type, liked_musics_id, num_liked_musics);
+        //freeUser(user);
+        //local onde depois será feita o armazenamento na hashtable(estrutura de dados) 
         }
-
-        User* u = createUser(username, email, first_name, last_name, birth_date , genre, country, subscription_type, liked_musics_id, num_liked_musics);
-        
-        //local onde depois será feita o armazenamento na hashtable(estrutura de dados)
-
-        // else{escreve erro}
-
-        freeUser(u);
+        else{
+            FILE *userErrors = fopen(errorsUsers, "a");
+            fputs(line, userErrors);
+            fclose(userErrors);
+        }
     }
-    fclose(file);
+    fclose(fp);
     return 0;
 }
+// Verificar/Corrigir os apontadores e os endereços nas chamadas de funções.
