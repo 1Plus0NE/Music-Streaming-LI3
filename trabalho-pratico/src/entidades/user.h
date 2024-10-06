@@ -11,4 +11,14 @@ User* createUser(char* username, char* email, char* first_name, char* last_name,
 // Função para libertar a memória de uma entidade do tipo utilizador.
 void freeUser(User* user);
 
+int userLineVerify(char *line);
+
+int nameVerify(char *name);
+
+int emailVerify(char *email);
+
+int birthDateVerify(char* birth_date);
+
+int strDigit(char *str);
+
 #endif
