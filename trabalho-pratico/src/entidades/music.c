@@ -101,6 +101,7 @@ int verify_music(char* duration) {
     return 1; 
 }
 
+// Função que verifica se um dado ano é válido
 int verify_year(int year){
     time_t t = time(NULL);
     struct tm *tm_info = localtime(&t);
