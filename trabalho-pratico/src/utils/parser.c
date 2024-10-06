@@ -221,3 +221,4 @@ int parse_user_csv(const char *filename){
     return 0;
 }
 // Verificar/Corrigir os apontadores e os endereços nas chamadas de funções.
+// Atualizar Paths
