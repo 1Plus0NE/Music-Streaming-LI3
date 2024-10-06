@@ -2,6 +2,7 @@
 #include <string.h>
 #include <errno.h>
 #include <stdlib.h>
+#include <time.h>
 #include "music.h"
 
 typedef struct music {
@@ -98,6 +99,67 @@ int verify_music(char* duration) {
     }
 
     return 1; 
+}
+
+int verify_year(int year){
+    time_t t = time(NULL);
+    struct tm *tm_info = localtime(&t);
+    int currentYear = tm_info->tm_year + 1900;
+    if (year > currentYear) return 0;
+
+    return 1;
+}
+
+// Função de verificação da validade de uma musica
+int musicLineVerify(char *line){
+
+    char *info = strtok(&line, ";");
+    
+    for(int i = 0; i <= 6; i++){
+
+        if(info){
+            switch(i){
+                case 0:
+                    // id nao pode ser < 0
+                    if(atoi(&info)<0) return 1;
+                    info = strtok(NULL, ";");
+                    break;
+                case 1:
+                    // title da musica nao pode ser uma string empty
+                    if(!remove_aspas(&info)) return 1;
+                    info = strtok(NULL, ";");
+                    break;
+                case 2:
+                    // genero nao pode ser uma string empty
+                    if(!remove_aspas(&info)) return 1;
+                    info = strtok(NULL, ";");
+                    break;
+                case 3:
+                    // duracao tem que ser sintaticamente valida
+                    if(!verify_music(atoi(&info))) return 1;
+                    info = strtok(NULL, ";");
+                    break;
+                case 4:
+                    // genero nao pode ser uma string empty
+                    if(!remove_aspas(&info)) return 1;
+                    info = strtok(NULL, ";");
+                    break;
+                case 5:
+                    // ano nao pode ser maior que o ano atual
+                    if(!verify_year(atoi(&info))) return 1;
+                    info = strtok(NULL, ";");
+                    break;
+                case 6:
+                    // as lyrics nao podem ser uma string empty
+                    if(!remove_aspas(&info)) return 1;
+                    info = strtok(NULL, ";");
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+    return 0;
 }
 
 // Função para libertar a memória de uma entidade do tipo música.
