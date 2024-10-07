@@ -83,44 +83,61 @@ Artist* createArtist(int id, char* name, char* description, float recipe_per_str
 }
 
 // Função que faz a validação de um artista.
-int verify_artist(Artist* artist){
-    if(!artist){
-        return 0;
-    }
+int verifyLineArtist(char* line){
+    char* info;
+    char* token = line;
+    char* id_constituent_check = NULL;
 
-    // o id não pode ser negativo.
-    if(artist -> id <= 0){
-        return 0;
-    }
+    for(int i = 0; i < 7; i++){
+        info = strsep(&token, ";");
 
-    // o nome do artista não pode ser nulo nem vazio.
-    if(!artist -> name || strlen(artist -> name) == 0){
-        return 0;
+        if(info){
+            switch(i){
+                case 0:
+                    if(!remove_aspas(info) || atoi(remove_aspas(info)) <= 0){
+                        return 1;
+                    }
+                    break;
+                case 1:
+                    if(!remove_aspas(info) || strlen(remove_aspas(info)) == 0){
+                        return 1;
+                    }
+                    break;
+                case 2:
+                    if(!remove_aspas(info) || strlen(remove_aspas(info)) == 0){
+                        return 1;
+                    }
+                    break;
+                case 3:
+                    if(atof(remove_aspas(info)) < 0){
+                        return 1;
+                    }
+                    break;
+                case 4:
+                    if(remove_aspas(info) && strlen(remove_aspas(info)) > 0){
+                        id_contituint_check = "grupo";
+                    }else{
+                        id_contituint_check = "individual";
+                    }
+                    break;
+                case 5:
+                    if(!remove_aspas(info) || strlen(remove_aspas(info)) == 0){
+                        return 1;
+                    }
+                    break;
+                case 6:
+                    if(strcmp(remove_aspas(info), "individual") != 0 && strcmp(remove_aspas(info), "grupo") != 0 && strcmp(remove_aspas(info), id_contituint_check) != 0){
+                        return 1;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }else{
+            return 1;
+        }
     }
-
-    // a receita não pode ser negativa.
-    if(!artist -> recipe_per_stream < 0){
-        return 0;
-    }
-
-    // o número de constituintes não pode ser nulo, e se não for verificar se coincide com a lista.
-    if(artist -> num_constituent < 0){
-        return 0;
-    }else if(artist -> num_ constituent > 0 && !artist -> id_constituent){
-        return 0;
-    }
-
-    // o país do artista não pode ser nulo nem vazio.
-    if(!artist -> country || strlen(artist -> country) == 0){
-        return 0;
-    }
-
-    // tipo do artista não pode ser nulo e só pode assumir aquelas duas formas.
-    if(!artist -> type || (strcmp(artist -> type, "individual") != 0 && (strcmp(artist -> type, "grupo")) != 0)){
-        return 0;
-    }
-
-    return 1;
+    return 0;
 }
 
 // Função para libertar a memória de uma entidade do tipo artista.
