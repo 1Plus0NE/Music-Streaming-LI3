@@ -123,45 +123,39 @@ void freeUser(User* user){
 // Função de verificação da validade de um user
 int userLineVerify(char *line){
 
-    char *info = strtok(&line, ";");
+    char *info = strsep(&line, ";");
     
     for(int i = 0; i <= 7; i++){
-
         if(info){
             switch(i){
                 case 0:
                     // Possivel erro, pretende verificar string vazia
-                    if(!remove_aspas(&info)){
-                        return 1;
-                    }
-                    info = strtok(NULL, ";");
+                    if(strlen(remove_aspas(&info))<=0) return 1;
+                    info = strsep(&line, ";");
                     break;
                 case 1:
                     if(emailVerify(remove_aspas(&info))!=0) return 1;
-                    info = strtok(NULL, ";");
+                    info = strsep(&line, ";");
                     break;
                 case 2:
                     if(nameVerify(remove_aspas(&info))!=0) return 1;
-                    info = strtok(NULL, ";");
+                    info = strsep(&line, ";");
                     break;
                 case 3:
                     if(nameVerify(remove_aspas(&info))!=0) return 1;
-                    info = strtok(NULL, ";");
+                    info = strsep(&line, ";");
                     break;
                 case 4:
                     if(birthDateVerify(remove_aspas(&info))!=0) return 1;
-                    info = strtok(NULL, ";");
+                    info = strsep(&line, ";");
                     break;
                 case 5:
-                    // Possivel erro
-                    if(!remove_aspas(&info)){
-                        return 1;
-                    }
-                    info = strtok(NULL, ";");
+                    if(strlen(remove_aspas(&info))<=0) return 1;
+                    info = strsep(&line, ";");
                     break;
                 case 6:
-                    if( (strcmp("premium",remove_aspas(&info)) || strcmp("normal",remove_aspas(&info)) )!=0) return 1;
-                    info = strtok(NULL, ";");
+                    if( (strcmp("premium",remove_aspas(&info)) && strcmp("normal",remove_aspas(&info)) )!=0) return 1;
+                    info = strsep(&line, "\n");
                     break;
                 case 7:
                     // verificação se as musicas com gosto estão dentro do ficheiro de musicas
@@ -199,13 +193,13 @@ int emailVerify(char *email){
     }
 
     // Testar com  casos práticos a divisao por tokens
-    char *user = strtok(email, "@");
-    char *lDomain = strtok(NULL, ".");
-    char *rDomain = strtok(NULL, "\0");
+    char *user = strsep(&email, "@");
+    char *lDomain = strsep(&email, ".");
+    char *rDomain = strsep(&email, "\0");
     if(!user || !lDomain || !rDomain) return 1;
 
     for(int i=0;user[i]!='\0';i++){
-        if(!isdigit(user[i]) || !isalpha(user[i])) return 1;
+        if(!isdigit(user[i]) && !isalpha(user[i])) return 1;
     }
     if(nameVerify(lDomain) == 1) return 1;
     if(nameVerify(rDomain) == 1 || strlen(rDomain)<=1 || strlen(rDomain)>=4) return 1;    
@@ -222,9 +216,9 @@ int birthDateVerify(char* birth_date){
 
     if(birth_date[4] != '/' || birth_date[7] != '/' || birth_date[10] != '\0') return 1;
 
-    char *ano = strtok(birth_date, "/");
-    char *mes = strtok(NULL, "/");
-    char *dia = strtok(NULL, "\0");
+    char *ano = strsep(&birth_date, "/");
+    char *mes = strsep(&birth_date, "/");
+    char *dia = strsep(&birth_date, "\0");
 
     if((strDigit(ano) || strDigit(mes) || strDigit(dia)) != 0) return 1;
     

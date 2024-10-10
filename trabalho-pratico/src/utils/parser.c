@@ -241,26 +241,31 @@ int parse_musics_csv(const char* filename) {
 
 //Função responsável por ler e fazer parse de um arquivo CSV de users.
 int parse_user_csv(const char *filename){
-    FILE *fp = fopen(filename, "r");
-
-    if(!fp){
+    
+    FILE *user = fopen(filename, "r");
+    if(!user){
         perror("Erro a abrir o ficheiro de users.\n");
         exit(EXIT_FAILURE);
     }
 
-    char *line = malloc(sizeof(char)*1024);
+    FILE *usersErrors = fopen("../../dataset-errors/users.csv", "a");
+    if(!usersErrors){
+        perror("Erro a abrir o ficheiro de erros de users.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    char *line = malloc(sizeof(char)*1500);
+    char *dupLine = NULL;
     // Ignora a 1ª linha do ficheiro
-    fgets(line, sizeof(line), fp);
+    fgets(line, 90, user);
 
-    // Path para o ficheiro de erros dos users 
-        //Supõe-se que o ficheiro e diretoria ja estejam criados pela função errorsDir
-    char *errorsUsers = "../dataset-errors/users.csv";
+    while(fgets(line, 1500, user)){
 
-    while(fgets(line, sizeof(line), fp)){
-        
-        if(userLineVerify(&line) == 0){
+        dupLine = malloc(sizeof(char)*1500);
+        dupLine = strdup(line);
+        if(userLineVerify(dupLine) == 0){
             
-            char *username = NULL;
+            char *username = NULL; //strcpy para NULL da seg error? 
             char *email = NULL;
             char *first_name = NULL;
             char *last_name = NULL;
@@ -272,7 +277,7 @@ int parse_user_csv(const char *filename){
             // int num_liked_musics = 0;
         
             // char* token = strsep(&line, "\n");
-            char *info = strtok(line, ";");
+            char *info = strsep(&line, ";");
 
             for(int i = 0; i <= 7; i++){
 
@@ -280,55 +285,56 @@ int parse_user_csv(const char *filename){
                     switch(i){
                         case 0:
                             strcpy(username, remove_aspas(&info));
-                            info = strtok(NULL, ";");
+                            info = strsep(&line, ";");
                             break;
                         case 1:
                             strcpy(email, remove_aspas(&info));
-                            info = strtok(NULL, ";");
+                            info = strsep(&line, ";");
                             break;
                         case 2:
                             strcpy(first_name, remove_aspas(&info));
-                            info = strtok(NULL, ";");
+                            info = strsep(&line, ";");
                             break;
                         case 3:
                             strcpy(last_name, remove_aspas(&info));
-                            info = strtok(NULL, ";");
+                            info = strsep(&line, ";");
                             break;
                         case 4:
                             strcpy(birth_date, remove_aspas(&info));
-                            info = strtok(NULL, ";");
+                            info = strsep(&line, ";");
                             break;
                         case 5:
                             strcpy(country, remove_aspas(&info));
-                            info = strtok(NULL, ";");
+                            info = strsep(&line, ";");
                             break;
                         case 6:
                             strcpy(subscription_type, remove_aspas(&info));
-                            info = strtok(NULL, ";");
+                            info = strsep(&line, "\n");
                             break;
                         case 7:
                             // liked_musics_id
                             // num_liked_musics=?
-                
-                            info = strtok(NULL, ";");
                             break;
                         default:
                             break;
                     }
                 }
             }
-
+        //free(*char); ??
         //User* user = createUser(username, email, first_name, last_name, birth_date , genre, country, subscription_type, liked_musics_id, num_liked_musics);
         //freeUser(user);
         //local onde depois será feita o armazenamento na hashtable(estrutura de dados) 
         }
         else{
-            FILE *userErrors = fopen(errorsUsers, "a");
-            fputs(line, userErrors);
-            fclose(userErrors);
+            fputs(line, usersErrors);
         }
+        free(dupLine); //?? Mem leak?
     }
-    fclose(fp);
+    
+    fclose(user);
+    fclose(usersErrors);
+    free(dupLine);
+    free(line);
     return 0;
 }
 // Verificar/Corrigir os apontadores e os endereços nas chamadas de funções.
