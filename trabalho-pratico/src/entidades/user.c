@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "user.h"
+#include "utils.h"
 
 typedef struct user {
     char* username;
@@ -158,95 +159,15 @@ int userLineVerify(char *line){
                     info = strsep(&line, "\n");
                     break;
                 case 7:
-                    // verificação se as musicas com gosto estão dentro do ficheiro de musicas
+                    if (verifyLikedMusics(info, music_table) != 0){
+                        return 1;
+                    }
+                    info = strsep(&line, "\n");
                     break;
                 default:
                     break;
             }
         }
-    }
-    return 0;
-}
-
-// Função para verificar se o nome é inteiramente carateres
-int nameVerify(char *name){
-    
-    // Caso vazio
-    if(!name){
-        return 1;
-    }
-
-    while(*name){
-        if(!isalpha(*name)){
-            return 1;
-        }
-        name++;
-    }
-    return 0;
-}
-
-// Função que valida um endereço de email, dividindo por tokens e verificando se e qual o conteudo desses tokens
-int emailVerify(char *email){
-    
-    if(!email){
-        return 1;
-    }
-
-    // Testar com  casos práticos a divisao por tokens
-    char *user = strsep(&email, "@");
-    char *lDomain = strsep(&email, ".");
-    char *rDomain = strsep(&email, "\0");
-    if(!user || !lDomain || !rDomain) return 1;
-
-    for(int i=0;user[i]!='\0';i++){
-        if(!isdigit(user[i]) && !isalpha(user[i])) return 1;
-    }
-    if(nameVerify(lDomain) == 1) return 1;
-    if(nameVerify(rDomain) == 1 || strlen(rDomain)<=1 || strlen(rDomain)>=4) return 1;    
-    
-    return 0;
-}
-
-int birthDateVerify(char* birth_date){
-    // data base 2024/09/09
-
-    if(!birth_date){
-        return 1;
-    }
-
-    if(birth_date[4] != '/' || birth_date[7] != '/' || birth_date[10] != '\0') return 1;
-
-    char *ano = strsep(&birth_date, "/");
-    char *mes = strsep(&birth_date, "/");
-    char *dia = strsep(&birth_date, "\0");
-
-    if((strDigit(ano) || strDigit(mes) || strDigit(dia)) != 0) return 1;
-    
-    // Data numérica verificada, transformar em int
-    int anoInt = atoi(ano);
-    int mesInt = atoi(mes);
-    int diaInt = atoi(dia);
-
-    // Verificação lógica
-    if(anoInt>2024 || (anoInt==2024 && mesInt>9) || (anoInt==2024 && mesInt==9 && diaInt>9)) return 1;
-    else if(anoInt<0) return 1;
-    else if(mesInt<=0 || mesInt>12) return 1;
-    else if(diaInt<=0 || diaInt>31) return 1;
-    else return 0;
-}
-
-// Função que verifica se toda a string é composta por dígitos
-int strDigit(char *str){
-    
-    if(!str){
-        return 1;
-    }
-
-    while(*str){
-        if(!isdigit(*str)){
-            return 1;
-        }
-        str++;
     }
     return 0;
 }

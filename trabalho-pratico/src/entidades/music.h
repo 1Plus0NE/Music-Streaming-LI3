@@ -11,9 +11,6 @@ Music* createMusic(int id, char* title, int* artist_id, int num_artists, int dur
 // Função que faz a validação sintática da duração de uma música
 int verify_music(char* duration);
 
-// Função que verifica se um dado ano é válido
-int verify_year(int year);
-
 // Função para libertar a memória de uma entidade do tipo música.
 void freeMusic(Music* music);
 

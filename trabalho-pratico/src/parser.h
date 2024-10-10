@@ -4,9 +4,6 @@
 // Função que cria uma diretoria com os ficheiros de erros, com os headers
 void errosDir();
 
-// Função responsável por remover as aspas.
-char* remove_aspas(char* str);
-
 // Função que faz a validação de uma música.
 int verify_music(Music* music);
 

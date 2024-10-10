@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "artist.h"
+#include "utils.h"
 
 typedef struct artist {
     int id;

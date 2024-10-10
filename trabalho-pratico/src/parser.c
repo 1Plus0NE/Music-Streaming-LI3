@@ -5,6 +5,7 @@
 #include "../entidades/music.c"
 #include "../entidades/user.h"
 #include "../entidades/user.c"
+#include "utils.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -50,15 +51,6 @@ void errorsDir(){
     }
     fprintf(errors, "\"id\";\"title\";\"artist_id\";\"duration\";\"genre\";\"year\";\"lyrics\"\n");
     fclose(errors);
-}
-
-// Função responsável por remover as aspas.
-char* remove_aspas(char* str){
-    if(str[0] == '"' && str[strlen(str) - 1] == '"'){
-        str[strlen(str) - 1] = '\0';
-        return str + 1;
-    }
-    return str;
 }
 
 // Função para ler e fazer parse de um arquivo CSV de artistas.
