@@ -14,4 +14,35 @@ int verify_artist(Artist* artist);
 // Função para libertar a memória de uma entidade do tipo artista.
 void freeArtist(Artist* artist);
 
+// getters e setters
+int getArtistId(Artist* a);
+
+char* getArtistName(Artist* a);
+
+char* getArtistDescription(Artist* a);
+
+float getArtistRecipePerStream(Artist* a);
+
+int* getArtistIdConstituent(Artist* a);
+
+int getArtistNumConstituent(Artist* a);
+
+char* getArtistCountry(Artist* a);
+
+char* getArtistType(Artist* a);
+
+void setArtistId(Artist* a, int id);
+
+void setArtistName(Artist* a, char* name);
+
+void setArtistDescription(Artist* a, char* description);
+
+void setArtistRecipePerStream(Artist* a, float recipe_per_stream);
+
+void setArtistIdConstituent(Artist* a, int* id_constituent, int num_constituent);
+
+void setArtistCountry(Artist* a, char* country);
+
+void setArtistType(Artist* a, char* type);
+
 #endif

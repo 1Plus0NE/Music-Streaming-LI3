@@ -149,3 +149,87 @@ void freeArtist(Artist* artist){
     free(artist -> name);
     free(artist);
 }
+
+// getters de artista.
+int getArtistId(Artist* a){
+    return a -> id;
+}
+
+char* getArtistName(Artist* a){
+    return a -> name ? strdup(a -> name) : NULL;
+}
+
+char* getArtistDescription(Artist* a){
+    return a -> description ? strdup(a -> description) : NULL;
+}
+
+float getArtistRecipePerStream(Artist* a){
+    return a -> recipe_per_stream;
+}
+
+int* getArtistIdConstituent(Artist* a){
+    if(artist -> num_constituent > 0){
+        int* cpy = malloc(a -> num_constituent * sizeof(int));
+        memcpy(copy, a -> id_constituent, a->num_constituent * sizeof(int));
+        return copy;
+    }
+    return NULL;
+}
+
+int getArtistNumConstituent(Artist* a){
+    return a -> num_constituent;
+}
+
+char* getArtistCountry(Artist* a){
+    return a -> country ? strdup(a -> country) : NULL;
+}
+
+char* getArtistType(Artist* a){
+    return a -> type ? strdup(a -> type) : NULL;
+}
+
+// setters de artista.
+void setArtistId(Artist* a, int id){
+    a -> id = id;
+}
+
+void setArtistName(Artist* a, char* name){
+    if(a -> name){
+        free(a -> name);
+    }
+    a -> name = strdup(name);
+}
+
+void setArtistDescription(Artist* a, char* description){
+    if(a -> description){
+        free(a -> description);
+    }
+    a -> description = strdup(description);
+}
+
+void setArtistRecipePerStream(Artist* a, float recipe_per_stream){
+    a -> recipe_per_stream = recipe_per_stream;
+}
+
+void setArtistIdConstituent(Artist* a, int* id_constituent, int num_constituent){
+    if(a -> id_constituent){
+        free(a -> id_constituent);
+    }
+    a -> id_constituent = malloc(num_constituent * sizeof(int));
+    memcpy(a -> id_constituent, id_constituent, num_constituent * sizeof(int));
+    a -> num_constituent = num_constituent;
+}
+
+void setArtistCountry(Artist* a, char* country){
+    if(a -> country){
+        free(a -> country);
+    }
+    a -> country = strdup(a -> country);
+}
+
+void setArtistType(Artist* a, char* type){
+    if(a -> type){
+        free(a -> type);
+    }
+    a -> type = strdup(a -> type);
+}
