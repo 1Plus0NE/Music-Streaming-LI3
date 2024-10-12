@@ -168,10 +168,10 @@ float getArtistRecipePerStream(Artist* a){
 }
 
 int* getArtistIdConstituent(Artist* a){
-    if(artist -> num_constituent > 0){
+    if(a -> num_constituent > 0){
         int* cpy = malloc(a -> num_constituent * sizeof(int));
-        memcpy(copy, a -> id_constituent, a->num_constituent * sizeof(int));
-        return copy;
+        memcpy(cpy, a -> id_constituent, a->num_constituent * sizeof(int));
+        return cpy;
     }
     return NULL;
 }
