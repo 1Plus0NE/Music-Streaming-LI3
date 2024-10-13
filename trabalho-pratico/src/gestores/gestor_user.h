@@ -1,8 +1,7 @@
 #ifndef GESTOR_USER_H
 #define GESTOR_USER_H
-
+#include "../entidades/user.h"
 #include <glib.h>
-#include "user.h"
 
 // função para criar uma tabela de utilizadores.
 GHashTable* createUserTable();

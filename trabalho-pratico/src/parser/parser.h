@@ -1,11 +1,11 @@
 #ifndef PARSER_H
 #define PARSER_H
+#include "../entidades/artist.h"
+#include "../entidades/music.h"
+#include "../entidades/user.h"
 
 // Função que cria uma diretoria com os ficheiros de erros, com os headers
 void errosDir();
-
-// Função que faz a validação de uma música.
-int verify_music(Music* music);
 
 // Função que faz a validação de um artista.
 int verify_artist(Artist* artist);

@@ -1,6 +1,5 @@
 #ifndef MUSIC_H
 #define MUSIC_H
-#include <stdio.h>
 
 // Forma de enunciar a entidade música.
 typedef struct music Music;

@@ -1,6 +1,5 @@
 #ifndef ARTIST_H
 #define ARTIST_H
-#include <stdio.h>
 
 // Forma de enunciar a entidade artista.
 typedef struct artist Artist;

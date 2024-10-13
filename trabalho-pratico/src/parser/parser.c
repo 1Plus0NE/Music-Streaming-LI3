@@ -1,10 +1,7 @@
 #include "parser.h"
 #include "../entidades/artist.h"
-#include "../entidades/artist.c"
 #include "../entidades/music.h"
-#include "../entidades/music.c"
 #include "../entidades/user.h"
-#include "../entidades/user.c"
 #include "utils.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -210,7 +207,7 @@ int parse_musics_csv(const char* filename) {
             }
             
             Music* m = createMusic(id, title, artist_id, num_artists, duration, genre, year, lyrics);
-            printf("Criada a musica: %s no de artistas: %d, duracao: %d\n", m->title, m->num_artists, m->duration); // print de teste
+            printf("Criada a musica: %s no de artistas: %d, duracao: %d\n", title, num_artists, duration); // print de teste
             //local onde depois será feita o armazenamento na hashtable(estrutura de dados)
 
             free(line_copy); 

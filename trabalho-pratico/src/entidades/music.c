@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "music.h"
-#include "../utils.h"
+#include "utils.h"
 
 typedef struct music {
     int id;
@@ -15,7 +15,7 @@ typedef struct music {
     char* genre;
     int year;
     char* lyrics;
-};
+} Music;
 
 // Função para criar uma estrutura da entidade música parametrizada.
 Music* createMusic(int id, char* title, int* artist_id, int num_artists, char* duration, char* genre, int year, char* lyrics){
@@ -138,54 +138,54 @@ int musicLineVerify(char *line){
 // GETTERS
 
 // Função que retorna o ID da música
-int getID(Music* m){
+int getMusicID(Music* m){
     return m->id;
 }
 
 // Função que retorna o título da música
-char* getTitle(Music* m){
+char* getMusicTitle(Music* m){
     return m->title ? strdup(m->title) : NULL;
 }
 
 // Função que retorna o array de IDs de artistas da música
-int* getArtistID(Music* m){
+int* getMusicArtistIDs(Music* m){
     return m->artist_id;
 }
 
 // Função que retorna o número de artistas da música
-int getNumArtists(Music* m){
+int getMusicNumArtists(Music* m){
     return m->num_artists;
 }
 
 // Função que retorna a duração da música
-char* getDuration(Music* m){
+char* getMusicDuration(Music* m){
     return m->duration ? strdup(m->duration) : NULL;
 }
 
 // Função que retorna o gênero da música
-char* getGenre(Music* m){
+char* getMusicGenre(Music* m){
     return m->genre ? strdup(m->genre) : NULL;
 }
 
 // Função que retorna o ano da música
-int getYear(Music* m){
+int getMusicYear(Music* m){
     return m->year;
 }
 
 // Função que retorna a letra da música
-char getLyrics(Music* m){
+char getMusicLyrics(Music* m){
     return m->lyrics ? strdup(m->lyrics) : NULL;
 }
 
 // SETTERS
 
 // Função que altera o ID da música
-void setID(Music* m, int newID){
+void setMusicID(Music* m, int newID){
     m->id = newID;
 }
 
 // Função que altera o título da música
-void setTitle(Music* m, const char* newTitle){
+void setMusicTitle(Music* m, const char* newTitle){
     if(m->title){
         free(m->title);
         m->title = NULL;
@@ -198,7 +198,7 @@ void setTitle(Music* m, const char* newTitle){
 }
 
 // Função que altera o array de ID's de artistas da música
-void setArtistID(Music* m, int* newArtistID, int newNumArtists){
+void setMusicArtistID(Music* m, int* newArtistID, int newNumArtists){
     if(m->artist_id){
         free(m->artist_id);
         m->artist_id = NULL;
@@ -213,7 +213,7 @@ void setArtistID(Music* m, int* newArtistID, int newNumArtists){
 }
 
 // Função que altera a duração da música
-void setDuration(Music* m, const char* newDuration){
+void setMusicDuration(Music* m, const char* newDuration){
     if(m->duration){
         free(m->duration);
         m->duration = NULL;
@@ -226,7 +226,7 @@ void setDuration(Music* m, const char* newDuration){
 }
 
 // Função que altera o género da música
-void setGenre(Music* m, const char* newGenre){
+void setMusicGenre(Music* m, const char* newGenre){
     if(m->genre){
         free(m->genre);
         m->genre = NULL;
@@ -239,12 +239,12 @@ void setGenre(Music* m, const char* newGenre){
 }
 
 // Função que altera o ano da música
-void setYear(Music* m, int newYear){
+void setMusicYear(Music* m, int newYear){
     m->year = newYear;
 }
 
 // Função que altera a letra da música
-void setLyrics(Music* m, const char* newLyrics){
+void setMusicLyrics(Music* m, const char* newLyrics){
     if(m->lyrics){
         free(m->lyrics);
         m->lyrics = NULL;

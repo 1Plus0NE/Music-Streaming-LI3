@@ -1,8 +1,7 @@
 #ifndef GESTOR_MUSIC_H
 #define GESTOR_MUSIC_H
-
+#include "../entidades/music.h"
 #include <glib.h>
-#include "music.h"
 
 // função para criar uma tabela de músicas.
 GHashTable* createMusicTable();

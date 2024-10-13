@@ -14,7 +14,7 @@ typedef struct user {
     char* subscription_type;
     int* liked_musics_id; // char* liked_musics_id?
     int num_liked_musics;
-};
+} User;
 
 // Função para criar uma estrutura da entidade utilizador parametrizada.
 User* createUser(char* username, char* email, char* first_name, char* last_name, char* birth_date , char* genre, char* country, char* subscription_type, int* liked_musics_id, int num_liked_musics){
@@ -159,15 +159,117 @@ int userLineVerify(char *line){
                     info = strsep(&line, "\n");
                     break;
                 case 7:
-                    if (verifyLikedMusics(info, music_table) != 0){
+                    /* if (verifyLikedMusics(info, music_table) != 0){
                         return 1;
                     }
                     info = strsep(&line, "\n");
-                    break;
+                    break; */
                 default:
                     break;
             }
         }
     }
     return 0;
+}
+
+//getters de utilizador
+char* getUserUsername(User* u){
+    return u -> username ? strdup(u -> username) : NULL;
+}
+
+char* getUserEmail(User* u){
+    return u->email ? strdup(u->email) : NULL;
+}
+
+char* getUserFirstName(User* u){
+    return u->first_name ? strdup(u->first_name) : NULL;
+}
+
+char* getUserLastName(User* u){
+    return u->last_name ? strdup(u->last_name) : NULL;
+}
+
+char* getUserBirthDate(User* u){
+    return strdup(u->birth_date);
+}
+
+char* getUserCountry(User* u){
+    return u->country ? strdup(u->country) : NULL;
+}
+
+char* getUserSubscriptionType(User* u){
+    return u->subscription_type ? strdup(u->subscription_type) : NULL;
+}
+
+int* getUserLikedMusics(User* u){
+    if (u->num_liked_musics > 0) {
+        int* cpy = malloc(u->num_liked_musics * sizeof(int));
+        memcpy(cpy, u->liked_musics_id, u->num_liked_musics * sizeof(int));
+        return cpy;
+    }
+    return NULL;
+}
+
+int getUserNumLikedMusics(User* u){
+    return u->num_liked_musics;
+}
+
+//setters de utilizador
+void setUserUsername(User* u, char* username){
+    if (u->username) {
+        free(u->username);
+    }
+    u->username = strdup(username);
+}
+
+void setUserEmail(User* u, char* email){
+    if (u->email) {
+        free(u->email);
+    }
+    u->email = strdup(email);
+}
+
+void setUserFirstName(User* u, char* first_name){
+    if (u->first_name) {
+        free(u->first_name);
+    }
+    u->first_name = strdup(first_name);
+}
+
+void setUserLastName(User* u, char* last_name){
+    if (u->last_name) {
+        free(u->last_name);
+    }
+    u->last_name = strdup(last_name);
+}
+
+void setUserBirthDate(User* u, char* birth_date){
+    strncpy(u->birth_date, birth_date, 10);
+}
+
+void setUserCountry(User* u, char* country){
+    if (u->country) {
+        free(u->country);
+    }
+    u->country = strdup(country);
+}
+
+void setUserSubscriptionType(User* u, char* subscription_type){
+    if (u->subscription_type) {
+        free(u->subscription_type);
+    }
+    u->subscription_type = strdup(subscription_type);
+}
+
+void setUserLikedMusics(User* u, int* liked_musics_id, int num_liked_musics){
+    if (u->liked_musics_id) {
+        free(u->liked_musics_id);
+    }
+    u->liked_musics_id = malloc(num_liked_musics * sizeof(int));
+    memcpy(u->liked_musics_id, liked_musics_id, num_liked_musics * sizeof(int));
+    u->num_liked_musics = num_liked_musics;
+}
+
+void setUserNumLikedMusics(User* u, int num_liked_musics){
+    u->num_liked_musics = num_liked_musics;
 }

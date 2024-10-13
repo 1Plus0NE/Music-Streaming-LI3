@@ -17,7 +17,7 @@ int verify_music(char* duration);
 
 int verify_year(int year);
 
-int verifyLikedMusics(char* liked_musics_str, MusicTable* music_table);
-
 //funções de conversão
 int calculaIdade(char* birthdate);
+
+#endif

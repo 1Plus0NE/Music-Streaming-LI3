@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "gestor_user.h"
-#include "user.h"
+#include "../entidades/user.h"
 #include <glib.h>
 
 // função para criar uma tabela de utilizadores.
@@ -12,7 +12,7 @@ GHashTable* createUserTable(){
 
 // função que adiciona um utilizador á tabela de utilizadores.
 void addUser(GHashTable* table, User* user){
-    g_hash_table_insert(table, user -> username, user);
+    g_hash_table_insert(table, getUserUsername(user), user);
 }
 
 // função que remove um utilizador da tabela de utilizadores.

@@ -1,22 +1,26 @@
 #include "utils.h"
-#include "../gestores/gestor_music.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <ctype.h>
+#include <time.h>
 
 #define MAX_MUSICS 1000
 
 //função responsável por remover as aspas.
-void remove_aspas(char* str){
-    int length = strlen(str);
-    if(length > 1 && str[0] == '"' && str[length - 1] == '"'){
-        for(int i = 1; i < length - 1; i++){
-            str[i - 1] = str[i];
-        }
-
-        str[length - 2] = '\0';
+char* remove_aspas(char* str) {
+    if (!str) return NULL;  // Verifica se a string é nula
+    
+    int len = strlen(str);
+    if (len == 0) return str;  // Se a string for vazia, retorne-a diretamente
+    
+    // Se a string começa e termina com aspas, remova-as
+    if (str[0] == '"' && str[len - 1] == '"') {
+        str[len - 1] = '\0';  // Remove a última aspas
+        return str + 1;       // Retorna a string sem a primeira aspas
     }
+    
+    return str;  // Retorna a string sem alterações se não houver aspas
 }
 
 // função que verifica se toda a string é composta por dígitos
@@ -140,28 +144,6 @@ int verify_year(int year){
     if (year > currentYear) return 0;
 
     return 1;
-}
-
-// função que verifica se as musicas que o utilizador tem like efetivamente existem.
-int verifyLikedMusics(char* liked_musics_str, MusicTable* music_table){
-    char* liked_musics = strdup(liked_musics_str);
-    char* music_id_str;
-    
-    int liked_musics_id[MAX_MUSICS];
-    int count = 0;
-
-    while ((music_id_str = strsep(&liked_musics, ",")) != NULL) {
-        int music_id = atoi(music_id_str);
-        liked_musics_id[count++] = music_id;
-
-        if (!searchMusic(music_table, music_id)) {
-            free(liked_musics);
-            return 1;
-        }
-    }
-
-    free(liked_musics);
-    return 0;
 }
 
 // função que calcula a idade através de uma data de nascimento dada como argumento.

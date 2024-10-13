@@ -1,8 +1,7 @@
 #ifndef GESTOR_ARTIST_H
 #define GESTOR_ARTIST_H
-
 #include <glib.h>
-#include "artist.h"
+#include "../entidades/artist.h"
 
 // função para criar uma tabela de artistas.
 GHashTable* createArtistTable();

@@ -13,7 +13,7 @@ typedef struct artist {
     int num_constituent;
     char* country;
     char* type;
-};
+} Artist;
 
 // Função para criar uma estrutura da entidade artista parametrizada.
 Artist* createArtist(int id, char* name, char* description, float recipe_per_stream, int* id_constituent, int num_constituent, char* country, char* type) {
@@ -116,9 +116,9 @@ int verifyLineArtist(char* line){
                     break;
                 case 4:
                     if(remove_aspas(info) && strlen(remove_aspas(info)) > 0){
-                        id_contituint_check = "grupo";
+                        id_constituent_check = "grupo";
                     }else{
-                        id_contituint_check = "individual";
+                        id_constituent_check = "individual";
                     }
                     break;
                 case 5:
@@ -127,7 +127,7 @@ int verifyLineArtist(char* line){
                     }
                     break;
                 case 6:
-                    if(strcmp(remove_aspas(info), "individual") != 0 && strcmp(remove_aspas(info), "grupo") != 0 && strcmp(remove_aspas(info), id_contituint_check) != 0){
+                    if(strcmp(remove_aspas(info), "individual") != 0 && strcmp(remove_aspas(info), "grupo") != 0 && strcmp(remove_aspas(info), id_constituent_check) != 0){
                         return 1;
                     }
                     break;
