@@ -1,3 +1,4 @@
+#define _DEFAULT_SOURCE
 #include "parser.h"
 #include "../entidades/artist.h"
 #include "../entidades/music.h"
@@ -59,7 +60,7 @@ int parse_artist_csv(const char* filename) {
         exit(EXIT_FAILURE);
     }
 
-    char line[512];
+    char* line;
 
     fgets(line, sizeof(line), file);
 
@@ -70,11 +71,11 @@ int parse_artist_csv(const char* filename) {
         char* name = NULL;
         char* description = NULL;
         float recipe_per_stream;
-        char* constituents[10]; // dúvida, tamanho de certos arrays e strings
+        int constituents[10];
         int num_constituents = 0;
         char* country = NULL;
         char* type = NULL;
-        
+
         char* token = strsep(&line, "\n");
         char* campo;
 
@@ -97,7 +98,7 @@ int parse_artist_csv(const char* filename) {
                         break;
                     case 4:
                         while(campo && num_constituents < 10){
-                            constituents[num_constituents++] = remove_aspas(campo);
+                            constituents[num_constituents++] = atoi(remove_aspas(campo));
                             campo = strsep(&token, ";");
                         }
                         break;
@@ -141,7 +142,7 @@ int parse_musics_csv(const char* filename) {
     char *errorsMusics = "../dataset-errors/musics.csv";
 
     while(fgets(line, sizeof(line), file)){
-        if(musicLineVerify(&line) == 0){
+        if(musicLineVerify(line) == 0){
             int id;
             char* title = NULL;
             int* artist_id = NULL;
@@ -207,7 +208,7 @@ int parse_musics_csv(const char* filename) {
             }
             
             Music* m = createMusic(id, title, artist_id, num_artists, duration, genre, year, lyrics);
-            printf("Criada a musica: %s no de artistas: %d, duracao: %d\n", title, num_artists, duration); // print de teste
+            printf("Criada a musica: %s no de artistas: %d, duracao: %s\n", title, num_artists, duration); // print de teste
             //local onde depois será feita o armazenamento na hashtable(estrutura de dados)
 
             free(line_copy); 
@@ -259,7 +260,6 @@ int parse_user_csv(const char *filename){
             char *first_name = NULL;
             char *last_name = NULL;
             char *birth_date = NULL;
-            char *genre = NULL;
             char *country = NULL;
             char *subscription_type = NULL;
             int *liked_musics_id = NULL;
@@ -273,31 +273,31 @@ int parse_user_csv(const char *filename){
                 if(info){
                     switch(i){
                         case 0:
-                            strcpy(username, remove_aspas(&info));
+                            strcpy(username, remove_aspas(info));
                             info = strsep(&line, ";");
                             break;
                         case 1:
-                            strcpy(email, remove_aspas(&info));
+                            strcpy(email, remove_aspas(info));
                             info = strsep(&line, ";");
                             break;
                         case 2:
-                            strcpy(first_name, remove_aspas(&info));
+                            strcpy(first_name, remove_aspas(info));
                             info = strsep(&line, ";");
                             break;
                         case 3:
-                            strcpy(last_name, remove_aspas(&info));
+                            strcpy(last_name, remove_aspas(info));
                             info = strsep(&line, ";");
                             break;
                         case 4:
-                            strcpy(birth_date, remove_aspas(&info));
+                            strcpy(birth_date, remove_aspas(info));
                             info = strsep(&line, ";");
                             break;
                         case 5:
-                            strcpy(country, remove_aspas(&info));
+                            strcpy(country, remove_aspas(info));
                             info = strsep(&line, ";");
                             break;
                         case 6:
-                            strcpy(subscription_type, remove_aspas(&info));
+                            strcpy(subscription_type, remove_aspas(info));
                             info = strsep(&line, "\n");
                             break;
                         case 7:

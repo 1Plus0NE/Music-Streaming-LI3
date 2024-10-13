@@ -1,3 +1,4 @@
+#define _DEFAULT_SOURCE
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
@@ -86,45 +87,45 @@ Music* createMusic(int id, char* title, int* artist_id, int num_artists, char* d
 // Função de verificação da validade de uma musica
 int musicLineVerify(char *line){
 
-    char *info = strtok(&line, ";");
-    
+    char *info = strtok(line, ";");
+
     for(int i = 0; i <= 6; i++){
 
         if(info){
             switch(i){
                 case 0:
                     // id nao pode ser < 0
-                    if(atoi(&info)<0) return 1;
+                    if(atoi(info)<0) return 1;
                     info = strtok(NULL, ";");
                     break;
                 case 1:
                     // title da musica nao pode ser uma string empty
-                    if(!remove_aspas(&info)) return 1;
+                    if(!remove_aspas(info)) return 1;
                     info = strtok(NULL, ";");
                     break;
                 case 2:
                     // array de artistas nao pode ser empty
-                    if(!remove_aspas(&info)) return 1;
+                    if(!remove_aspas(info)) return 1;
                     info = strtok(NULL, ";");
                     break;
                 case 3:
                     // duracao tem que ser sintaticamente valida
-                    if(!verify_music(&info)) return 1;
+                    if(!verify_music(info)) return 1;
                     info = strtok(NULL, ";");
                     break;
                 case 4:
                     // genero nao pode ser uma string empty
-                    if(!remove_aspas(&info)) return 1;
+                    if(!remove_aspas(info)) return 1;
                     info = strtok(NULL, ";");
                     break;
                 case 5:
                     // ano nao pode ser maior que o ano atual
-                    if(!verify_year(atoi(&info))) return 1;
+                    if(!verify_year(atoi(info))) return 1;
                     info = strtok(NULL, ";");
                     break;
                 case 6:
                     // as lyrics nao podem ser uma string empty
-                    if(!remove_aspas(&info)) return 1;
+                    if(!remove_aspas(info)) return 1;
                     info = strtok(NULL, ";");
                     break;
                 default:
@@ -138,8 +139,8 @@ int musicLineVerify(char *line){
 // GETTERS
 
 // Função que retorna o ID da música
-int getMusicID(Music* m){
-    return m->id;
+int* getMusicID(Music* m){
+    return m->id ? &m->id : NULL;
 }
 
 // Função que retorna o título da música
@@ -173,7 +174,7 @@ int getMusicYear(Music* m){
 }
 
 // Função que retorna a letra da música
-char getMusicLyrics(Music* m){
+char* getMusicLyrics(Music* m){
     return m->lyrics ? strdup(m->lyrics) : NULL;
 }
 
@@ -185,7 +186,7 @@ void setMusicID(Music* m, int newID){
 }
 
 // Função que altera o título da música
-void setMusicTitle(Music* m, const char* newTitle){
+void setMusicTitle(Music* m, char* newTitle){
     if(m->title){
         free(m->title);
         m->title = NULL;
@@ -198,7 +199,7 @@ void setMusicTitle(Music* m, const char* newTitle){
 }
 
 // Função que altera o array de ID's de artistas da música
-void setMusicArtistID(Music* m, int* newArtistID, int newNumArtists){
+void setMusicArtistIDs(Music* m, int* newArtistID, int newNumArtists){
     if(m->artist_id){
         free(m->artist_id);
         m->artist_id = NULL;
@@ -213,7 +214,7 @@ void setMusicArtistID(Music* m, int* newArtistID, int newNumArtists){
 }
 
 // Função que altera a duração da música
-void setMusicDuration(Music* m, const char* newDuration){
+void setMusicDuration(Music* m, char* newDuration){
     if(m->duration){
         free(m->duration);
         m->duration = NULL;
@@ -226,7 +227,7 @@ void setMusicDuration(Music* m, const char* newDuration){
 }
 
 // Função que altera o género da música
-void setMusicGenre(Music* m, const char* newGenre){
+void setMusicGenre(Music* m, char* newGenre){
     if(m->genre){
         free(m->genre);
         m->genre = NULL;
@@ -244,7 +245,7 @@ void setMusicYear(Music* m, int newYear){
 }
 
 // Função que altera a letra da música
-void setMusicLyrics(Music* m, const char* newLyrics){
+void setMusicLyrics(Music* m, char* newLyrics){
     if(m->lyrics){
         free(m->lyrics);
         m->lyrics = NULL;

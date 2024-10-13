@@ -8,6 +8,6 @@
 int calculaIdade(char* birthdate);
 
 // função que responde á query1.
-void query1(int user_id, GHashTable* user_table, FILE* output_file);
+void query1(char* user_username, GHashTable* user_table, FILE* output_file);
 
 #endif

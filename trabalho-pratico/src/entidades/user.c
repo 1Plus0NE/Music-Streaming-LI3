@@ -1,3 +1,4 @@
+#define _DEFAULT_SOURCE
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -17,7 +18,7 @@ typedef struct user {
 } User;
 
 // Função para criar uma estrutura da entidade utilizador parametrizada.
-User* createUser(char* username, char* email, char* first_name, char* last_name, char* birth_date , char* genre, char* country, char* subscription_type, int* liked_musics_id, int num_liked_musics){
+User* createUser(char* username, char* email, char* first_name, char* last_name, char* birth_date , char* country, char* subscription_type, int* liked_musics_id, int num_liked_musics){
     User* user = (User*)malloc(sizeof(User));
     if (!user) {
         perror("erro ao alocar memória para o utilizador.\n");
@@ -131,31 +132,31 @@ int userLineVerify(char *line){
             switch(i){
                 case 0:
                     // Possivel erro, pretende verificar string vazia
-                    if(strlen(remove_aspas(&info))<=0) return 1;
+                    if(strlen(remove_aspas(info))<=0) return 1;
                     info = strsep(&line, ";");
                     break;
                 case 1:
-                    if(emailVerify(remove_aspas(&info))!=0) return 1;
+                    if(emailVerify(remove_aspas(info))!=0) return 1;
                     info = strsep(&line, ";");
                     break;
                 case 2:
-                    if(nameVerify(remove_aspas(&info))!=0) return 1;
+                    if(nameVerify(remove_aspas(info))!=0) return 1;
                     info = strsep(&line, ";");
                     break;
                 case 3:
-                    if(nameVerify(remove_aspas(&info))!=0) return 1;
+                    if(nameVerify(remove_aspas(info))!=0) return 1;
                     info = strsep(&line, ";");
                     break;
                 case 4:
-                    if(birthDateVerify(remove_aspas(&info))!=0) return 1;
+                    if(birthDateVerify(remove_aspas(info))!=0) return 1;
                     info = strsep(&line, ";");
                     break;
                 case 5:
-                    if(strlen(remove_aspas(&info))<=0) return 1;
+                    if(strlen(remove_aspas(info))<=0) return 1;
                     info = strsep(&line, ";");
                     break;
                 case 6:
-                    if( (strcmp("premium",remove_aspas(&info)) && strcmp("normal",remove_aspas(&info)) )!=0) return 1;
+                    if( (strcmp("premium",remove_aspas(info)) && strcmp("normal",remove_aspas(info)) )!=0) return 1;
                     info = strsep(&line, "\n");
                     break;
                 case 7:

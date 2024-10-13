@@ -1,3 +1,4 @@
+#define _DEFAULT_SOURCE
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -151,8 +152,8 @@ void freeArtist(Artist* artist){
 }
 
 // getters de artista.
-int getArtistId(Artist* a){
-    return a -> id;
+int* getArtistId(Artist* a){
+    return a->id ? &a->id : NULL;
 }
 
 char* getArtistName(Artist* a){
@@ -224,12 +225,12 @@ void setArtistCountry(Artist* a, char* country){
     if(a -> country){
         free(a -> country);
     }
-    a -> country = strdup(a -> country);
+    a -> country = strdup(country);
 }
 
 void setArtistType(Artist* a, char* type){
     if(a -> type){
         free(a -> type);
     }
-    a -> type = strdup(a -> type);
+    a -> type = strdup(type);
 }

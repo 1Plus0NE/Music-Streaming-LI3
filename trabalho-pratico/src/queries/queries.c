@@ -6,12 +6,11 @@
 #include <glib.h>
 
 // função que responde á query1.
-void query1(int user_id, GHashTable* user_table, FILE* output_file){
-    User* user = searchUser(user_table, user_id);
+void query1(char* user_username, GHashTable* user_table, FILE* output_file){
+    User* user = searchUser(user_table, user_username);
 
     if(!user){
         fprintf(output_file, "\n");
-        return 0;
     }
 
     int age = calculaIdade(getUserBirthDate(user));
