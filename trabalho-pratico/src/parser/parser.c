@@ -1,16 +1,4 @@
-#define _DEFAULT_SOURCE
 #include "parser.h"
-#include "../entidades/artist.h"
-#include "../entidades/music.h"
-#include "../entidades/user.h"
-#include "utils.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h> // utilizada a biblioteca ctype que contem a funcao isdigit que permite verificar se o digito é um numero
-#include <sys/stat.h> // Criação de diretoria
-#include <sys/types.h> // Criação de diretoria
-#include <errno.h> 
 
 // Função que cria a diretoria "dataset-errors" e respetivos ficheiros com cabeçalhos
     // Possivelmente inutil, mudar módulo posteriormente

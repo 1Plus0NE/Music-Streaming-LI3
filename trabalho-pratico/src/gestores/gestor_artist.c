@@ -1,9 +1,4 @@
-#include <stdio.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include "gestor_artist.h"
-#include "../entidades/artist.h"
-#include <glib.h>
 
 // função para criar uma tabela de artistas.
 GHashTable* createArtistTable(){

@@ -1,5 +1,8 @@
 #ifndef GESTOR_USER_H
 #define GESTOR_USER_H
+#include <stdio.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "../entidades/user.h"
 #include <glib.h>
 

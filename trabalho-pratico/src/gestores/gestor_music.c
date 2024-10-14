@@ -1,9 +1,4 @@
-#include <stdio.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include "gestor_music.h"
-#include "../entidades/music.h"
-#include <glib.h>
 
 // função para criar uma tabela de músicas.
 GHashTable* createMusicTable(){

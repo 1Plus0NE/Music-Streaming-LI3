@@ -1,9 +1,4 @@
-#include <stdio.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include "gestor_user.h"
-#include "../entidades/user.h"
-#include <glib.h>
 
 // função para criar uma tabela de utilizadores.
 GHashTable* createUserTable(){

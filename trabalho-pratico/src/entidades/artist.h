@@ -1,5 +1,10 @@
 #ifndef ARTIST_H
 #define ARTIST_H
+#define _DEFAULT_SOURCE
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include "utils.h"
 
 // Forma de enunciar a entidade artista.
 typedef struct artist Artist;

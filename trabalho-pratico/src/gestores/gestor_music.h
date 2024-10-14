@@ -1,5 +1,8 @@
 #ifndef GESTOR_MUSIC_H
 #define GESTOR_MUSIC_H
+#include <stdio.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "../entidades/music.h"
 #include <glib.h>
 

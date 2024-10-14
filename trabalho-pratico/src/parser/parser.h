@@ -1,8 +1,17 @@
 #ifndef PARSER_H
 #define PARSER_H
+#define _DEFAULT_SOURCE
 #include "../entidades/artist.h"
 #include "../entidades/music.h"
 #include "../entidades/user.h"
+#include "utils.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <errno.h>
 
 // Função que cria uma diretoria com os ficheiros de erros, com os headers
 void errosDir();

@@ -1,5 +1,11 @@
 #ifndef UTILS_H
 #define UTILS_H
+#define _DEFAULT_SOURCE
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <ctype.h>
+#include <time.h>
 
 //funções de manipulação de strings
 char* remove_aspas(char* str);

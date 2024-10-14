@@ -1,9 +1,4 @@
-#define _DEFAULT_SOURCE
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
 #include "user.h"
-#include "utils.h"
 
 typedef struct user {
     char* username;

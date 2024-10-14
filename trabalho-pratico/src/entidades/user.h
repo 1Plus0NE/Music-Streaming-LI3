@@ -1,5 +1,10 @@
 #ifndef USER_H
 #define USER_H
+#define _DEFAULT_SOURCE
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include "utils.h"
 
 // Forma de enunciar a entidade utilizador.
 typedef struct user User;
