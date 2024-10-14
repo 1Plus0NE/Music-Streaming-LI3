@@ -64,7 +64,7 @@ int parse_artist_csv(const char* filename) {
 
     fgets(line, sizeof(line), file);
 
-    char* errorsArtists = "../dataset-errors/artists.csv";
+    //char* errorsArtists = "../dataset-errors/artists.csv";
 
     while(fgets(line, sizeof(line), file)){
         int id;
@@ -207,7 +207,7 @@ int parse_musics_csv(const char* filename) {
                 }
             }
             
-            Music* m = createMusic(id, title, artist_id, num_artists, duration, genre, year, lyrics);
+            //Music* m = createMusic(id, title, artist_id, num_artists, duration, genre, year, lyrics);
             printf("Criada a musica: %s no de artistas: %d, duracao: %s\n", title, num_artists, duration); // print de teste
             //local onde depois será feita o armazenamento na hashtable(estrutura de dados)
 
@@ -262,7 +262,7 @@ int parse_user_csv(const char *filename){
             char *birth_date = NULL;
             char *country = NULL;
             char *subscription_type = NULL;
-            int *liked_musics_id = NULL;
+            //int *liked_musics_id = NULL;
             // int num_liked_musics = 0;
         
             // char* token = strsep(&line, "\n");
