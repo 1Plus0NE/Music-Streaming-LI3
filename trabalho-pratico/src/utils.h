@@ -1,6 +1,8 @@
 #ifndef UTILS_H
 #define UTILS_H
+#ifndef _DEFAULT_SOURCE
 #define _DEFAULT_SOURCE
+#endif
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>

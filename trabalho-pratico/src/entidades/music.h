@@ -1,6 +1,8 @@
 #ifndef MUSIC_H
 #define MUSIC_H
+#ifndef _DEFAULT_SOURCE
 #define _DEFAULT_SOURCE
+#endif
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
