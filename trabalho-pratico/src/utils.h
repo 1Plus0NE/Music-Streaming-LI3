@@ -21,11 +21,20 @@ int emailVerify(char *email);
 
 int birthDateVerify(char* birth_date);
 
-int verify_music(char* duration);
+int verify_duration(char* duration);
 
 int verify_year(int year);
 
 //funções de conversão
 int calculaIdade(char* birthdate);
+
+// Função que verifica se o formato do ID é válido, i.e, tem que ser [ID]
+int isFormatValid(const char *input);
+
+// Função que dado um array de IDs converte de char para long int
+long int* convertID(const char *input, int *count);
+
+// Função que remove new lines
+void removeEnters(char *input);
 
 #endif

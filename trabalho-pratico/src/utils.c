@@ -103,7 +103,7 @@ int birthDateVerify(char* birth_date){
 }
 
 // função que faz a validação sintática da duração de uma música.
-int verify_music(char* duration){
+int verify_duration(char* duration){
     // se cumpre o formato "hh:mm:ss"
     if (strlen(duration) != 8 && duration[2] != ':' && duration[5] != ':') {
         return 0; // invalid format
@@ -156,4 +156,70 @@ int calculaIdade(char* birthdate){
     }
 
     return age;
+}
+
+// Função que verifica se o formato do ID é válido, i.e, tem que ser [ID]
+int isFormatValid(const char *input){
+    if (input[0] == '[' && input[strlen(input) - 1] == ']'){
+        return 1;
+    }
+    return 0; 
+}
+
+// Função que dado um array de IDs converte de char para long int
+long int* convertID(const char *input, int *count){
+    // Verificar se tem um formato valido, pois existem entries sem []
+    if (!is_valid_format(input)){
+        *count = 0;
+        return 0;
+    }
+
+    char *input_copy = strdup(input);
+    
+    // Remover os parentesis retos
+    input_copy++;
+    input_copy[strlen(input_copy) - 1] = '\0';
+
+    // Contar o número de ids através das virgulas, o nosso contador começa 1, pois podemos ter um array de um só elemento
+    *count = 1;
+    for (char *c = input_copy; *c != '\0'; c++){
+        if (*c == ',') (*count)++;
+    }
+
+    // Após a contagem, alocamos memoria para este novo array
+    long int *convertedIDs = (long int*) malloc(*count * sizeof(long int));
+    if (convertedIDs == NULL){
+        perror("Erro ao alocar memoria para o array de IDs\n");
+        free(input_copy); 
+        exit(EXIT_FAILURE);
+    }
+
+    char *token;
+    int index = 0;
+    // Percorremos toda a linha até não encontrarmos uma virgula
+    while ((token = strsep(&input_copy, ",")) != NULL){
+        // Remover as plicas
+        if (token[0] == '\'' && token[strlen(token) - 1] == '\'' ){
+            token++;
+            token[strlen(token) - 1] = '\0'; 
+        }
+
+        // Convertemos o ID para um long int e damos store no array
+        convertedIDs[index] = strtol(token + 1, NULL, 10); 
+        index++;
+    }
+
+    free(input_copy);  // Libertamos a memoria do pointer original
+    
+    return convertedIDs;
+}
+
+// Função que remove new lines
+void removeEnters(char *input){
+    int len = strlen(input);
+    len--;
+
+    if(input[len]=='\n'){
+        input[len]='\0';
+    }
 }
