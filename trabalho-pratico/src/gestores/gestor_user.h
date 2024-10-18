@@ -7,7 +7,7 @@
 #include <glib.h>
 
 // função para criar uma tabela de utilizadores.
-GHashTable* createUserTable();
+void createUserTable();
 
 // função que adiciona um utilizador á tabela de utilizadores.
 void addUser(GHashTable* table, User* user);

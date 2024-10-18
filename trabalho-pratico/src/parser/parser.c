@@ -136,7 +136,7 @@ void parse_musics(char* path){
     snprintf(filename,1024,"%s/musics.csv",path); //abrir ficheiro de musicas
 
     musics = fopen(filename, "r");
-    if(!file){
+    if(!musics){
         perror("Erro ao abrir o ficheiro csv das musicas.\n");
         exit(EXIT_FAILURE);
     }
@@ -151,7 +151,7 @@ void parse_musics(char* path){
         duration  = strsep(&tmp_line,";");
         genre  = strsep(&tmp_line,";");
         year = atoi(strsep(&tmp_line,";"));
-        lyrics = stsep(&tmp_line,";") //as lyrics tem o \n lá porque é onde ha mudanca de linha
+        lyrics = strsep(&tmp_line,";"); //as lyrics tem o \n lá porque é onde ha mudanca de linha
         removeEnters(lyrics);
         /*
         if(isFormatValid(artist_id) && verify_year(year) && verify_music(duration)){

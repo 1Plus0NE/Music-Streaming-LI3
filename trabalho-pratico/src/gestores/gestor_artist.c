@@ -1,8 +1,8 @@
 #include "gestor_artist.h"
 
 // função para criar uma tabela de artistas.
-GHashTable* createArtistTable(){
-    return g_hash_table_new(g_int_hash, g_int_equal);
+void createArtistTable(){
+    g_hash_table_new(g_int_hash, g_int_equal);
 }
 
 // função que adiciona um artista á tabela de artistas.

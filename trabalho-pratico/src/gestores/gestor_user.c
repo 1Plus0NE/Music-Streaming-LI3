@@ -1,7 +1,7 @@
 #include "gestor_user.h"
 
 // função para criar uma tabela de utilizadores.
-GHashTable* createUserTable(){
+void createUserTable(){
     return g_hash_table_new(g_str_hash, g_str_equal);
 }
 

@@ -1,6 +1,6 @@
 #include "user.h"
 
-typedef struct user {
+struct user {
     char* username;
     char* email;
     char* first_name;
@@ -10,7 +10,7 @@ typedef struct user {
     char* subscription_type;
     int* liked_musics_id; // char* liked_musics_id?
     int num_liked_musics;
-} User;
+};
 
 // Função para criar uma estrutura da entidade utilizador parametrizada.
 User* createUser(char* username, char* email, char* first_name, char* last_name, char* birth_date , char* country, char* subscription_type, int* liked_musics_id, int num_liked_musics){

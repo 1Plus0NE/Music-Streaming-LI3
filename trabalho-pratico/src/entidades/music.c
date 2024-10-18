@@ -1,6 +1,6 @@
 #include "music.h"
 
-typedef struct music {
+struct music {
     long int id;
     char* title;
     long int* artist_id;
@@ -9,7 +9,7 @@ typedef struct music {
     char* genre;
     int year;
     char* lyrics;
-} Music;
+};
 
 // Função para criar uma estrutura da entidade música parametrizada.
 Music* createMusic(long int id, char* title, long int* artist_id, int num_artists, char* duration, char* genre, int year, char* lyrics){
@@ -109,7 +109,7 @@ int musicLineVerify(char *line){
                     break;
                 case 3:
                     // duracao tem que ser sintaticamente valida
-                    if(!verify_music(info)) return 1;
+                    if(!verify_duration(info)) return 1;
                     info = strtok(NULL, ";");
                     break;
                 case 4:

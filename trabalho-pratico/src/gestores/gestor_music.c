@@ -1,7 +1,7 @@
 #include "gestor_music.h"
 
 // função para criar uma tabela de músicas.
-GHashTable* createMusicTable(){
+void createMusicTable(){
     return g_hash_table_new(g_int_hash, g_int_equal);
 }
 
