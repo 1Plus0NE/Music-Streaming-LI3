@@ -1,9 +1,9 @@
 #include "music.h"
 
 typedef struct music {
-    int id;
+    long int id;
     char* title;
-    int* artist_id;
+    long int* artist_id;
     int num_artists;
     char* duration;
     char* genre;
@@ -12,7 +12,7 @@ typedef struct music {
 } Music;
 
 // Função para criar uma estrutura da entidade música parametrizada.
-Music* createMusic(int id, char* title, int* artist_id, int num_artists, char* duration, char* genre, int year, char* lyrics){
+Music* createMusic(long int id, char* title, long int* artist_id, int num_artists, char* duration, char* genre, int year, char* lyrics){
     Music* music = (Music*)malloc(sizeof(Music));
     if(!music){
         perror("erro ao alocar memória para a música.\n");
@@ -29,7 +29,7 @@ Music* createMusic(int id, char* title, int* artist_id, int num_artists, char* d
     }
     strcpy(music -> title, title);
 
-    music -> artist_id = malloc(num_artists * sizeof(int));
+    music -> artist_id = malloc(num_artists * sizeof(long int));
     if(!music -> artist_id){
         perror("erro ao alocar memória para a lista de artistas.\n");
         free(music -> title);
@@ -37,16 +37,20 @@ Music* createMusic(int id, char* title, int* artist_id, int num_artists, char* d
         exit(EXIT_FAILURE);
     }
 
+    // eu acho que já não é preciso isto pq no convertID ele ja calcula o tamanho do array 
+    /*
     for(int i = 0; i < num_artists; i++){
         music -> artist_id[i] = artist_id[i];
     }
+    music -> num_artists = num_artists;
+    */
     music -> num_artists = num_artists;
 
     music -> duration = malloc(strlen(duration) + 1);
     if(!music -> duration){
         perror("erro ao alocar memória para a duracao.\n");
-        free(title);
-        free(artist_id);
+        free(music -> title);
+        free(music -> artist_id);
         free(music);
         exit(EXIT_FAILURE);
     }
@@ -54,8 +58,9 @@ Music* createMusic(int id, char* title, int* artist_id, int num_artists, char* d
     music -> genre = malloc(strlen(genre) + 1);
     if(!music -> genre){
         perror("erro ao alocar memória para o género da música.\n");
-        free(music -> artist_id);
         free(music -> title);
+        free(music -> artist_id);
+        free(music -> duration);
         free(music);
         exit(EXIT_FAILURE);
     }
@@ -66,9 +71,10 @@ Music* createMusic(int id, char* title, int* artist_id, int num_artists, char* d
     music->lyrics = malloc(strlen(lyrics) + 1);
     if(!music -> lyrics){
         perror("erro ao alocar memória para a letra da música.\n");
-        free(music -> genre);
-        free(music -> artist_id);
         free(music -> title);
+        free(music -> artist_id);
+        free(music -> duration);
+        free(music -> genre);
         free(music);
         exit(EXIT_FAILURE);
     }
@@ -132,7 +138,7 @@ int musicLineVerify(char *line){
 // GETTERS
 
 // Função que retorna o ID da música
-int* getMusicID(Music* m){
+long int* getMusicID(Music* m){
     return m->id ? &m->id : NULL;
 }
 
@@ -142,7 +148,7 @@ char* getMusicTitle(Music* m){
 }
 
 // Função que retorna o array de IDs de artistas da música
-int* getMusicArtistIDs(Music* m){
+long int* getMusicArtistIDs(Music* m){
     return m->artist_id;
 }
 
@@ -192,17 +198,17 @@ void setMusicTitle(Music* m, char* newTitle){
 }
 
 // Função que altera o array de ID's de artistas da música
-void setMusicArtistIDs(Music* m, int* newArtistID, int newNumArtists){
+void setMusicArtistIDs(Music* m, long int* newArtistID, int newNumArtists){
     if(m->artist_id){
         free(m->artist_id);
         m->artist_id = NULL;
     }        
-    m->artist_id = (int*)malloc(newNumArtists * sizeof(int));
+    m->artist_id = (long int*)malloc(newNumArtists * sizeof(long int));
     if (m->artist_id == NULL){
         perror("Erro ao alocar memoria para o novo array de artistas da musica");
         exit(EXIT_FAILURE); 
     }
-    memcpy(m->artist_id, newArtistID, newNumArtists * sizeof(int));
+    memcpy(m->artist_id, newArtistID, newNumArtists * sizeof(long int));
     m->num_artists = newNumArtists;
 }
 

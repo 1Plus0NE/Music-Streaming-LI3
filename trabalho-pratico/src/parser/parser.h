@@ -4,6 +4,7 @@
 #include "../entidades/artist.h"
 #include "../entidades/music.h"
 #include "../entidades/user.h"
+#include "../gestores/gestor_music.h"
 #include "utils.h"
 #include <stdio.h>
 #include <stdlib.h>

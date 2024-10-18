@@ -112,6 +112,68 @@ int parse_artist_csv(const char* filename) {
     return 0;
 }
 
+void parse_musics(char* path){
+    // Variaveis para o parse
+    FILE* musics;
+    char filename[1024];
+    char line[2048];
+    char *tmp_line=NULL;
+
+    // Argumentos para a struct de musicas
+    long int id;
+    char* title;
+    char* artist_id;
+    long int* artist_id_converted;
+    int num_artists;
+    char* duration;
+    char* genre;
+    int year;
+    char* lyrics;
+    
+    int erros=1; // a primeira linha n conta
+
+    // music_table = createMusicTable();
+    snprintf(filename,1024,"%s/musics.csv",path); //abrir ficheiro de musicas
+
+    musics = fopen(filename, "r");
+    if(!file){
+        perror("Erro ao abrir o ficheiro csv das musicas.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    fgets(line, sizeof(line), musics); //skip da primeira linha por ser o header
+
+    while((fgets(line, sizeof(line), musics) != NULL)){
+        tmp_line= line;
+        id = atoi(strsep(&tmp_line,";"));
+        title  = strsep(&tmp_line,";");
+        artist_id  = strsep(&tmp_line,";");
+        duration  = strsep(&tmp_line,";");
+        genre  = strsep(&tmp_line,";");
+        year = atoi(strsep(&tmp_line,";"));
+        lyrics = stsep(&tmp_line,";") //as lyrics tem o \n lá porque é onde ha mudanca de linha
+        removeEnters(lyrics);
+        /*
+        if(isFormatValid(artist_id) && verify_year(year) && verify_music(duration)){
+            
+            artist_id_converted = convertID(artist_id, &num_artists);
+            Music* m = createMusic(id, title, artist_id_converted, num_artists, duration, genre, year, lyrics);
+            addMusic(music_table, m);
+            // chama func para escrever no csv a linha (quando esta correta)
+        }*/
+       /*
+        else{
+            erros++;
+            chama func para escrever no csv das musicas erradas a linha (tmp_line)
+        }
+       
+       */
+
+    }
+    fclose(musics);
+}
+
+
 // Função para ler e fazer parse de um CSV file de musicas.
 int parse_musics_csv(const char* filename) {
     FILE* file = fopen(filename, "r");
