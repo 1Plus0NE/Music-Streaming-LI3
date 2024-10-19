@@ -2,19 +2,20 @@
 
 // Função que cria a diretoria "dataset-errors" e respetivos ficheiros com cabeçalhos
     // Possivelmente inutil, mudar módulo posteriormente
+    // se calhar nao é necessário criar a dir
 void errorsDir(){
     // Criação da diretoria
-    if (mkdir("../dataset-errors", 0777) == -1) {
+    if (mkdir("../resultados", 0777) == -1) {
         if (errno == EEXIST) printf("Diretoria já existente.\n");
         else {
             perror("Erro ao criar a diretoria.\n");
             exit(EXIT_FAILURE);
         }
     }
-    else printf("dataset-errors criado com sucesso.\n");
+    else printf("resultados criado com sucesso.\n");
 
     // Ficheiros de erros com respetivos cabeçalhos
-    FILE *errors = fopen("../dataset-errors/users.csv", "w");
+    FILE *errors = fopen("../resultados/users.csv", "w");
     if(!errors){
         perror("Erro ao criar o ficheiro de erros de users.\n");
         exit(EXIT_FAILURE);
@@ -22,7 +23,7 @@ void errorsDir(){
     fprintf(errors, "\"username\";\"email\";\"first_name\";\"last_name\";\"birth_date\";\"country\";\"subscription_type\";\"liked_songs_id\"\n");
     fclose(errors);
 
-    fopen("../dataset-errors/artists.csv", "w");
+    fopen("../resultados/artists.csv", "w");
     if(!errors){
         perror("Erro ao criar o ficheiro de erros de artists.\n");
         exit(EXIT_FAILURE);
@@ -30,13 +31,50 @@ void errorsDir(){
     fprintf(errors, "\"id\";\"name\";\"description\";\"recipe_per_stream\";\"id_constituent\";\"country\";\"type\"\n");
     fclose(errors);
 
-    fopen("../dataset-errors/musics.csv", "w");
+    fopen("../resultados/musics.csv", "w");
     if(!errors){
         perror("Erro ao criar o ficheiro de erros de musics.\n");
         exit(EXIT_FAILURE);
     }
     fprintf(errors, "\"id\";\"title\";\"artist_id\";\"duration\";\"genre\";\"year\";\"lyrics\"\n");
     fclose(errors);
+}
+
+// Função que recebe uma linha e escreve no csv de erros
+
+void writeErrors(char* line, int csvFile){
+    FILE *errors;
+    switch(csvFile){
+        case 1:
+            errors = fopen("../resultados/artists.csv", "a");
+            if(!errors){
+                perror("Erro ao escrever no ficheiro de erros de artists.\n");
+                exit(EXIT_FAILURE);
+            }
+            fprintf(errors, "%s", line);
+            fclose(errors);
+            break;
+        case 2:
+            errors = fopen("../resultados/musics.csv", "a");
+            if(!errors){
+                perror("Erro ao escrever no ficheiro de erros de musics.\n");
+                exit(EXIT_FAILURE);
+            }
+            fprintf(errors, "%s", line);
+            fclose(errors);
+            break;
+        case 3:
+            errors = fopen("../resultados/users.csv", "a");
+            if(!errors){
+                perror("Erro ao escrever no ficheiro de erros de users.\n");
+                exit(EXIT_FAILURE);
+            }
+            fprintf(errors, "%s", line);
+            fclose(errors);
+            break;
+        default:
+            printf("Opcao invalida.\n");
+    }
 }
 
 // Função para ler e fazer parse de um arquivo CSV de artistas.
@@ -112,13 +150,13 @@ int parse_artist_csv(const char* filename) {
     return 0;
 }
 
-// decidi alterar o parser anterior para este
-
+// Função para ler e fazer parse de um ficheiro CSV de músicas.
 void parse_musics(char* path){
-    // Variaveis para o parse
+    // Variaveis para o parse 
     FILE* musics;
     char filename[1024];
     char line[2048];
+    char original_line[2048];
     char *tmp_line=NULL;
 
     // Argumentos para a struct de musicas
@@ -133,8 +171,9 @@ void parse_musics(char* path){
     int year;
     char* lyrics;
     
-    //int parsed=0; era para ver os que tinham sido loaded
-    //int verified=0; era para ver os que tinham sido verificados
+    // int parsed=0; 
+    // int verified=0;
+    // int erros=0;
 
     // music_table = createMusicTable(); // criar a tabela de musicas
     snprintf(filename,1024,"%s/musics.csv",path); //abrir ficheiro de musicas
@@ -148,7 +187,10 @@ void parse_musics(char* path){
     fgets(line, sizeof(line), musics); //skip da primeira linha por ser o header
 
     while((fgets(line, sizeof(line), musics) != NULL)){
-        tmp_line= line;
+        strcpy(original_line, line); // assim temos uma copia da linha para depois escrever os erros no csv
+        // outra ideia era nao ter outra variavel para a linha, mas enviar todos os argumentos para a funcao de escrita no ficheiro e delimitar com ";"
+        tmp_line = line;
+
         id_str = remove_aspas(strsep(&tmp_line, ";"));
         id = strtol(id_str + 1, NULL, 10);
         title  = remove_aspas(strsep(&tmp_line,";"));
@@ -158,8 +200,8 @@ void parse_musics(char* path){
         year = atoi(remove_aspas(strsep(&tmp_line,";")));
         lyrics = remove_aspas(strsep(&tmp_line,";")); //as lyrics tem o \n lá porque é onde ha mudanca de linha
         removeEnters(lyrics);
-        //parsed++;
-        //printf("ID: %li | Lyrics: %s \n",id,lyrics);
+        // parsed++;
+        // printf("ID: %li | Lyrics: %s \n",id,lyrics);
         
         if(isFormatValid(artist_id) && verify_year(year) && verify_duration(duration)){
             //verified++;
@@ -167,128 +209,19 @@ void parse_musics(char* path){
             Music* m = createMusic(id, title, artist_id_converted, num_artists, duration, genre, year, lyrics);
             //addMusic(music_table, m);
             // chama func para escrever no csv a linha (quando esta correta)
-            // Depois de criar a musica, já não precisamos para nada o ID convertido
             free(artist_id_converted);
         }
-       /*
-        else{
-            
-            chama func para escrever no csv das musicas erradas a linha (tmp_line)
-        }
        
-       */
+        else{
+            //erros++;
+            writeErrors(original_line, 2);
+        }   
 
     }
-    //printf("Foram lidos %d dados e foram verificados %d\n", parsed, verified);
+    // printf("Foram lidos %d dados, foram validados %d dados e foram encontrados %d erros.\n", parsed, verified, erros);
 
     fclose(musics);
 }
-/*
-// Função para ler e fazer parse de um CSV file de musicas.
-int parse_musics_csv(const char* filename) {
-    FILE* file = fopen(filename, "r");
-
-    if(!file){
-        perror("Erro ao abrir o ficheiro csv das musicas.\n");
-        exit(EXIT_FAILURE);
-    }
-
-    char line[512];
-
-    fgets(line, sizeof(line), file); //skip da primeira linha por ser o header
-
-    // Path para o ficheiro de erros dos users 
-        //Supõe-se que o ficheiro e diretoria ja estejam criados pela função errorsDir
-    char *errorsMusics = "../dataset-errors/musics.csv";
-
-    while(fgets(line, sizeof(line), file)){
-        if(musicLineVerify(line) == 0){
-            int id;
-            char* title = NULL;
-            int* artist_id = NULL;
-            int num_artists = 0;
-            char* duration = NULL;
-            char* genre = NULL;
-            int year;
-            char* lyrics = NULL;
-            
-            // copia da linha para usarmos o strsep
-            char* line_copy = strdup(line);
-            char* token = line_copy; 
-            char* campo;
-
-            for(int i = 0; i <= 6; i++){
-                campo = strsep(&token, ";");
-
-                if(campo){
-                    switch(i){
-                        case 0:
-                            id = atoi(remove_aspas(campo));
-                            break;
-                        case 1:
-                            title = strdup(remove_aspas(campo));
-                            break;
-                        case 2:
-                            char* artist_list = remove_aspas(campo);
-
-                            // quantos artistas existem
-                            char* tmp = artist_list;
-                            num_artists = 1;  // vamos assumir que existe pelo menos 1 
-                            while (*tmp) {
-                                if (*tmp == ',') {
-                                    num_artists++;
-                                }
-                                tmp++;
-                            }
-
-                            artist_id = malloc(num_artists * sizeof(int));
-
-                            char* artist_token;
-                            int artist_index = 0;
-                            while ((artist_token = strsep(&artist_list, ",")) != NULL && artist_index < num_artists) {
-                                artist_id[artist_index++] = atoi(artist_token);
-                            }
-                            break;                       
-                        case 3:
-                            duration = strdup(remove_aspas(campo));
-                            break;
-                        case 4:
-                            genre = strdup(remove_aspas(campo));
-                            break;
-                        case 5:
-                            year = atoi(remove_aspas(campo));
-                            break;
-                        case 6:
-                            lyrics = strdup(remove_aspas(campo));
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
-            
-            //Music* m = createMusic(id, title, artist_id, num_artists, duration, genre, year, lyrics);
-            printf("Criada a musica: %s no de artistas: %d, duracao: %s\n", title, num_artists, duration); // print de teste
-            //local onde depois será feita o armazenamento na hashtable(estrutura de dados)
-
-            free(line_copy); 
-            free(title);
-            free(artist_id);
-            free(duration);
-            free(genre);
-            free(lyrics);
-        }      
-        else{
-
-            FILE *musicErrors = fopen(errorsMusics, "a");
-            fputs(line, musicErrors);
-            fclose(musicErrors);
-        }  
-    }
-    fclose(file);
-    return 0;
-}
-*/
 
 //Função responsável por ler e fazer parse de um arquivo CSV de users.
 int parse_user_csv(const char *filename){
