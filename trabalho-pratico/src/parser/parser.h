@@ -18,7 +18,7 @@
 void errosDir();
 
 // Função que recebe uma linha e escreve no csv de erros
-void writeErrors(char* line, int csvFile)
+void writeErrors(char* line, int csvFile);
 
 // Função que faz a validação de um artista.
 // int verify_artist(Artist* artist); não está no parser.c
