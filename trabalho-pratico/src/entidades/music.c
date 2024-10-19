@@ -83,58 +83,6 @@ Music* createMusic(long int id, char* title, long int* artist_id, int num_artist
     return music;
 }
 
-// Função de verificação da validade de uma musica
-int musicLineVerify(char *line){
-
-    char *info = strtok(line, ";");
-
-    for(int i = 0; i <= 6; i++){
-
-        if(info){
-            switch(i){
-                case 0:
-                    // id nao pode ser < 0
-                    if(atoi(info)<0) return 1;
-                    info = strtok(NULL, ";");
-                    break;
-                case 1:
-                    // title da musica nao pode ser uma string empty
-                    if(!remove_aspas(info)) return 1;
-                    info = strtok(NULL, ";");
-                    break;
-                case 2:
-                    // array de artistas nao pode ser empty
-                    if(!remove_aspas(info)) return 1;
-                    info = strtok(NULL, ";");
-                    break;
-                case 3:
-                    // duracao tem que ser sintaticamente valida
-                    if(!verify_duration(info)) return 1;
-                    info = strtok(NULL, ";");
-                    break;
-                case 4:
-                    // genero nao pode ser uma string empty
-                    if(!remove_aspas(info)) return 1;
-                    info = strtok(NULL, ";");
-                    break;
-                case 5:
-                    // ano nao pode ser maior que o ano atual
-                    if(!verify_year(atoi(info))) return 1;
-                    info = strtok(NULL, ";");
-                    break;
-                case 6:
-                    // as lyrics nao podem ser uma string empty
-                    if(!remove_aspas(info)) return 1;
-                    info = strtok(NULL, ";");
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-    return 0;
-}
-
 // GETTERS
 
 // Função que retorna o ID da música
