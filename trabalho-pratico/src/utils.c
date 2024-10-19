@@ -183,7 +183,7 @@ int isFormatValid(const char *input){
 // Função que dado um array de IDs converte de char para long int
 long int* convertID(const char *input, int *count){
     // Verificar se tem um formato valido, pois existem entries sem []
-    if (!is_valid_format(input)){
+    if (!isFormatValid(input)){
         *count = 0;
         return 0;
     }
@@ -212,6 +212,7 @@ long int* convertID(const char *input, int *count){
     int index = 0;
     // Percorremos toda a linha até não encontrarmos uma virgula
     while ((token = strsep(&input_copy, ",")) != NULL){
+        remove_espacos(token);
         // Remover as plicas
         if (token[0] == '\'' && token[strlen(token) - 1] == '\'' ){
             token++;
