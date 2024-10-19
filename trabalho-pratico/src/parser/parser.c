@@ -167,6 +167,8 @@ void parse_musics(char* path){
             Music* m = createMusic(id, title, artist_id_converted, num_artists, duration, genre, year, lyrics);
             //addMusic(music_table, m);
             // chama func para escrever no csv a linha (quando esta correta)
+            // Depois de criar a musica, já não precisamos para nada o ID convertido
+            free(artist_id_converted);
         }
        /*
         else{
