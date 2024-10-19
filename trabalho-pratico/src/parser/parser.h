@@ -17,13 +17,16 @@
 // Função que cria uma diretoria com os ficheiros de erros, com os headers
 void errosDir();
 
+// Função que recebe uma linha e escreve no csv de erros
+void writeErrors(char* line, int csvFile)
+
 // Função que faz a validação de um artista.
-int verify_artist(Artist* artist);
+// int verify_artist(Artist* artist); não está no parser.c
 
 // Função para ler e fazer parse de um arquivo CSV de artistas.
 int parse_artist_csv(const char* filename);
 
-// Função para ler e fazer parse de um arquivo CSV de músicas.
+// Função para ler e fazer parse de um ficheiro CSV de músicas.
 void parse_musics(char* path);
 
 // Função para ler e fazer parse de um arquivo CSV de utilizadores.
