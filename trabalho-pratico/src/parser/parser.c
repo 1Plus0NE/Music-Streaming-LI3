@@ -112,6 +112,8 @@ int parse_artist_csv(const char* filename) {
     return 0;
 }
 
+// decidi alterar o parser anterior para este
+
 void parse_musics(char* path){
     // Variaveis para o parse
     FILE* musics;
@@ -120,9 +122,10 @@ void parse_musics(char* path){
     char *tmp_line=NULL;
 
     // Argumentos para a struct de musicas
+    char *id_str; // para depois passar para long int
     long int id;
     char* title;
-    char* artist_id;
+    char* artist_id; // para depois converter para um array de long ints
     long int* artist_id_converted;
     int num_artists;
     char* duration;
@@ -130,9 +133,10 @@ void parse_musics(char* path){
     int year;
     char* lyrics;
     
-    int erros=1; // a primeira linha n conta
+    //int parsed=0; era para ver os que tinham sido loaded
+    //int verified=0; era para ver os que tinham sido verificados
 
-    // music_table = createMusicTable();
+    // music_table = createMusicTable(); // criar a tabela de musicas
     snprintf(filename,1024,"%s/musics.csv",path); //abrir ficheiro de musicas
 
     musics = fopen(filename, "r");
@@ -145,35 +149,39 @@ void parse_musics(char* path){
 
     while((fgets(line, sizeof(line), musics) != NULL)){
         tmp_line= line;
-        id = atoi(strsep(&tmp_line,";"));
-        title  = strsep(&tmp_line,";");
-        artist_id  = strsep(&tmp_line,";");
-        duration  = strsep(&tmp_line,";");
-        genre  = strsep(&tmp_line,";");
-        year = atoi(strsep(&tmp_line,";"));
-        lyrics = strsep(&tmp_line,";"); //as lyrics tem o \n lá porque é onde ha mudanca de linha
+        id_str = remove_aspas(strsep(&tmp_line, ";"));
+        id = strtol(id_str + 1, NULL, 10);
+        title  = remove_aspas(strsep(&tmp_line,";"));
+        artist_id  = remove_aspas(strsep(&tmp_line,";"));
+        duration  = remove_aspas(strsep(&tmp_line,";"));
+        genre  = remove_aspas(strsep(&tmp_line,";"));
+        year = atoi(remove_aspas(strsep(&tmp_line,";")));
+        lyrics = remove_aspas(strsep(&tmp_line,";")); //as lyrics tem o \n lá porque é onde ha mudanca de linha
         removeEnters(lyrics);
-        /*
-        if(isFormatValid(artist_id) && verify_year(year) && verify_music(duration)){
-            
-            artist_id_converted = convertID(artist_id, &num_artists);
+        //parsed++;
+        //printf("ID: %li | Lyrics: %s \n",id,lyrics);
+        
+        if(isFormatValid(artist_id) && verify_year(year) && verify_duration(duration)){
+            //verified++;
+            artist_id_converted = convertID(artist_id, &num_artists); // daqui temos o array de ids de artistas + o num_artists calculado
             Music* m = createMusic(id, title, artist_id_converted, num_artists, duration, genre, year, lyrics);
-            addMusic(music_table, m);
+            //addMusic(music_table, m);
             // chama func para escrever no csv a linha (quando esta correta)
-        }*/
+        }
        /*
         else{
-            erros++;
+            
             chama func para escrever no csv das musicas erradas a linha (tmp_line)
         }
        
        */
 
     }
+    //printf("Foram lidos %d dados e foram verificados %d\n", parsed, verified);
+
     fclose(musics);
 }
-
-
+/*
 // Função para ler e fazer parse de um CSV file de musicas.
 int parse_musics_csv(const char* filename) {
     FILE* file = fopen(filename, "r");
@@ -278,6 +286,7 @@ int parse_musics_csv(const char* filename) {
     fclose(file);
     return 0;
 }
+*/
 
 //Função responsável por ler e fazer parse de um arquivo CSV de users.
 int parse_user_csv(const char *filename){

@@ -24,7 +24,7 @@ int verify_artist(Artist* artist);
 int parse_artist_csv(const char* filename);
 
 // Função para ler e fazer parse de um arquivo CSV de músicas.
-int parse_music_csv(const char* filename);
+void parse_musics(char* path);
 
 // Função para ler e fazer parse de um arquivo CSV de utilizadores.
 int parse_user_csv(const char* filename);

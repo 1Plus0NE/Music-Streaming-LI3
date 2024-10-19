@@ -11,6 +11,7 @@
 
 //funções de manipulação de strings
 char* remove_aspas(char* str);
+char* remove_espacos(char* input);
 
 //funções de validação
 int strDigit(char *str);

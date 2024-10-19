@@ -18,6 +18,20 @@ char* remove_aspas(char* str) {
     return str;  // Retorna a string sem alterações se não houver aspas
 }
 
+// Função que remove espaços de uma dada string
+char* remove_espacos(char* input){
+    int i,j;
+    char *output=input;
+    for (i = 0, j = 0; i<strlen(input); i++,j++){
+        if (input[i]!=' ')                           
+            output[j]=input[i];                     
+        else
+            j--;                                     
+    }
+    output[j]=0;
+    return output;
+}
+
 // função que verifica se toda a string é composta por dígitos
 int strDigit(char *str){
     
@@ -169,7 +183,7 @@ int isFormatValid(const char *input){
 // Função que dado um array de IDs converte de char para long int
 long int* convertID(const char *input, int *count){
     // Verificar se tem um formato valido, pois existem entries sem []
-    if (!isFormatValid(input)){
+    if (!is_valid_format(input)){
         *count = 0;
         return 0;
     }
