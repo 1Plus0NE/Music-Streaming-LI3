@@ -5,14 +5,14 @@ struct artist {
     char* name;
     char* description;
     float recipe_per_stream;
-    int* id_constituent;
+    long int* id_constituent;
     int num_constituent;
     char* country;
     char* type;
 };
 
 // Função para criar uma estrutura da entidade artista parametrizada.
-Artist* createArtist(int id, char* name, char* description, float recipe_per_stream, int* id_constituent, int num_constituent, char* country, char* type) {
+Artist* createArtist(int id, char* name, char* description, float recipe_per_stream, long int* id_constituent, int num_constituent, char* country, char* type) {
     Artist* artist = (Artist*)malloc(sizeof(Artist));
     if (!artist) {
         perror("Erro ao alocar memória para o artista.\n");
@@ -40,7 +40,7 @@ Artist* createArtist(int id, char* name, char* description, float recipe_per_str
 
     artist -> recipe_per_stream = recipe_per_stream;
 
-    artist -> id_constituent = malloc(num_constituent * sizeof(int));
+    artist -> id_constituent = malloc(num_constituent * sizeof(long int));
     if (!artist -> id_constituent) {
         perror("Erro ao alocar memória para a lista de constituintes.\n");
         free(artist -> description);

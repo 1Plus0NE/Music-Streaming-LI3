@@ -41,7 +41,6 @@ void errorsDir(){
 }
 
 // Função que recebe uma linha e escreve no csv de erros
-
 void writeErrors(char* line, int csvFile){
     FILE *errors;
     switch(csvFile){
@@ -77,77 +76,71 @@ void writeErrors(char* line, int csvFile){
     }
 }
 
-// Função para ler e fazer parse de um arquivo CSV de artistas.
-int parse_artist_csv(const char* filename) {
-    FILE* file = fopen(filename, "r");
+// função para ler e fazer parse de um ficheiro CSV de artistas.
+void parse_artist(char* path){
+    //variáveis para o parse
+    FILE* artists;
+    char filename[1024];
+    char line[2048];
+    char original_line[2048];
+    char *tmp_line=NULL;
 
-    if(!file){
-        perror("Erro ao abrir o arquivo csv dos artistas.\n");
+    //argumentos para a struct de artistas
+    char *id_str;
+    long int id;
+    char* name;
+    char* description;
+    float recipe_per_stream;
+    char* id_constituent;
+    long int* id_constituent_converted;
+    int num_constituent;
+    char* country;
+    char * type;
+
+    snprintf(filename,1024,"%s/artists.csv", path);
+
+    artists = fopen(filename, "r");
+    if(!artists){
+        perror("Erro ao abrir o ficheiro csv dos artistas.\n");
         exit(EXIT_FAILURE);
     }
 
-    char* line;
+    fgets(line, sizeof(line), artists);
+    
+    while((fgets(line, sizeof(line), artists) != NULL)){
+        strcpy(original_line, line);
+        tmp_line = line;
 
-    fgets(line, sizeof(line), file);
+        id_str = remove_aspas(strsep(&tmp_line, ";"));
+        id = strtol(id_str + 1, NULL, 10);
+        name = remove_aspas(strsep(&tmp_line,";"));
+        description = remove_aspas(strsep(&tmp_line,";"));
+        recipe_per_stream = atof(remove_aspas(strsep(&tmp_line,";")));
+        id_constituent = remove_aspas(strsep(&tmp_line,";"));
+        country = remove_aspas(strsep(&tmp_line,";"));
+        type = remove_aspas(strsep(&tmp_line,";"));
+        removeEnters(description);
+        // parsed++;
+        // printf("ID: %li | Lyrics: %s \n",id,lyrics);
 
-    //char* errorsArtists = "../dataset-errors/artists.csv";
-
-    while(fgets(line, sizeof(line), file)){
-        int id;
-        char* name = NULL;
-        char* description = NULL;
-        float recipe_per_stream;
-        int constituents[10];
-        int num_constituents = 0;
-        char* country = NULL;
-        char* type = NULL;
-
-        char* token = strsep(&line, "\n");
-        char* campo;
-
-        for(int i = 0; i <= 8; i++){
-            campo = strsep(&token, ";");
-
-            if(campo){
-                switch(i){
-                    case 0:
-                        id = atoi(remove_aspas(campo));
-                        break;
-                    case 1:
-                        name = remove_aspas(campo);
-                        break;
-                    case 2:
-                        description = remove_aspas(campo);
-                        break;
-                    case 3:
-                        recipe_per_stream = atof(remove_aspas(campo));
-                        break;
-                    case 4:
-                        while(campo && num_constituents < 10){
-                            constituents[num_constituents++] = atoi(remove_aspas(campo));
-                            campo = strsep(&token, ";");
-                        }
-                        break;
-                    case 5:
-                        country = remove_aspas(campo);
-                        break;
-                    case 6:
-                        type = remove_aspas(campo);
-                        break;
-                    default:
-                        break;
-                }
-            }
+        if(isFormatValid(id_constituent)){
+            // verified++;
+            id_constituent_converted = convertID(id_constituent, &num_constituent);
+            Artist* a = createArtist(id, name, description, recipe_per_stream, id_constituent_converted, num_constituent, country, type);
+            // addMusic(music_table, m);
+            // chama func para escrever no csv a linha (quando esta correta)
+            free(id_constituent_converted);
         }
-        
-        Artist* a = createArtist(id, name, description, recipe_per_stream, constituents, num_constituents, country, type);
+       
+        else{
+            //erros++;
+            writeErrors(original_line, 2);
+        }   
 
-        //local onde depois será feita o armazenamento na hashtable(estrutura de dados)
-
-        freeArtist(a);
     }
-    fclose(file);
-    return 0;
+    // printf("Foram lidos %d dados, foram validados %d dados e foram encontrados %d erros.\n", parsed, verified, erros);
+
+    fclose(artists);
 }
 
 // Função para ler e fazer parse de um ficheiro CSV de músicas.
@@ -221,6 +214,73 @@ void parse_musics(char* path){
     // printf("Foram lidos %d dados, foram validados %d dados e foram encontrados %d erros.\n", parsed, verified, erros);
 
     fclose(musics);
+}
+
+// função para ler e fazer parse de um ficheiro CSV de artistas.
+void parse_user(char* path){
+    //variáveis para o parse
+    FILE* users;
+    char filename[1024];
+    char line[2048];
+    char original_line[2048];
+    char *tmp_line=NULL;
+
+    //argumentos para a struct de artistas
+    char *username;
+    char* email;
+    char* first_name;
+    char* last_name;
+    char birth_date[10];
+    char* country;
+    char* subscription_type;
+    char* liked_musics_id;
+    long int* liked_musics_id_converted;
+    int num_liked_musics;
+
+    snprintf(filename,1024,"%s/users.csv", path);
+
+    users = fopen(filename, "r");
+    if(!users){
+        perror("Erro ao abrir o ficheiro csv dos utilizadores.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    fgets(line, sizeof(line), users);
+
+    while((fgets(line, sizeof(line), users) != NULL)){
+        strcpy(original_line, line);
+        tmp_line = line;
+
+        username = remove_aspas(strsep(&tmp_line, ";"));
+        email = remove_aspas(strsep(&tmp_line, ";"));
+        first_name = remove_aspas(strsep(&tmp_line,";"));
+        last_name = remove_aspas(strsep(&tmp_line,";"));
+        strncpy(birth_date, remove_aspas(strsep(&tmp_line, ";")), sizeof(birth_date) - 1);
+        birth_date[9] = '\0';
+        country = remove_aspas(strsep(&tmp_line,";"));
+        subscription_type = remove_aspas(strsep(&tmp_line,";"));
+        liked_musics_id = remove_aspas(strsep(&tmp_line,";"));
+        // parsed++;
+        // printf("ID: %li | Lyrics: %s \n",id,lyrics);
+
+        if(isFormatValid(liked_musics_id) && birthDateVerify(birth_date)){
+            // verified++;
+            liked_musics_id_converted = convertID(liked_musics_id, &num_liked_musics);
+            User* u = createUser(username, email, first_name, last_name, birth_date, country, subscription_type, liked_musics_id_converted, num_liked_musics);
+            // addMusic(music_table, m);
+            // chama func para escrever no csv a linha (quando esta correta)
+            free(liked_musics_id_converted);
+        }
+
+        else{
+            //erros++;
+            writeErrors(original_line, 2);
+        }   
+
+    }
+    // printf("Foram lidos %d dados, foram validados %d dados e foram encontrados %d erros.\n", parsed, verified, erros);
+
+    fclose(users);
 }
 
 //Função responsável por ler e fazer parse de um arquivo CSV de users.

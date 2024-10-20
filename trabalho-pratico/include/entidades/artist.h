@@ -12,7 +12,7 @@
 typedef struct artist Artist;
 
 // Função para criar uma estrutura da entidade artista parametrizada.
-Artist* createArtist(int id, char* name, char* description, float recipe_per_stream, int* id_constituent, int num_constituent, char* country, char* type);
+Artist* createArtist(int id, char* name, char* description, float recipe_per_stream, long int* id_constituent, int num_constituent, char* country, char* type);
 
 // Função que faz a validação de um artista.
 int verify_artist(Artist* artist);

@@ -8,12 +8,12 @@ struct user {
     char birth_date[10]; // data base 2024/09/09
     char* country;
     char* subscription_type;
-    int* liked_musics_id; // char* liked_musics_id?
+    long int* liked_musics_id; // char* liked_musics_id?
     int num_liked_musics;
 };
 
 // Função para criar uma estrutura da entidade utilizador parametrizada.
-User* createUser(char* username, char* email, char* first_name, char* last_name, char* birth_date , char* country, char* subscription_type, int* liked_musics_id, int num_liked_musics){
+User* createUser(char* username, char* email, char* first_name, char* last_name, char* birth_date , char* country, char* subscription_type, long int* liked_musics_id, int num_liked_musics){
     User* user = (User*)malloc(sizeof(User));
     if (!user) {
         perror("erro ao alocar memória para o utilizador.\n");

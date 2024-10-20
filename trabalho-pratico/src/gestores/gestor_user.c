@@ -2,7 +2,7 @@
 
 // função para criar uma tabela de utilizadores.
 void createUserTable(){
-    return g_hash_table_new(g_str_hash, g_str_equal);
+    g_hash_table_new(g_str_hash, g_str_equal);
 }
 
 // função que adiciona um utilizador á tabela de utilizadores.

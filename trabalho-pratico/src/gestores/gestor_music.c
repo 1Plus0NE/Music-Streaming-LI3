@@ -2,7 +2,7 @@
 
 // função para criar uma tabela de músicas.
 void createMusicTable(){
-    return g_hash_table_new(g_int_hash, g_int_equal);
+    g_hash_table_new(g_int_hash, g_int_equal);
 }
 
 // função que adiciona uma música á tabela de músicas.
