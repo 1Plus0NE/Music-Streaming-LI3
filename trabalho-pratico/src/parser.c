@@ -95,7 +95,7 @@ void parse_artist(char* path){
     long int* id_constituent_converted;
     int num_constituent;
     char* country;
-    char * type;
+    char* type;
 
     snprintf(filename,1024,"%s/artists.csv", path);
 
@@ -120,26 +120,19 @@ void parse_artist(char* path){
         country = remove_aspas(strsep(&tmp_line,";"));
         type = remove_aspas(strsep(&tmp_line,";"));
         removeEnters(description);
-        // parsed++;
-        // printf("ID: %li | Lyrics: %s \n",id,lyrics);
 
         if(isFormatValid(id_constituent)){
-            // verified++;
             id_constituent_converted = convertID(id_constituent, &num_constituent);
             Artist* a = createArtist(id, name, description, recipe_per_stream, id_constituent_converted, num_constituent, country, type);
-            // addMusic(music_table, m);
-            // chama func para escrever no csv a linha (quando esta correta)
+            // adiciona à tabela de artists
             free(id_constituent_converted);
         }
        
         else{
-            //erros++;
-            writeErrors(original_line, 2);
+            writeErrors(original_line, 1);
         }   
 
     }
-    // printf("Foram lidos %d dados, foram validados %d dados e foram encontrados %d erros.\n", parsed, verified, erros);
-
     fclose(artists);
 }
 
@@ -163,10 +156,6 @@ void parse_musics(char* path){
     char* genre;
     int year;
     char* lyrics;
-    
-    // int parsed=0; 
-    // int verified=0;
-    // int erros=0;
 
     // music_table = createMusicTable(); // criar a tabela de musicas
     snprintf(filename,1024,"%s/musics.csv",path); //abrir ficheiro de musicas
@@ -180,8 +169,7 @@ void parse_musics(char* path){
     fgets(line, sizeof(line), musics); //skip da primeira linha por ser o header
 
     while((fgets(line, sizeof(line), musics) != NULL)){
-        strcpy(original_line, line); // assim temos uma copia da linha para depois escrever os erros no csv
-        // outra ideia era nao ter outra variavel para a linha, mas enviar todos os argumentos para a funcao de escrita no ficheiro e delimitar com ";"
+        strcpy(original_line, line);
         tmp_line = line;
 
         id_str = remove_aspas(strsep(&tmp_line, ";"));
@@ -193,26 +181,19 @@ void parse_musics(char* path){
         year = atoi(remove_aspas(strsep(&tmp_line,";")));
         lyrics = remove_aspas(strsep(&tmp_line,";")); //as lyrics tem o \n lá porque é onde ha mudanca de linha
         removeEnters(lyrics);
-        // parsed++;
-        // printf("ID: %li | Lyrics: %s \n",id,lyrics);
         
         if(isFormatValid(artist_id) && verify_year(year) && verify_duration(duration)){
-            //verified++;
             artist_id_converted = convertID(artist_id, &num_artists); // daqui temos o array de ids de artistas + o num_artists calculado
             Music* m = createMusic(id, title, artist_id_converted, num_artists, duration, genre, year, lyrics);
             //addMusic(music_table, m);
-            // chama func para escrever no csv a linha (quando esta correta)
             free(artist_id_converted);
         }
        
         else{
-            //erros++;
             writeErrors(original_line, 2);
         }   
 
     }
-    // printf("Foram lidos %d dados, foram validados %d dados e foram encontrados %d erros.\n", parsed, verified, erros);
-
     fclose(musics);
 }
 
@@ -274,7 +255,7 @@ void parse_user(char* path){
 
         else{
             //erros++;
-            writeErrors(original_line, 2);
+            writeErrors(original_line, 3);
         }   
 
     }

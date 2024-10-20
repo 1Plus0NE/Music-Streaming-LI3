@@ -194,6 +194,13 @@ long int* convertID(const char *input, int *count){
     input_copy++;
     input_copy[strlen(input_copy) - 1] = '\0';
 
+    // Verificar se está empty
+    if(strlen(input_copy) == 0){
+        *count = 0;
+        free(input_copy - 1);
+        return 0;
+    }
+
     // Contar o número de ids através das virgulas, o nosso contador começa 1, pois podemos ter um array de um só elemento
     *count = 1;
     for (char *c = input_copy; *c != '\0'; c++){
