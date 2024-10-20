@@ -1,4 +1,4 @@
-#include "music.h"
+#include "../../include/entidades/music.h"
 
 struct music {
     long int id;

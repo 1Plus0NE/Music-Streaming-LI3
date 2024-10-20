@@ -1,4 +1,4 @@
-#include "gestor_user.h"
+#include "../../include/gestores/gestor_user.h"
 
 // função para criar uma tabela de utilizadores.
 void createUserTable(){

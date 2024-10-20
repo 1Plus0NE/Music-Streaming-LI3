@@ -1,4 +1,4 @@
-#include "gestor_music.h"
+#include "../../include/gestores/gestor_music.h"
 
 // função para criar uma tabela de músicas.
 void createMusicTable(){

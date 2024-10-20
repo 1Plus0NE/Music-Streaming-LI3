@@ -1,4 +1,4 @@
-#include "queries.h"
+#include "../include/queries.h"
 
 // função que responde á query1.
 void query1(char* user_username, GHashTable* user_table, FILE* output_file){

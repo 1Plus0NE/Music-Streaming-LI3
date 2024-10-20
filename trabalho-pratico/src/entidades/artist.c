@@ -1,4 +1,4 @@
-#include "artist.h"
+#include "../../include/entidades/artist.h"
 
 struct artist {
     int id;

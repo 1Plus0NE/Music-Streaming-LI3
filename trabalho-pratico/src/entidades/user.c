@@ -1,4 +1,4 @@
-#include "user.h"
+#include "../../include/entidades/user.h"
 
 struct user {
     char* username;

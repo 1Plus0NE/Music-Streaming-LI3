@@ -1,4 +1,4 @@
-#include "parser.h"
+#include "../include/parser.h"
 
 // Função que cria a diretoria "dataset-errors" e respetivos ficheiros com cabeçalhos
     // Possivelmente inutil, mudar módulo posteriormente

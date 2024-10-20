@@ -1,4 +1,4 @@
-#include "gestor_artist.h"
+#include "../../include/gestores/gestor_artist.h"
 
 // função para criar uma tabela de artistas.
 void createArtistTable(){
