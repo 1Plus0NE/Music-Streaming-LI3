@@ -86,7 +86,7 @@ User* createUser(char* username, char* email, char* first_name, char* last_name,
     }
     strcpy(user -> subscription_type, subscription_type);
 
-    user -> liked_musics_id = malloc(num_liked_musics * sizeof(int));
+    user -> liked_musics_id = malloc(num_liked_musics * sizeof(long int));
     if (!user -> liked_musics_id) {
         perror("Erro ao alocar memória para a lista de músicas com gosto.\n");
         free(user -> subscription_type);
