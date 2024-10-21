@@ -232,10 +232,10 @@ void parse_user(char* path){
     char* last_name;
     char birth_date[10];
     char* country;
-    char* subscription_type;
-    char* liked_musics_id;
+    char subscription_type[7];
+    //char* liked_musics_id;
     long int* liked_musics_id_converted;
-    int num_liked_musics;
+    int num_liked_musics=0;
 
     snprintf(filename,1024,"%s/users.csv", path);
 
@@ -251,18 +251,29 @@ void parse_user(char* path){
         strcpy(original_line, line);
         tmp_line = line;
 
-        username = remove_aspas(strsep(&tmp_line, ";"));
-        email = remove_aspas(strsep(&tmp_line, ";"));
-        first_name = remove_aspas(strsep(&tmp_line,";"));
-        last_name = remove_aspas(strsep(&tmp_line,";"));
-        strncpy(birth_date, remove_aspas(strsep(&tmp_line, ";")), sizeof(birth_date) - 1);
-        birth_date[9] = '\0';
-        country = remove_aspas(strsep(&tmp_line,";"));
-        subscription_type = remove_aspas(strsep(&tmp_line,";"));
-        liked_musics_id = remove_aspas(strsep(&tmp_line,";"));
+        // Antes da função atribuir valor as variaveis, verifica a sua validação
+        // tmp_line sera alterada na verificaçao
+        // line sera alterada na atribuição
+        // original_line permanece intacta, para erro
+        if(userLineVerify(tmp_line) == 0){
+            username = remove_aspas(strsep(&line, ";"));
+            email = remove_aspas(strsep(&line, ";"));
+            first_name = remove_aspas(strsep(&line,";"));
+            last_name = remove_aspas(strsep(&line,";"));
+            strncpy(birth_date, remove_aspas(strsep(&line, ";")), sizeof(birth_date) - 1);
+            birth_date[10] = '\0';
+            country = remove_aspas(strsep(&line,";"));
+            strncpy(subscription_type, remove_aspas(strsep(&line, ";")), sizeof(subscription_type) - 1);
+            subscription_type[7] = '\0';
+            //subscription_type = remove_aspas(strsep(&line,";"));
+            liked_musics_id_converted = convertID(remove_aspas(strsep(&line,"\n")), &num_liked_musics);
+
+            User* u = createUser(username, email, first_name, last_name, birth_date, country, subscription_type, liked_musics_id_converted, num_liked_musics);
+            //liked_musics_id = remove_aspas(strsep(&line,"\n"));
+
         // parsed++;
         // printf("ID: %li | Lyrics: %s \n",id,lyrics);
-
+        }/*
         if(isFormatValid(liked_musics_id) && birthDateVerify(birth_date)){
             // verified++;
             liked_musics_id_converted = convertID(liked_musics_id, &num_liked_musics);
@@ -270,13 +281,12 @@ void parse_user(char* path){
             // addMusic(music_table, m);
             // chama func para escrever no csv a linha (quando esta correta)
             free(liked_musics_id_converted);
-        }
+        }*/
 
         else{
             //erros++;
-            writeErrors(original_line, 2);
+            writeErrors(original_line, 2); //basta line?
         }   
-
     }
     // printf("Foram lidos %d dados, foram validados %d dados e foram encontrados %d erros.\n", parsed, verified, erros);
 
@@ -284,7 +294,7 @@ void parse_user(char* path){
 }
 
 //Função responsável por ler e fazer parse de um arquivo CSV de users.
-int parse_user_csv(const char *filename){
+/*int parse_user_csv(const char *filename){
     
     FILE *user = fopen(filename, "r");
     if(!user){
@@ -309,13 +319,15 @@ int parse_user_csv(const char *filename){
         dupLine = strdup(line);
         if(userLineVerify(dupLine) == 0){
             
-            char *username = NULL; //strcpy para NULL da seg error? 
-            char *email = NULL;
-            char *first_name = NULL;
-            char *last_name = NULL;
-            char *birth_date = NULL;
-            char *country = NULL;
-            char *subscription_type = NULL;
+            char *username; 
+            char *email;
+            char *first_name;
+            char *last_name;
+            char *birth_date[10];
+            char *country;
+            char *subscription_type[7];
+            long int *liked_musics_id;
+            int num_liked_musics = 0;
             //int *liked_musics_id = NULL;
             // int num_liked_musics = 0;
         
@@ -379,5 +391,5 @@ int parse_user_csv(const char *filename){
     free(dupLine);
     free(line);
     return 0;
-}
+}*/
 // Verificar/Corrigir os apontadores e os endereços nas chamadas de funções.

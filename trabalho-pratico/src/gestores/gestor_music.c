@@ -25,6 +25,11 @@ void freeMusicTable(GHashTable* table) {
     g_hash_table_destroy(table);
 }
 
+// Função para devolver TRUE (1) ou FALSE (0) quanto a existência de uma música
+/*gboolean musicExists(GHashTable* table, int id){
+    return g_hash_table_contains(table, &id);
+}*/
+
 // função que verifica se as musicas que o utilizador tem like efetivamente existem.
 /* int verifyLikedMusics(char* liked_musics_str, MusicTable* music_table){
     char* liked_musics = strdup(liked_musics_str);

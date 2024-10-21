@@ -120,6 +120,9 @@ void freeUser(User* user){
 // Função de verificação da validade de um user
 int userLineVerify(char *line){
 
+    // Para guardar a lista para comparação com a hashtable
+    long int* liked_musics_id_converted;
+
     char *info = strsep(&line, ";");
     
     for(int i = 0; i <= 7; i++){
@@ -158,7 +161,6 @@ int userLineVerify(char *line){
                     /* if (verifyLikedMusics(info, music_table) != 0){
                         return 1;
                     }
-                    info = strsep(&line, "\n");
                     break; */
                 default:
                     break;
@@ -166,6 +168,10 @@ int userLineVerify(char *line){
         }
     }
     return 0;
+}
+
+int verifyLikedMusics(long int* list, MusicTable* musics){
+    
 }
 
 //getters de utilizador
