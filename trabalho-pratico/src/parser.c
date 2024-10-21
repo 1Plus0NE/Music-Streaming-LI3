@@ -198,7 +198,7 @@ void parse_musics(char* path){
 }
 
 // função para ler e fazer parse de um ficheiro CSV de artistas.
-void parse_user(char* path){
+void parse_user(char* path/*,music_table,user_table*/){
     //variáveis para o parse
     FILE* users;
     char filename[1024];
@@ -236,7 +236,7 @@ void parse_user(char* path){
         // tmp_line sera alterada na verificaçao
         // line sera alterada na atribuição
         // original_line permanece intacta, para erro
-        if(userLineVerify(tmp_line) == 0){
+        if(userLineVerify(tmp_line, /*musictable*/) == 0){
             username = remove_aspas(strsep(&line, ";"));
             email = remove_aspas(strsep(&line, ";"));
             first_name = remove_aspas(strsep(&line,";"));
@@ -250,6 +250,8 @@ void parse_user(char* path){
             liked_musics_id_converted = convertID(remove_aspas(strsep(&line,"\n")), &num_liked_musics);
 
             User* u = createUser(username, email, first_name, last_name, birth_date, country, subscription_type, liked_musics_id_converted, num_liked_musics);
+            addUser(User_table, u);
+            //free(liked_musics_id_converted);
             //liked_musics_id = remove_aspas(strsep(&line,"\n"));
 
         // parsed++;
@@ -266,7 +268,7 @@ void parse_user(char* path){
 
         else{
             //erros++;
-            writeErrors(original_line, 3);
+            writeErrors(original_line, 3); // Basta line?
         }   
     }
     // printf("Foram lidos %d dados, foram validados %d dados e foram encontrados %d erros.\n", parsed, verified, erros);

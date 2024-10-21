@@ -7,6 +7,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "../utils.h"
+#include <glib-2.0/glib.h>
 
 // Forma de enunciar a entidade utilizador.
 typedef struct user User;
@@ -19,6 +20,8 @@ void freeUser(User* user);
 
 // Função de verificação da validade de um utilizador.
 int userLineVerify(char *line);
+
+int verifyLikedMusics(long int* list, MusicTable* musics);
 
 //getters de utilizador
 char* getUserUsername(User* u);
