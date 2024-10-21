@@ -1,4 +1,6 @@
 #include "../include/parser.h"
+#define MAX_FILENAME 1024
+#define MAX_LINE 2048
 
 // Função que cria a diretoria "dataset-errors" e respetivos ficheiros com cabeçalhos
     // Possivelmente inutil, mudar módulo posteriormente
@@ -80,9 +82,9 @@ void writeErrors(char* line, int csvFile){
 void parse_artist(char* path){
     //variáveis para o parse
     FILE* artists;
-    char filename[1024];
-    char line[2048];
-    char original_line[2048];
+    char filename[MAX_FILENAME];
+    char line[MAX_LINE];
+    char original_line[MAX_LINE];
     char *tmp_line=NULL;
 
     //argumentos para a struct de artistas
@@ -97,7 +99,7 @@ void parse_artist(char* path){
     char* country;
     char* type;
 
-    snprintf(filename,1024,"%s/artists.csv", path);
+    snprintf(filename,MAX_FILENAME,"%s/artists.csv", path);
 
     artists = fopen(filename, "r");
     if(!artists){
@@ -140,9 +142,9 @@ void parse_artist(char* path){
 void parse_musics(char* path){
     // Variaveis para o parse 
     FILE* musics;
-    char filename[1024];
-    char line[2048];
-    char original_line[2048];
+    char filename[MAX_FILENAME];
+    char line[MAX_LINE];
+    char original_line[MAX_LINE];
     char *tmp_line=NULL;
 
     // Argumentos para a struct de musicas
@@ -158,7 +160,7 @@ void parse_musics(char* path){
     char* lyrics;
 
     // music_table = createMusicTable(); // criar a tabela de musicas
-    snprintf(filename,1024,"%s/musics.csv",path); //abrir ficheiro de musicas
+    snprintf(filename,MAX_FILENAME,"%s/musics.csv",path); //abrir ficheiro de musicas
 
     musics = fopen(filename, "r");
     if(!musics){
@@ -201,9 +203,9 @@ void parse_musics(char* path){
 void parse_user(char* path/*,music_table,user_table*/){
     //variáveis para o parse
     FILE* users;
-    char filename[1024];
-    char line[2048];
-    char original_line[2048];
+    char filename[MAX_FILENAME];
+    char line[MAX_LINE];
+    char original_line[MAX_LINE];
     char *tmp_line=NULL;
 
     //argumentos para a struct de artistas
@@ -218,7 +220,7 @@ void parse_user(char* path/*,music_table,user_table*/){
     long int* liked_musics_id_converted;
     int num_liked_musics=0;
 
-    snprintf(filename,1024,"%s/users.csv", path);
+    snprintf(filename,MAX_FILENAME,"%s/users.csv", path);
 
     users = fopen(filename, "r");
     if(!users){
