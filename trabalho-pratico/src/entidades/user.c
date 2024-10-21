@@ -120,9 +120,6 @@ void freeUser(User* user){
 // Função de verificação da validade de um user
 int userLineVerify(char *line /*,music_table*/){
 
-    // Para guardar a lista para comparação com a hashtable
-    long int* liked_musics_id_converted;
-
     char *info = strsep(&line, ";");
     
     for(int i = 0; i <= 7; i++){
@@ -158,10 +155,10 @@ int userLineVerify(char *line /*,music_table*/){
                     info = strsep(&line, "\n");
                     break;
                 case 7:
-                     if(verifyLikedMusics(convertID(remove_aspas(info)), music_table) != 0){
+                    /*if(verifyLikedMusics(convertID(remove_aspas(info)), music_table) != 0){
                         return 1;
-                    }
-                    break; */
+                    }*/
+                    break;
                 default:
                     break;
             }
@@ -170,7 +167,7 @@ int userLineVerify(char *line /*,music_table*/){
     return 0;
 }
 
-int verifyLikedMusics(long int* list, MusicTable* musics){
+/*int verifyLikedMusics(long int* list, MusicTable* musics){
     while(*list){
         if(!g_hash_table_contains(musics, (gconstpointer) *list)) {
             return 1;
@@ -178,7 +175,7 @@ int verifyLikedMusics(long int* list, MusicTable* musics){
         list++;
     }
     return 0;
-}
+}*/
 
 //getters de utilizador
 char* getUserUsername(User* u){

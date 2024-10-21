@@ -206,7 +206,7 @@ void parse_user(char* path/*,music_table,user_table*/){
     char filename[MAX_FILENAME];
     char line[MAX_LINE];
     char original_line[MAX_LINE];
-    char *tmp_line=NULL;
+    char *tmp_oriLine=NULL;
 
     //argumentos para a struct de artistas
     char *username;
@@ -232,27 +232,27 @@ void parse_user(char* path/*,music_table,user_table*/){
 
     while((fgets(line, sizeof(line), users) != NULL)){
         strcpy(original_line, line);
-        tmp_line = line;
+        //Apontadores para o strsep
+        tmp_oriLine = original_line;
 
         // Antes da função atribuir valor as variaveis, verifica a sua validação
-        // tmp_line sera alterada na verificaçao
-        // line sera alterada na atribuição
-        // original_line permanece intacta, para erro
-        if(userLineVerify(tmp_line, /*musictable*/) == 0){
-            username = remove_aspas(strsep(&line, ";"));
-            email = remove_aspas(strsep(&line, ";"));
-            first_name = remove_aspas(strsep(&line,";"));
-            last_name = remove_aspas(strsep(&line,";"));
-            strncpy(birth_date, remove_aspas(strsep(&line, ";")), sizeof(birth_date) - 1);
+        // line para analise
+        // original_line para escrita de resultado
+        if(userLineVerify(line/*,musictable*/) == 0){
+            username = remove_aspas(strsep(&tmp_oriLine, ";"));
+            email = remove_aspas(strsep(&tmp_oriLine, ";"));
+            first_name = remove_aspas(strsep(&tmp_oriLine,";"));
+            last_name = remove_aspas(strsep(&tmp_oriLine,";"));
+            strncpy(birth_date, remove_aspas(strsep(&tmp_oriLine, ";")), sizeof(birth_date) - 1);
             birth_date[10] = '\0';
-            country = remove_aspas(strsep(&line,";"));
-            strncpy(subscription_type, remove_aspas(strsep(&line, ";")), sizeof(subscription_type) - 1);
+            country = remove_aspas(strsep(&tmp_oriLine,";"));
+            strncpy(subscription_type, remove_aspas(strsep(&tmp_oriLine, ";")), sizeof(subscription_type) - 1);
             subscription_type[7] = '\0';
             //subscription_type = remove_aspas(strsep(&line,";"));
-            liked_musics_id_converted = convertID(remove_aspas(strsep(&line,"\n")), &num_liked_musics);
+            liked_musics_id_converted = convertID(remove_aspas(strsep(&tmp_oriLine,"\n")), &num_liked_musics);
 
             User* u = createUser(username, email, first_name, last_name, birth_date, country, subscription_type, liked_musics_id_converted, num_liked_musics);
-            addUser(User_table, u);
+            //addUser(User_table, u);
             //free(liked_musics_id_converted);
             //liked_musics_id = remove_aspas(strsep(&line,"\n"));
 
