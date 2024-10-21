@@ -37,13 +37,9 @@ Music* createMusic(long int id, char* title, long int* artist_id, int num_artist
         exit(EXIT_FAILURE);
     }
 
-    // eu acho que já não é preciso isto pq no convertID ele ja calcula o tamanho do array 
-    /*
     for(int i = 0; i < num_artists; i++){
         music -> artist_id[i] = artist_id[i];
     }
-    music -> num_artists = num_artists;
-    */
     music -> num_artists = num_artists;
 
     music -> duration = malloc(strlen(duration) + 1);
@@ -54,6 +50,7 @@ Music* createMusic(long int id, char* title, long int* artist_id, int num_artist
         free(music);
         exit(EXIT_FAILURE);
     }
+    strcpy(m -> duration, duration);
     
     music -> genre = malloc(strlen(genre) + 1);
     if(!music -> genre){
