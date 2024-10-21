@@ -8,7 +8,7 @@ struct user {
     char birth_date[10]; // data base 2024/09/09
     char* country;
     char* subscription_type;
-    long int* liked_musics_id; // char* liked_musics_id?
+    long int* liked_musics_id;
     int num_liked_musics;
 };
 
