@@ -78,11 +78,12 @@ int emailVerify(char *email){
     char *rDomain = strsep(&email, "\0");
     if(!user || !lDomain || !rDomain) return 1;
 
+    if(strlen(user)<1) return 1;
     for(int i=0;user[i]!='\0';i++){
         if(!isdigit(user[i]) && !isalpha(user[i])) return 1;
     }
-    if(nameVerify(lDomain) == 1) return 1;
-    if(nameVerify(rDomain) == 1 || strlen(rDomain)<=1 || strlen(rDomain)>=4) return 1;    
+    if(nameVerify(lDomain) == 1 || strlen(lDomain)<1) return 1;
+    if(nameVerify(rDomain) == 1 || strlen(rDomain)<2 || strlen(rDomain)>3) return 1;    
     
     return 0;
 }
