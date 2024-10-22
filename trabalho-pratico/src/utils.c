@@ -39,7 +39,7 @@ int strDigit(char *str){
         return 1;
     }
 
-    for(int i=0;str[i]!='\n';i++){
+    for(int i=0;str[i]!='\0';i++){
         if(isdigit(str[i])==0){
             return 1;
         }

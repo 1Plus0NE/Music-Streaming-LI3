@@ -134,7 +134,8 @@ int userLineVerify(char *line /*,music_table*/){
                     if(birthDateVerify(remove_aspas(info))!=0) return 1;
                     break;
                 case 6:
-                    if(strcmp("premium",remove_aspas(info))!=0 && strcmp("normal",remove_aspas(info))!=0) return 1;
+                info = remove_aspas(info);
+                    if(strcmp("premium",info)!=0 && strcmp("normal",info)!=0) return 1;
                     break;
                 case 7:
                     /*if(verifyLikedMusics(convertID(remove_aspas(info)), music_table) != 0){
