@@ -120,39 +120,21 @@ void freeUser(User* user){
 // Função de verificação da validade de um user
 int userLineVerify(char *line /*,music_table*/){
 
-    char *info = strsep(&line, ";");
+    //char *info = strsep(&line, ";");
+    char *info;
     
     for(int i = 0; i <= 7; i++){
+        info=strsep(&line, ";");
         if(info){
             switch(i){
-                case 0:
-                    // Possivel erro, pretende verificar string vazia
-                    if(strlen(remove_aspas(info))<=0) return 1;
-                    info = strsep(&line, ";");
-                    break;
                 case 1:
                     if(emailVerify(remove_aspas(info))!=0) return 1;
-                    info = strsep(&line, ";");
-                    break;
-                case 2:
-                    if(nameVerify(remove_aspas(info))!=0) return 1;
-                    info = strsep(&line, ";");
-                    break;
-                case 3:
-                    if(nameVerify(remove_aspas(info))!=0) return 1;
-                    info = strsep(&line, ";");
                     break;
                 case 4:
                     if(birthDateVerify(remove_aspas(info))!=0) return 1;
-                    info = strsep(&line, ";");
-                    break;
-                case 5:
-                    if(strlen(remove_aspas(info))<=0) return 1;
-                    info = strsep(&line, ";");
                     break;
                 case 6:
                     if( (strcmp("premium",remove_aspas(info)) && strcmp("normal",remove_aspas(info)) )!=0) return 1;
-                    info = strsep(&line, "\n");
                     break;
                 case 7:
                     /*if(verifyLikedMusics(convertID(remove_aspas(info)), music_table) != 0){
