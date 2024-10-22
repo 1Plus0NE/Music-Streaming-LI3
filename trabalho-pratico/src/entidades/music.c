@@ -50,7 +50,7 @@ Music* createMusic(long int id, char* title, long int* artist_id, int num_artist
         free(music);
         exit(EXIT_FAILURE);
     }
-    strcpy(m -> duration, duration);
+    strcpy(music -> duration, duration);
     
     music -> genre = malloc(strlen(genre) + 1);
     if(!music -> genre){
