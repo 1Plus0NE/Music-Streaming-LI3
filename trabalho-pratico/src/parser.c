@@ -97,7 +97,7 @@ void parse_artist(char* path){
     long int* id_constituent_converted;
     int num_constituent;
     char* country;
-    char* type;
+    ArtistType type;
 
     snprintf(filename,MAX_FILENAME,"%s/artists.csv", path);
 
@@ -120,7 +120,8 @@ void parse_artist(char* path){
         recipe_per_stream = atof(remove_aspas(strsep(&tmp_line,";")));
         id_constituent = remove_aspas(strsep(&tmp_line,";"));
         country = remove_aspas(strsep(&tmp_line,";"));
-        type = remove_aspas(strsep(&tmp_line,";"));
+        char* type_str = remove_aspas(strsep(&tmp_line,";"));
+        type = stringToArtistType(type_str);
         removeEnters(description);
 
         if(isFormatValid(id_constituent)){

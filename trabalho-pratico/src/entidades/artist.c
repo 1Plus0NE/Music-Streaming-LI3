@@ -8,11 +8,11 @@ struct artist {
     long int* id_constituent;
     int num_constituent;
     char* country;
-    char* type;
+    ArtistType type;
 };
 
 // Função para criar uma estrutura da entidade artista parametrizada.
-Artist* createArtist(long int id, char* name, char* description, float recipe_per_stream, long int* id_constituent, int num_constituent, char* country, char* type) {
+Artist* createArtist(long int id, char* name, char* description, float recipe_per_stream, long int* id_constituent, int num_constituent, char* country, ArtistType type) {
     Artist* artist = (Artist*)malloc(sizeof(Artist));
     if (!artist) {
         perror("Erro ao alocar memória para o artista.\n");
@@ -65,7 +65,7 @@ Artist* createArtist(long int id, char* name, char* description, float recipe_pe
     }
     strcpy(artist -> country, country);
 
-    artist -> type = malloc(strlen(type) + 1);
+    artist -> type = type;
     if (!artist -> type) {
         perror("Erro ao alocar memória para o tipo de artista.\n");
         free(artist -> country);
@@ -75,7 +75,6 @@ Artist* createArtist(long int id, char* name, char* description, float recipe_pe
         free(artist);
         exit(EXIT_FAILURE);
     }
-    strcpy(artist -> type, type);
     return artist;
 }
 
@@ -112,9 +111,9 @@ int verifyLineArtist(char* line){
                     break;
                 case 4:
                     if(remove_aspas(info) && strlen(remove_aspas(info)) > 0){
-                        id_constituent_check = "grupo";
+                        id_constituent_check = "GRUPO";
                     }else{
-                        id_constituent_check = "individual";
+                        id_constituent_check = "INDIVIDUAL";
                     }
                     break;
                 case 5:
@@ -123,7 +122,8 @@ int verifyLineArtist(char* line){
                     }
                     break;
                 case 6:
-                    if(strcmp(remove_aspas(info), "individual") != 0 && strcmp(remove_aspas(info), "grupo") != 0 && strcmp(remove_aspas(info), id_constituent_check) != 0){
+                    char* type_str = remove_aspas(info);
+                    if((strcmp(type_str, "INDIVIDUAL") != 0 && strcmp(type_str, "GRUPO") != 0) || strcmp(type_str, id_constituent_check) != 0){
                         return 1;
                     }
                     break;
@@ -180,8 +180,8 @@ char* getArtistCountry(Artist* a){
     return a -> country ? strdup(a -> country) : NULL;
 }
 
-char* getArtistType(Artist* a){
-    return a -> type ? strdup(a -> type) : NULL;
+ArtistType getArtistType(Artist* a){
+    return a -> type;
 }
 
 // setters de artista.
@@ -223,9 +223,6 @@ void setArtistCountry(Artist* a, char* country){
     a -> country = strdup(country);
 }
 
-void setArtistType(Artist* a, char* type){
-    if(a -> type){
-        free(a -> type);
-    }
-    a -> type = strdup(type);
+void setArtistType(Artist* a, ArtistType type){
+    a -> type = type;
 }

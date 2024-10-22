@@ -11,8 +11,13 @@
 // Forma de enunciar a entidade artista.
 typedef struct artist Artist;
 
+typedef enum {
+    INDIVIDUAL,
+    GRUPO
+} ArtistType;
+
 // Função para criar uma estrutura da entidade artista parametrizada.
-Artist* createArtist(long int id, char* name, char* description, float recipe_per_stream, long int* id_constituent, int num_constituent, char* country, char* type);
+Artist* createArtist(long int id, char* name, char* description, float recipe_per_stream, long int* id_constituent, int num_constituent, char* country, ArtistType type);
 
 // Função que faz a validação de um artista.
 int verify_artist(Artist* artist);
@@ -35,7 +40,7 @@ int getArtistNumConstituent(Artist* a);
 
 char* getArtistCountry(Artist* a);
 
-char* getArtistType(Artist* a);
+ArtistType getArtistType(Artist* a);
 
 void setArtistId(Artist* a, int id);
 
@@ -49,6 +54,6 @@ void setArtistIdConstituent(Artist* a, int* id_constituent, int num_constituent)
 
 void setArtistCountry(Artist* a, char* country);
 
-void setArtistType(Artist* a, char* type);
+void setArtistType(Artist* a, ArtistType type);
 
 #endif

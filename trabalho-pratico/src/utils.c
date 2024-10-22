@@ -245,3 +245,15 @@ void removeEnters(char *input){
         input[len]='\0';
     }
 }
+
+//função que passa uma string do tipo do artista para o enum type
+ArtistType stringToArtistType(char* type_str){
+    if(strcmp(type_str, "individual") == 0){
+        return INDIVIDUAL;
+    }else if(strcmp(type_str, "grupo") == 0){
+        return GRUPO;
+    }else{
+        fprintf(stderr, "tipo de artista inexistente %s.\n", type_str);
+        exit(EXIT_FAILURE);
+    }
+}
