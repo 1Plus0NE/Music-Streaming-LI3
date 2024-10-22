@@ -14,3 +14,12 @@ void query1(char* user_username, GHashTable* user_table, FILE* output_file){
     
     freeUser(user);
 }
+
+// Query que devolve os N artistas com maior discografia
+void query2Single(int N, GHashTable* artist_table, FILE* output_file){
+    
+}
+
+void query2Country(int N, GHashTable* artist_table, FILE* output_file){
+    
+}
