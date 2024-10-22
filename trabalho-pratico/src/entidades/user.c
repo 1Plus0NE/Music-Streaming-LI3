@@ -121,7 +121,7 @@ void freeUser(User* user){
 int userLineVerify(char *line /*,music_table*/){
 
     //char *info = strsep(&line, ";");
-    char *info;
+    char *info=NULL;
     
     for(int i = 0; i <= 7; i++){
         info=strsep(&line, ";");
