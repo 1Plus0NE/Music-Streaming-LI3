@@ -39,11 +39,10 @@ int strDigit(char *str){
         return 1;
     }
 
-    while(*str){
-        if(!isdigit(*str)){
+    for(int i=0;str[i]!='\n';i++){
+        if(isdigit(str[i])==0){
             return 1;
         }
-        str++;
     }
     return 0;
 }
@@ -80,10 +79,10 @@ int emailVerify(char *email){
 
     if(strlen(user)<1) return 1;
     for(int i=0;user[i]!='\0';i++){
-        if(!isdigit(user[i]) && !isalpha(user[i])) return 1;
+        if(isdigit(user[i])==0 && isalpha(user[i])==0) return 1;
     }
-    if(nameVerify(lDomain) == 1 || strlen(lDomain)<1) return 1;
-    if(nameVerify(rDomain) == 1 || strlen(rDomain)<2 || strlen(rDomain)>3) return 1;    
+    if(nameVerify(lDomain) != 0 || strlen(lDomain)<1) return 1;
+    if(nameVerify(rDomain) != 0 || strlen(rDomain)<2 || strlen(rDomain)>3) return 1;    
     
     return 0;
 }
@@ -102,7 +101,7 @@ int birthDateVerify(char* birth_date){
     char *mes = strsep(&birth_date, "/");
     char *dia = strsep(&birth_date, "\0");
 
-    if((strDigit(ano) || strDigit(mes) || strDigit(dia)) != 0) return 1;
+    if(strDigit(ano)!=0 || strDigit(mes)!=0 || strDigit(dia)!=0) return 1;
     
     // Data numérica verificada, transformar em int
     int anoInt = atoi(ano);
