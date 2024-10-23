@@ -22,7 +22,8 @@ char* remove_aspas(char* str) {
 char* remove_espacos(char* input){
     int i,j;
     char *output=input;
-    for (i = 0, j = 0; i<strlen(input); i++,j++){
+    int tam = strlen(input);
+    for (i = 0, j = 0; i<tam; i++,j++){
         if (input[i]!=' ')                           
             output[j]=input[i];                     
         else
@@ -243,17 +244,5 @@ void removeEnters(char *input){
 
     if(input[len]=='\n'){
         input[len]='\0';
-    }
-}
-
-//função que passa uma string do tipo do artista para o enum type
-ArtistType stringToArtistType(char* type_str){
-    if(strcmp(type_str, "individual") == 0){
-        return INDIVIDUAL;
-    }else if(strcmp(type_str, "grupo") == 0){
-        return GRUPO;
-    }else{
-        fprintf(stderr, "tipo de artista inexistente %s.\n", type_str);
-        exit(EXIT_FAILURE);
     }
 }

@@ -137,6 +137,18 @@ int verifyLineArtist(char* line){
     return 0;
 }
 
+//função que passa uma string do tipo do artista para o enum type
+ArtistType stringToArtistType(char* type_str){
+    if(strcmp(type_str, "individual") == 0){
+        return INDIVIDUAL;
+    }else if(strcmp(type_str, "grupo") == 0){
+        return GRUPO;
+    }else{
+        fprintf(stderr, "tipo de artista inexistente %s.\n", type_str);
+        exit(EXIT_FAILURE);
+    }
+}
+
 // Função para libertar a memória de uma entidade do tipo artista.
 void freeArtist(Artist* artist){
     free(artist -> country);
@@ -147,7 +159,7 @@ void freeArtist(Artist* artist){
 }
 
 // getters de artista.
-int* getArtistId(Artist* a){
+long int* getArtistId(Artist* a){
     return a->id ? &a->id : NULL;
 }
 

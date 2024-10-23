@@ -25,8 +25,11 @@ int verify_artist(Artist* artist);
 // Função para libertar a memória de uma entidade do tipo artista.
 void freeArtist(Artist* artist);
 
+//função que passa uma string do tipo do artista para o enum type
+ArtistType stringToArtistType(char* type_str);
+
 // getters e setters
-int* getArtistId(Artist* a);
+long int* getArtistId(Artist* a);
 
 char* getArtistName(Artist* a);
 
