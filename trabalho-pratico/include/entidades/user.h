@@ -41,7 +41,7 @@ char* getUserBirthDate(User* u);
 
 char* getUserCountry(User* u);
 
-char* getUserSubscriptionType(User* u);
+SubscriptionType getUserSubscriptionType(User* u);
 
 int* getUserLikedMusics(User* u);
 
@@ -60,7 +60,7 @@ void setUserBirthDate(User* u, char* birth_date);
 
 void setUserCountry(User* u, char* country);
 
-void setUserSubscriptionType(User* u, char* subscription_type);
+void setUserSubscriptionType(User* u, SubscriptionType subscription_type);
 
 void setUserLikedMusics(User* u, int* liked_musics_id, int num_liked_musics);
 

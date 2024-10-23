@@ -8,8 +8,8 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <time.h>
-#include "../../include/entidades/artist.h"
-#include "../../include/entidades/user.h"
+#include "entidades/artist.h"
+//#include "entidades/user.h"
 
 //funções de manipulação de strings
 char* remove_aspas(char* str);
