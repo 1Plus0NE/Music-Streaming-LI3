@@ -210,3 +210,10 @@ void freeMusic(Music* music){
     free(music -> lyrics);
     free(music);
 }
+
+/*struct discografia{
+    int idArtista;
+    int duracao;
+    long int *listaMusicas;
+    struct discografia *prox;
+}Disco;*/
