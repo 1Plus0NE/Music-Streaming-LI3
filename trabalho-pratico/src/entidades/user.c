@@ -174,6 +174,7 @@ char* getUserCountry(User* u){
 
 SubscriptionType getUserSubscriptionType(User* u){
     return u->subscription_type;
+}
 
 int* getUserLikedMusics(User* u){
     if (u->num_liked_musics > 0) {

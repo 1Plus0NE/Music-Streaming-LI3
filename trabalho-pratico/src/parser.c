@@ -5,7 +5,7 @@
 // Função que cria a diretoria "dataset-errors" e respetivos ficheiros com cabeçalhos
     // Possivelmente inutil, mudar módulo posteriormente
     // se calhar nao é necessário criar a dir
-void errorsDir(){
+void errosDir(){
     // Criação da diretoria
     if (mkdir("../resultados", 0777) == -1) {
         if (errno == EEXIST) printf("Diretoria já existente.\n");
@@ -246,8 +246,8 @@ void parse_user(char* path/*,music_table,user_table*/){
             strncpy(birth_date, remove_aspas(strsep(&tmp_oriLine, ";")), sizeof(birth_date) - 1);
             birth_date[10] = '\0';
             country = remove_aspas(strsep(&tmp_oriLine,";"));
-            char tmpSub* = remove_aspas(strsep(&tmp_oriLine,";"));
-            subscription = convertSubscriptionType(tmpSub);
+            char* tmpSub = remove_aspas(strsep(&tmp_oriLine,";"));
+            subscription = stringToSubscriptionType(tmpSub);
             //strncpy(subscription_type, remove_aspas(strsep(&tmp_oriLine, ";")), sizeof(subscription_type) - 1);
             //subscription_type[7] = '\0';
             //subscription_type = remove_aspas(strsep(&line,";"));
