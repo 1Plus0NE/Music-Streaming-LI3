@@ -10,6 +10,7 @@ struct user {
     SubscriptionType subscription_type;
     long int* liked_musics_id;
     int num_liked_musics;
+    SubscriptionType subscription_type;
 };
 
 // Função para criar uma estrutura da entidade utilizador parametrizada.

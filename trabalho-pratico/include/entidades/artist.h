@@ -26,7 +26,7 @@ int verify_artist(Artist* artist);
 void freeArtist(Artist* artist);
 
 // getters e setters
-int* getArtistId(Artist* a);
+long int* getArtistId(Artist* a);
 
 char* getArtistName(Artist* a);
 

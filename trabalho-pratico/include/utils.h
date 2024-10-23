@@ -39,6 +39,10 @@ long int* convertID(const char *input, int *count);
 
 // Função que remove new lines
 void removeEnters(char *input);
+
+//função que passa uma string do tipo do artista para o enum type
+ArtistType stringToArtistType(char* type_str);
+
 // Função para transformar uma string em tipo enum
 SubscriptionType stringToSubscriptionType(char* type_str);
 

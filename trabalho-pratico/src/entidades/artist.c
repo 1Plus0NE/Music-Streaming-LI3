@@ -148,7 +148,7 @@ void freeArtist(Artist* artist){
 }
 
 // getters de artista.
-int* getArtistId(Artist* a){
+long int* getArtistId(Artist* a){
     return a->id ? &a->id : NULL;
 }
 
