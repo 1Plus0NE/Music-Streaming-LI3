@@ -12,8 +12,13 @@
 // Forma de enunciar a entidade utilizador.
 typedef struct user User;
 
+typedef enum {
+    PREMIUM,
+    NORMAL
+} SubscriptionType;
+
 // Função para criar uma estrutura da entidade utilizador parametrizada.
-User* createUser(char* username, char* email, char* first_name, char* last_name, char* birth_date , char* country, char* subscription_type, long int* liked_musics_id, int num_liked_musics);
+User* createUser(char* username, char* email, char* first_name, char* last_name, char* birth_date , char* country, SubscriptionType subscription_type, long int* liked_musics_id, int num_liked_musics);
 
 // Função para libertar a memória de uma entidade do tipo utilizador.
 void freeUser(User* user);
@@ -36,7 +41,7 @@ char* getUserBirthDate(User* u);
 
 char* getUserCountry(User* u);
 
-char* getUserSubscriptionType(User* u);
+SubscriptionType getUserSubscriptionType(User* u);
 
 int* getUserLikedMusics(User* u);
 
@@ -55,10 +60,12 @@ void setUserBirthDate(User* u, char* birth_date);
 
 void setUserCountry(User* u, char* country);
 
-void setUserSubscriptionType(User* u, char* subscription_type);
+void setUserSubscriptionType(User* u, SubscriptionType subscription_type);
 
 void setUserLikedMusics(User* u, int* liked_musics_id, int num_liked_musics);
 
 void setUserNumLikedMusics(User* u, int num_liked_musics);
+
+SubscriptionType stringToSubscriptionType(char* subType);
 
 #endif

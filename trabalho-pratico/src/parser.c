@@ -17,7 +17,7 @@ void errorsDir(){
     else printf("resultados criado com sucesso.\n");
 
     // Ficheiros de erros com respetivos cabeçalhos
-    FILE *errors = fopen("../resultados/users.csv", "w");
+    FILE *errors = fopen("../resultados/users_errors.csv", "w");
     if(!errors){
         perror("Erro ao criar o ficheiro de erros de users.\n");
         exit(EXIT_FAILURE);
@@ -25,7 +25,7 @@ void errorsDir(){
     fprintf(errors, "\"username\";\"email\";\"first_name\";\"last_name\";\"birth_date\";\"country\";\"subscription_type\";\"liked_songs_id\"\n");
     fclose(errors);
 
-    fopen("../resultados/artists.csv", "w");
+    fopen("../resultados/artists_errors.csv", "w");
     if(!errors){
         perror("Erro ao criar o ficheiro de erros de artists.\n");
         exit(EXIT_FAILURE);
@@ -33,7 +33,7 @@ void errorsDir(){
     fprintf(errors, "\"id\";\"name\";\"description\";\"recipe_per_stream\";\"id_constituent\";\"country\";\"type\"\n");
     fclose(errors);
 
-    fopen("../resultados/musics.csv", "w");
+    fopen("../resultados/musics_errors.csv", "w");
     if(!errors){
         perror("Erro ao criar o ficheiro de erros de musics.\n");
         exit(EXIT_FAILURE);
@@ -47,7 +47,7 @@ void writeErrors(char* line, int csvFile){
     FILE *errors;
     switch(csvFile){
         case 1:
-            errors = fopen("../resultados/artists.csv", "a");
+            errors = fopen("../resultados/artists_errors.csv", "a");
             if(!errors){
                 perror("Erro ao escrever no ficheiro de erros de artists.\n");
                 exit(EXIT_FAILURE);
@@ -56,7 +56,7 @@ void writeErrors(char* line, int csvFile){
             fclose(errors);
             break;
         case 2:
-            errors = fopen("../resultados/musics.csv", "a");
+            errors = fopen("../resultados/musics_errors.csv", "a");
             if(!errors){
                 perror("Erro ao escrever no ficheiro de erros de musics.\n");
                 exit(EXIT_FAILURE);
@@ -65,7 +65,7 @@ void writeErrors(char* line, int csvFile){
             fclose(errors);
             break;
         case 3:
-            errors = fopen("../resultados/users.csv", "a");
+            errors = fopen("../resultados/users_errors.csv", "a");
             if(!errors){
                 perror("Erro ao escrever no ficheiro de erros de users.\n");
                 exit(EXIT_FAILURE);
@@ -73,8 +73,6 @@ void writeErrors(char* line, int csvFile){
             fprintf(errors, "%s", line);
             fclose(errors);
             break;
-        default:
-            printf("Opcao invalida.\n");
     }
 }
 
@@ -216,7 +214,8 @@ void parse_user(char* path/*,music_table,user_table*/){
     char* last_name;
     char birth_date[10];
     char* country;
-    char subscription_type[7];
+    SubscriptionType subscription;
+    //char subscription_type[7];
     //char* liked_musics_id;
     long int* liked_musics_id_converted;
     int num_liked_musics=0;
@@ -247,17 +246,19 @@ void parse_user(char* path/*,music_table,user_table*/){
             strncpy(birth_date, remove_aspas(strsep(&tmp_oriLine, ";")), sizeof(birth_date) - 1);
             birth_date[10] = '\0';
             country = remove_aspas(strsep(&tmp_oriLine,";"));
-            strncpy(subscription_type, remove_aspas(strsep(&tmp_oriLine, ";")), sizeof(subscription_type) - 1);
-            subscription_type[7] = '\0';
+            char tmpSub* = remove_aspas(strsep(&tmp_oriLine,";"));
+            subscription = convertSubscriptionType(tmpSub);
+            //strncpy(subscription_type, remove_aspas(strsep(&tmp_oriLine, ";")), sizeof(subscription_type) - 1);
+            //subscription_type[7] = '\0';
             //subscription_type = remove_aspas(strsep(&line,";"));
             liked_musics_id_converted = convertID(remove_aspas(strsep(&tmp_oriLine,"\n")), &num_liked_musics);
 
-            User* u = createUser(username, email, first_name, last_name, birth_date, country, subscription_type, liked_musics_id_converted, num_liked_musics);
+            User* u = createUser(username, email, first_name, last_name, birth_date, country, subscription, liked_musics_id_converted, num_liked_musics);
             //addUser(User_table, u);
             //free(liked_musics_id_converted);
             //liked_musics_id = remove_aspas(strsep(&line,"\n"));
 
-        // parsed++;
+            //parsed++;
         // printf("ID: %li | Lyrics: %s \n",id,lyrics);
         }/*
         if(isFormatValid(liked_musics_id) && birthDateVerify(birth_date)){
@@ -274,7 +275,7 @@ void parse_user(char* path/*,music_table,user_table*/){
             writeErrors(original_line, 3); // Basta line?
         }   
     }
-    // printf("Foram lidos %d dados, foram validados %d dados e foram encontrados %d erros.\n", parsed, verified, erros);
+    //printf("Foram lidos %d dados e foram encontrados %d erros.\n", parsed, erros);
 
     fclose(users);
 }

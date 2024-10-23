@@ -83,6 +83,7 @@ int verifyLineArtist(char* line){
     char* info;
     char* token = line;
     char* id_constituent_check = NULL;
+    char* type_str;
 
     for(int i = 0; i < 7; i++){
         info = strsep(&token, ";");
@@ -122,7 +123,7 @@ int verifyLineArtist(char* line){
                     }
                     break;
                 case 6:
-                    char* type_str = remove_aspas(info);
+                    type_str = remove_aspas(info);
                     if((strcmp(type_str, "INDIVIDUAL") != 0 && strcmp(type_str, "GRUPO") != 0) || strcmp(type_str, id_constituent_check) != 0){
                         return 1;
                     }

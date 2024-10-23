@@ -7,13 +7,13 @@ struct user {
     char* last_name;
     char birth_date[10]; // data base 2024/09/09
     char* country;
-    char* subscription_type;
+    SubscriptionType subscription_type;
     long int* liked_musics_id;
     int num_liked_musics;
 };
 
 // Função para criar uma estrutura da entidade utilizador parametrizada.
-User* createUser(char* username, char* email, char* first_name, char* last_name, char* birth_date , char* country, char* subscription_type, long int* liked_musics_id, int num_liked_musics){
+User* createUser(char* username, char* email, char* first_name, char* last_name, char* birth_date , char* country, SubscriptionType subscription_type, long int* liked_musics_id, int num_liked_musics){
     User* user = (User*)malloc(sizeof(User));
     if (!user) {
         perror("erro ao alocar memória para o utilizador.\n");
@@ -73,23 +73,11 @@ User* createUser(char* username, char* email, char* first_name, char* last_name,
     }
     strcpy(user -> country, country);
 
-    user -> subscription_type = malloc(strlen(subscription_type) + 1);
-    if (!user -> subscription_type) {
-        perror("Erro ao alocar memória para o tipo de subscricao.\n");
-        free(user -> country);
-        free(user -> last_name);
-        free(user -> first_name);
-        free(user -> email);
-        free(user -> username);
-        free(user);
-        exit(EXIT_FAILURE);
-    }
-    strcpy(user -> subscription_type, subscription_type);
+    user -> subscription_type = subscription_type;
 
     user -> liked_musics_id = malloc(num_liked_musics * sizeof(long int));
     if (!user -> liked_musics_id) {
         perror("Erro ao alocar memória para a lista de músicas com gosto.\n");
-        free(user -> subscription_type);
         free(user -> country);
         free(user -> last_name);
         free(user -> first_name);
@@ -108,7 +96,6 @@ User* createUser(char* username, char* email, char* first_name, char* last_name,
 
 // Função para libertar a memória de uma entidade do tipo utilizador.
 void freeUser(User* user){
-    free(user -> subscription_type);
     free(user -> country);
     free(user -> last_name);
     free(user -> first_name);
@@ -185,9 +172,8 @@ char* getUserCountry(User* u){
     return u->country ? strdup(u->country) : NULL;
 }
 
-char* getUserSubscriptionType(User* u){
-    return u->subscription_type ? strdup(u->subscription_type) : NULL;
-}
+SubscriptionType getUserSubscriptionType(User* u){
+    return u->subscription_type;
 
 int* getUserLikedMusics(User* u){
     if (u->num_liked_musics > 0) {
@@ -242,11 +228,9 @@ void setUserCountry(User* u, char* country){
     u->country = strdup(country);
 }
 
-void setUserSubscriptionType(User* u, char* subscription_type){
-    if (u->subscription_type) {
-        free(u->subscription_type);
-    }
-    u->subscription_type = strdup(subscription_type);
+void setUserSubscriptionType(User* u, SubscriptionType subscription_type){
+   
+    u->subscription_type = subscription_type;
 }
 
 void setUserLikedMusics(User* u, int* liked_musics_id, int num_liked_musics){
@@ -260,4 +244,15 @@ void setUserLikedMusics(User* u, int* liked_musics_id, int num_liked_musics){
 
 void setUserNumLikedMusics(User* u, int num_liked_musics){
     u->num_liked_musics = num_liked_musics;
+}
+
+SubscriptionType stringToSubscriptionType(char* subType){
+    if(strcmp(subType, "normal") == 0){
+        return NORMAL;
+    }else if(strcmp(subType, "premium") == 0){
+        return PREMIUM;
+    }else{
+        fprintf(stderr, "Subscrição inválida %s.\n", subType);
+        exit(EXIT_FAILURE);
+    }
 }
