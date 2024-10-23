@@ -10,7 +10,6 @@ struct user {
     SubscriptionType subscription_type;
     long int* liked_musics_id;
     int num_liked_musics;
-    SubscriptionType subscription_type;
 };
 
 // Função para criar uma estrutura da entidade utilizador parametrizada.
@@ -245,4 +244,15 @@ void setUserLikedMusics(User* u, int* liked_musics_id, int num_liked_musics){
 
 void setUserNumLikedMusics(User* u, int num_liked_musics){
     u->num_liked_musics = num_liked_musics;
+}
+
+SubscriptionType stringToSubscriptionType(char* subType){
+    if(strcmp(subType, "normal") == 0){
+        return NORMAL;
+    }else if(strcmp(subType, "premium") == 0){
+        return PREMIUM;
+    }else{
+        fprintf(stderr, "Subscrição inválida %s.\n", subType);
+        exit(EXIT_FAILURE);
+    }
 }

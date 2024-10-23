@@ -66,4 +66,6 @@ void setUserLikedMusics(User* u, int* liked_musics_id, int num_liked_musics);
 
 void setUserNumLikedMusics(User* u, int num_liked_musics);
 
+SubscriptionType stringToSubscriptionType(char* subType);
+
 #endif
