@@ -7,7 +7,7 @@
     // se calhar nao é necessário criar a dir
 void errorsDir(){
     // Criação da diretoria
-    if (mkdir("../dataset-errors", 0777) == -1) {
+    if (mkdir("../resultados", 0777) == -1) {
         if (errno == EEXIST) printf("Diretoria já existente.\n");
         else {
             perror("Erro ao criar a diretoria.\n");
@@ -17,7 +17,7 @@ void errorsDir(){
     else printf("resultados criado com sucesso.\n");
 
     // Ficheiros de erros com respetivos cabeçalhos
-    FILE *errors = fopen("../dataset-errors/users.csv", "w");
+    FILE *errors = fopen("../resultados/users_errors.csv", "w");
     if(!errors){
         perror("Erro ao criar o ficheiro de erros de users.\n");
         exit(EXIT_FAILURE);
@@ -25,7 +25,7 @@ void errorsDir(){
     fprintf(errors, "\"username\";\"email\";\"first_name\";\"last_name\";\"birth_date\";\"country\";\"subscription_type\";\"liked_songs_id\"\n");
     fclose(errors);
 
-    fopen("../dataset-errors/artists.csv", "w");
+    fopen("../resultados/artists_errors.csv", "w");
     if(!errors){
         perror("Erro ao criar o ficheiro de erros de artists.\n");
         exit(EXIT_FAILURE);
@@ -33,7 +33,7 @@ void errorsDir(){
     fprintf(errors, "\"id\";\"name\";\"description\";\"recipe_per_stream\";\"id_constituent\";\"country\";\"type\"\n");
     fclose(errors);
 
-    fopen("../dataset-errors/musics.csv", "w");
+    fopen("../resultados/musics_errors.csv", "w");
     if(!errors){
         perror("Erro ao criar o ficheiro de erros de musics.\n");
         exit(EXIT_FAILURE);
@@ -47,7 +47,7 @@ void writeErrors(char* line, int csvFile){
     FILE *errors;
     switch(csvFile){
         case 1:
-            errors = fopen("../dataset-errors/artists.csv", "a");
+            errors = fopen("../resultados/artists_errors.csv", "a");
             if(!errors){
                 perror("Erro ao escrever no ficheiro de erros de artists.\n");
                 exit(EXIT_FAILURE);
@@ -56,7 +56,7 @@ void writeErrors(char* line, int csvFile){
             fclose(errors);
             break;
         case 2:
-            errors = fopen("../dataset-errors/musics.csv", "a");
+            errors = fopen("../resultados/musics_errors.csv", "a");
             if(!errors){
                 perror("Erro ao escrever no ficheiro de erros de musics.\n");
                 exit(EXIT_FAILURE);
@@ -65,7 +65,7 @@ void writeErrors(char* line, int csvFile){
             fclose(errors);
             break;
         case 3:
-            errors = fopen("../dataset-errors/users.csv", "a");
+            errors = fopen("../resultados/users_errors.csv", "a");
             if(!errors){
                 perror("Erro ao escrever no ficheiro de erros de users.\n");
                 exit(EXIT_FAILURE);
