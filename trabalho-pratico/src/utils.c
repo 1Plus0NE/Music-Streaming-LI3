@@ -257,3 +257,14 @@ ArtistType stringToArtistType(char* type_str){
         exit(EXIT_FAILURE);
     }
 }
+
+SubscriptionType stringToSubscriptionType(char* subType){
+    if(strcmp(subType, "normal") == 0){
+        return NORMAL;
+    }else if(strcmp(subType, "premium") == 0){
+        return PREMIUM;
+    }else{
+        fprintf(stderr, "Subscrição inválida %s.\n", subType);
+        exit(EXIT_FAILURE);
+    }
+}

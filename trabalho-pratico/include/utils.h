@@ -9,6 +9,7 @@
 #include <ctype.h>
 #include <time.h>
 #include "../../include/entidades/artist.h"
+#include "../../include/entidades/user.h"
 
 //funções de manipulação de strings
 char* remove_aspas(char* str);
@@ -38,5 +39,7 @@ long int* convertID(const char *input, int *count);
 
 // Função que remove new lines
 void removeEnters(char *input);
+// Função para transformar uma string em tipo enum
+SubscriptionType stringToSubscriptionType(char* type_str);
 
 #endif

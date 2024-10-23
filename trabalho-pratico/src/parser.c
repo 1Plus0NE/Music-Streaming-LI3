@@ -216,7 +216,8 @@ void parse_user(char* path/*,music_table,user_table*/){
     char* last_name;
     char birth_date[10];
     char* country;
-    char subscription_type[7];
+    SubscriptionType subscription;
+    //char subscription_type[7];
     //char* liked_musics_id;
     long int* liked_musics_id_converted;
     int num_liked_musics=0;
@@ -247,12 +248,14 @@ void parse_user(char* path/*,music_table,user_table*/){
             strncpy(birth_date, remove_aspas(strsep(&tmp_oriLine, ";")), sizeof(birth_date) - 1);
             birth_date[10] = '\0';
             country = remove_aspas(strsep(&tmp_oriLine,";"));
-            strncpy(subscription_type, remove_aspas(strsep(&tmp_oriLine, ";")), sizeof(subscription_type) - 1);
-            subscription_type[7] = '\0';
+            char tmpSub* = remove_aspas(strsep(&tmp_oriLine,";"));
+            subscription = convertSubscriptionType(tmpSub);
+            //strncpy(subscription_type, remove_aspas(strsep(&tmp_oriLine, ";")), sizeof(subscription_type) - 1);
+            //subscription_type[7] = '\0';
             //subscription_type = remove_aspas(strsep(&line,";"));
             liked_musics_id_converted = convertID(remove_aspas(strsep(&tmp_oriLine,"\n")), &num_liked_musics);
 
-            User* u = createUser(username, email, first_name, last_name, birth_date, country, subscription_type, liked_musics_id_converted, num_liked_musics);
+            User* u = createUser(username, email, first_name, last_name, birth_date, country, type, liked_musics_id_converted, num_liked_musics);
             //addUser(User_table, u);
             //free(liked_musics_id_converted);
             //liked_musics_id = remove_aspas(strsep(&line,"\n"));

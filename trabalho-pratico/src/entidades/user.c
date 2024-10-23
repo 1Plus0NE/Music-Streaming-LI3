@@ -13,7 +13,7 @@ struct user {
 };
 
 // Função para criar uma estrutura da entidade utilizador parametrizada.
-User* createUser(char* username, char* email, char* first_name, char* last_name, char* birth_date , char* country, char* subscription_type, long int* liked_musics_id, int num_liked_musics){
+User* createUser(char* username, char* email, char* first_name, char* last_name, char* birth_date , char* country, SubscriptionType subscription_type, long int* liked_musics_id, int num_liked_musics){
     User* user = (User*)malloc(sizeof(User));
     if (!user) {
         perror("erro ao alocar memória para o utilizador.\n");
