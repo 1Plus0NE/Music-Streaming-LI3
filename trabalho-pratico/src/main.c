@@ -4,9 +4,10 @@
 
 int main(){
     GHashTable* artist_table = createArtistTable();
+    GHashTable* music_table = createMusicTable();
     errosDir();
     parse_artist("dataset", artist_table);
-    //parse_musics("dataset");
+    parse_music("dataset", music_table);
     //parse_user("dataset");
     return 0;
 }

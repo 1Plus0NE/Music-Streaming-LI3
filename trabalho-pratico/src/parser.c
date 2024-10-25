@@ -98,7 +98,7 @@ void parse_artist(char* path, GHashTable* artist_table){
     char* country;
     char* type_str;
     ArtistType type;
-    int erros = 0;
+
     snprintf(filename,MAX_FILENAME,"%s/artists.csv", path);
 
     artists = fopen(filename, "r");
@@ -134,17 +134,15 @@ void parse_artist(char* path, GHashTable* artist_table){
         }
        
         else{
-            erros++;
             writeErrors(original_line, 1);
         }   
 
     }
-    printf("Foram encontrados %d erros",erros);
     fclose(artists);
 }
 
 // Função para ler e fazer parse de um ficheiro CSV de músicas.
-void parse_musics(char* path){
+void parse_music(char* path, GHashTable* music_table){
     // Variaveis para o parse 
     FILE* musics;
     char filename[MAX_FILENAME];
@@ -188,6 +186,7 @@ void parse_musics(char* path){
         year = atoi(remove_aspas(strsep(&tmp_line,";")));
         lyrics = remove_aspas(strsep(&tmp_line,";")); //as lyrics tem o \n lá porque é onde ha mudanca de linha
         removeEnters(lyrics);
+        remove_aspas(lyrics);
         printf("Lyrics: %s\n",lyrics);
         if(isFormatValid(artist_id) && verify_year(year) && verify_duration(duration)){
             artist_id_converted = convertID(artist_id, &num_artists); // daqui temos o array de ids de artistas + o num_artists calculado

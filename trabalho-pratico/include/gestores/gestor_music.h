@@ -7,7 +7,7 @@
 #include <glib.h>
 
 // função para criar uma tabela de músicas.
-void createMusicTable();
+GHashTable* createMusicTable();
 
 // função que adiciona uma música á tabela de músicas.
 void addMusic(GHashTable* table, Music* music);
