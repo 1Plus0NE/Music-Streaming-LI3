@@ -142,7 +142,7 @@ void parse_artist(char* path, GHashTable* artist_table){
 }
 
 // Função para ler e fazer parse de um ficheiro CSV de músicas.
-void parse_music(char* path, GHashTable* music_table){
+void parse_music(char* path, GHashTable* music_table, GHashTable* artist_table){
     // Variaveis para o parse 
     FILE* musics;
     char filename[MAX_FILENAME];
@@ -161,8 +161,9 @@ void parse_music(char* path, GHashTable* music_table){
     char* genre;
     int year;
     char* lyrics;
+    
+    int erros = 0;
 
-    // music_table = createMusicTable(); // criar a tabela de musicas
     snprintf(filename,MAX_FILENAME,"%s/musics.csv",path); //abrir ficheiro de musicas
 
     musics = fopen(filename, "r");
@@ -189,16 +190,24 @@ void parse_music(char* path, GHashTable* music_table){
         remove_aspas(lyrics);
         if(isFormatValid(artist_id) && verify_year(year) && verify_duration(duration)){
             artist_id_converted = convertID(artist_id, &num_artists); // daqui temos o array de ids de artistas + o num_artists calculado
-            Music* m = createMusic(id, title, artist_id_converted, num_artists, duration, genre, year, lyrics);
-            addMusic(music_table, m);
-            free(artist_id_converted);
+            if(validateArtistIDs(artist_table, artist_id_converted ,num_artists)){
+                    Music* m = createMusic(id, title, artist_id_converted, num_artists, duration, genre, year, lyrics);
+                    addMusic(music_table, m);
+                    free(artist_id_converted);
+            }
+            else{
+                //erros++;
+                writeErrors(original_line, 2);
+            }         
         }
        
         else{
+            erros++;
             writeErrors(original_line, 2);
         }   
 
     }
+    printf("Foram encontrados %d erros",erros);
     fclose(musics);
 }
 
