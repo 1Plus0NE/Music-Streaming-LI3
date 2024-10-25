@@ -4,6 +4,6 @@
 
 int main(){
     errosDir();
-    parse_user("../resultados");
+    parse_user("dataset");
     return 0;
 }
