@@ -4,7 +4,9 @@
 #include "entidades/artist.h"
 #include "entidades/music.h"
 #include "entidades/user.h"
+#include "gestores/gestor_artist.h"
 #include "gestores/gestor_music.h"
+#include "gestores/gestor_user.h"
 #include "utils.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,7 +23,7 @@ void errosDir();
 void writeErrors(char* line, int csvFile);
 
 // Função para ler e fazer parse de um arquivo CSV de artistas.
-void parse_artist(char* path);
+void parse_artist(char* path, GHashTable* artist_table);
 
 // Função para ler e fazer parse de um ficheiro CSV de músicas.
 void parse_musics(char* path);

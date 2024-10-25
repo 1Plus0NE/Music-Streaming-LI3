@@ -3,7 +3,10 @@
 #include "../include/parser.h"
 
 int main(){
+    GHashTable* artist_table = createArtistTable();
     errosDir();
-    parse_user("dataset");
+    parse_artist("dataset", artist_table);
+    //parse_musics("dataset");
+    //parse_user("dataset");
     return 0;
 }

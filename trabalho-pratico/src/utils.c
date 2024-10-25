@@ -9,10 +9,13 @@ char* remove_aspas(char* str) {
     int len = strlen(str);
     if (len == 0) return str;  // Se a string for vazia, retorne-a diretamente
     
-    // Se a string começa e termina com aspas, remova-as
-    if (str[0] == '"' && str[len - 1] == '"') {
-        str[len - 1] = '\0';  // Remove a última aspas
-        return str + 1;       // Retorna a string sem a primeira aspas
+    // Se a string começa com aspas
+    if(str[0] == '"'){
+        str++;
+    }
+    // Se a string acaba com aspas
+    if(str[strlen(str) - 1] == '"'){
+        str[strlen(str) - 1] = '\0';
     }
     
     return str;  // Retorna a string sem alterações se não houver aspas
@@ -171,6 +174,17 @@ int calculaIdade(char* birthdate){
     }
 
     return age;
+}
+
+// Função que faz a validação lógica dos id_constituent de um artista
+int verifyConstituent(char* type, char* constituent){
+    int len = strlen(constituent);
+    // Se o nosso type for individual, o id_constituent tem que ser uma lista vazia []
+    if(!strcmp(type,"individual")){
+        if(len==2) return 1;
+        else return 0;
+    }
+    return 1; // Como não é individual só pode ser group
 }
 
 // Função que verifica se o formato do ID é válido, i.e, tem que ser [ID]

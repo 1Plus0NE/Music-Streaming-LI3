@@ -31,6 +31,8 @@ int verify_year(int year);
 //funções de conversão
 int calculaIdade(char* birthdate);
 
+int verifyConstituent(char* type, char* constituent);
+
 // Função que verifica se o formato do ID é válido, i.e, tem que ser [ID]
 int isFormatValid(const char *input);
 

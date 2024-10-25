@@ -66,15 +66,7 @@ Artist* createArtist(long int id, char* name, char* description, float recipe_pe
     strcpy(artist -> country, country);
 
     artist -> type = type;
-    if (!artist -> type) {
-        perror("Erro ao alocar memória para o tipo de artista.\n");
-        free(artist -> country);
-        free(artist -> id_constituent);
-        free(artist -> description);
-        free(artist -> name);
-        free(artist);
-        exit(EXIT_FAILURE);
-    }
+
     return artist;
 }
 
@@ -142,7 +134,7 @@ int verifyLineArtist(char* line){
 ArtistType stringToArtistType(char* type_str){
     if(strcmp(type_str, "individual") == 0){
         return INDIVIDUAL;
-    }else if(strcmp(type_str, "grupo") == 0){
+    }else if(strcmp(type_str, "group") == 0){
         return GRUPO;
     }else{
         fprintf(stderr, "tipo de artista inexistente %s.\n", type_str);
@@ -161,7 +153,7 @@ void freeArtist(Artist* artist){
 
 // getters de artista.
 long int* getArtistId(Artist* a){
-    return a->id ? &a->id : NULL;
+    return a ? &(a->id) : NULL;
 }
 
 char* getArtistName(Artist* a){

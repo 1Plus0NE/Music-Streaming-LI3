@@ -7,7 +7,7 @@
 #include <glib.h>
 
 // função para criar uma tabela de artistas.
-void createArtistTable();
+GHashTable* createArtistTable();
 
 // função que adiciona um artista á tabela de artistas.
 void addArtist(GHashTable* table, Artist* artist);
