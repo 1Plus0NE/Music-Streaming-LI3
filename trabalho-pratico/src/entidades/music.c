@@ -84,7 +84,7 @@ Music* createMusic(long int id, char* title, long int* artist_id, int num_artist
 
 // Função que retorna o ID da música
 long int* getMusicID(Music* m){
-    return m->id ? &m->id : NULL;
+    return m->id ? &(m->id) : NULL;
 }
 
 // Função que retorna o título da música

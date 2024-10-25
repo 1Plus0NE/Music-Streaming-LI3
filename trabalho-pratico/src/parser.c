@@ -187,11 +187,10 @@ void parse_music(char* path, GHashTable* music_table){
         lyrics = remove_aspas(strsep(&tmp_line,";")); //as lyrics tem o \n lá porque é onde ha mudanca de linha
         removeEnters(lyrics);
         remove_aspas(lyrics);
-        printf("Lyrics: %s\n",lyrics);
         if(isFormatValid(artist_id) && verify_year(year) && verify_duration(duration)){
             artist_id_converted = convertID(artist_id, &num_artists); // daqui temos o array de ids de artistas + o num_artists calculado
             Music* m = createMusic(id, title, artist_id_converted, num_artists, duration, genre, year, lyrics);
-            //addMusic(music_table, m);
+            addMusic(music_table, m);
             free(artist_id_converted);
         }
        
