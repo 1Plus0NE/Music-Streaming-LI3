@@ -5,12 +5,14 @@
 #include <stdlib.h>
 #include "../entidades/music.h"
 #include <glib.h>
+//#include <stdbool.h>
 
 // função para criar uma tabela de músicas.
 GHashTable* createMusicTable();
 
 // função que adiciona uma música á tabela de músicas.
 void addMusic(GHashTable* table, Music* music);
+
 
 // função que remove uma música da tabela de músicas.
 void removeMusic(GHashTable* table, int id);

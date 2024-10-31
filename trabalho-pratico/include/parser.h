@@ -29,6 +29,6 @@ void parse_artist(char* path, GHashTable* artist_table);
 void parse_music(char* path, GHashTable* music_table, GHashTable* artist_table);
 
 // Função para ler e fazer parse de um arquivo CSV de utilizadores.
-void parse_user(char* path);
+void parse_user(char* path, GHashTable* userTable, GHashTable* musicTable);
 
 #endif

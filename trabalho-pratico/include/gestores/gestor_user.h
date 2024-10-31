@@ -5,10 +5,10 @@
 #include <stdlib.h>
 #include "../entidades/user.h"
 #include <glib.h>
+#include <stdbool.h>
 
 // função para criar uma tabela de utilizadores.
-void createUserTable();
-
+GHashTable* createUserTable();
 // função que adiciona um utilizador á tabela de utilizadores.
 void addUser(GHashTable* table, User* user);
 
@@ -21,4 +21,9 @@ User* searchUser(GHashTable* table, char* username);
 // função que libera a memória alocada para a tabela de utilizadores.
 void freeUserTable(GHashTable* table);
 
+//Verificação singular de musica na tabela
+bool containsMusicID(GHashTable* table, long int id);
+
+//Verificação conjunta de uma lista de ids de musicas
+bool validateMusicId(GHashTable* table, long int* id, int N);
 #endif

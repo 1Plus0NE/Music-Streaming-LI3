@@ -24,7 +24,7 @@ User* createUser(char* username, char* email, char* first_name, char* last_name,
 void freeUser(User* user);
 
 // Função de verificação da validade de um utilizador.
-int userLineVerify(char *line);
+int userLineVerify(char *line, GHashTable* music_table);
 
 //int verifyLikedMusics(long int* list, MusicTable* musics);
 

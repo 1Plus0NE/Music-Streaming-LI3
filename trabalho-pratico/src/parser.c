@@ -212,7 +212,7 @@ void parse_music(char* path, GHashTable* music_table, GHashTable* artist_table){
 }
 
 // função para ler e fazer parse de um ficheiro CSV de artistas.
-void parse_user(char* path/*,music_table,user_table*/){
+void parse_user(char* path, GHashTable* userTable, GHashTable* musicTable){
     //variáveis para o parse
     FILE* users;
     char filename[MAX_FILENAME];
@@ -228,8 +228,6 @@ void parse_user(char* path/*,music_table,user_table*/){
     char birth_date[10];
     char* country;
     SubscriptionType subscription;
-    //char subscription_type[7];
-    //char* liked_musics_id;
     long int* liked_musics_id_converted;
     int num_liked_musics=0;
 
@@ -254,7 +252,8 @@ void parse_user(char* path/*,music_table,user_table*/){
         // Antes da função atribuir valor as variaveis, verifica a sua validação
         // line para analise
         // original_line para escrita de resultado
-        if(userLineVerify(line/*,musictable*/) == 0){
+        // tmp_oriLine desnecessária?
+        if(userLineVerify(line, musicTable) == 0){
             username = remove_aspas(strsep(&tmp_oriLine, ";"));
             email = remove_aspas(strsep(&tmp_oriLine, ";"));
             first_name = remove_aspas(strsep(&tmp_oriLine,";"));
@@ -264,31 +263,17 @@ void parse_user(char* path/*,music_table,user_table*/){
             country = remove_aspas(strsep(&tmp_oriLine,";"));
             char* tmpSub = remove_aspas(strsep(&tmp_oriLine,";"));
             subscription = stringToSubscriptionType(tmpSub);
-            //strncpy(subscription_type, remove_aspas(strsep(&tmp_oriLine, ";")), sizeof(subscription_type) - 1);
-            //subscription_type[7] = '\0';
-            //subscription_type = remove_aspas(strsep(&line,";"));
             liked_musics_id_converted = convertID(remove_aspas(strsep(&tmp_oriLine,"\n")), &num_liked_musics);
 
             User* u = createUser(username, email, first_name, last_name, birth_date, country, subscription, liked_musics_id_converted, num_liked_musics);
-            //addUser(User_table, u);
-            //free(liked_musics_id_converted);
-            //liked_musics_id = remove_aspas(strsep(&line,"\n"));
+            addUser(userTable, u);
 
             parsed++;
         // printf("ID: %li | Lyrics: %s \n",id,lyrics);
-        }/*
-        if(isFormatValid(liked_musics_id) && birthDateVerify(birth_date)){
-            // verified++;
-            liked_musics_id_converted = convertID(liked_musics_id, &num_liked_musics);
-            User* u = createUser(username, email, first_name, last_name, birth_date, country, subscription_type, liked_musics_id_converted, num_liked_musics);
-            // addMusic(music_table, m);
-            // chama func para escrever no csv a linha (quando esta correta)
-            free(liked_musics_id_converted);
-        }*/
-
+        }
         else{
             erros++;
-            writeErrors(original_line, 3); // Basta line?
+            writeErrors(original_line, 3);
         }   
     }
     printf("Foram lidos %d dados e foram encontrados %d erros.\n", parsed, erros);

@@ -1,4 +1,5 @@
 #include "../../include/entidades/user.h"
+#include "../../include/gestores/gestor_user.h"
 
 struct user {
     char* username;
@@ -105,11 +106,12 @@ void freeUser(User* user){
 }
 
 // Função de verificação da validade de um user
-int userLineVerify(char *line /*,music_table*/){
-
+int userLineVerify(char *line, GHashTable* music_table){
     //char *info = strsep(&line, ";");
     char *info=NULL;
-    
+    long int* musicsIds;
+    int N;
+
     for(int i = 0; i <= 7; i++){
         info=strsep(&line, ";");
         if(info){
@@ -125,9 +127,9 @@ int userLineVerify(char *line /*,music_table*/){
                     if(strcmp("premium",info)!=0 && strcmp("normal",info)!=0) return 1;
                     break;
                 case 7:
-                    /*if(verifyLikedMusics(convertID(remove_aspas(info)), music_table) != 0){
-                        return 1;
-                    }*/
+                    info = remove_aspas(info);
+                    musicsIds=convertID(info,&N);
+                    if(!validateMusicId(music_table, musicsIds, N)) return 1;
                     break;
                 default:
                     break;
@@ -136,16 +138,6 @@ int userLineVerify(char *line /*,music_table*/){
     }
     return 0;
 }
-
-/*int verifyLikedMusics(long int* list, MusicTable* musics){
-    while(*list){
-        if(!g_hash_table_contains(musics, (gconstpointer) *list)) {
-            return 1;
-        }
-        list++;
-    }
-    return 0;
-}*/
 
 //getters de utilizador
 char* getUserUsername(User* u){
