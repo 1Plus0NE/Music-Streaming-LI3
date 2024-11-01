@@ -43,3 +43,4 @@ bool validateMusicId(GHashTable* table, long int* id, int N){
     }
     return true;
 }
+//TODO Verificação do user na table

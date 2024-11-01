@@ -15,13 +15,16 @@ void query1(char* user_username, GHashTable* user_table, FILE* output_file){
     freeUser(user);
 }
 
-// Query que devolve os N artistas com maior discografia
-/*void query2Single(int N, GHashTable* artist_table, FILE* output_file){
+// Função para a 2ª query sem especificação de país
+void query2(int nArtists, GHashTable* artistTable, GHashTable* musicTable, FILE* output){
     
 }
 
-void query2Country(int N, char *country, GHashTable* artist_table, FILE* output_file){
-    while(N>0){
-        discografia(artista) = somaDuracaoMusicas(id artista)
-    }
-}*/
+// Função para a 2ª query, com especificação de país
+void query2b(int nArtists, char* country, GHashTable* artistTable, GHashTable* musicTable, FILE* output){
+
+}
+
+void query3(int ageMin, int ageMax, GHashTable* userTable, GHashTable* musicTable,FILE* output){
+
+}

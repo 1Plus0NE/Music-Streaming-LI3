@@ -13,4 +13,12 @@ int calculaIdade(char* birthdate);
 // função que responde á query1.
 void query1(char* user_username, GHashTable* user_table, FILE* output_file);
 
+// Função para a 2ª query sem especificação de informações
+void query2(int nArtists, GHashTable* artistTable, GHashTable* musicTable, FILE* output);
+
+// Função para a 2ª query, com especificação de país
+void query2b(int nArtists, char* country, GHashTable* artistTable, GHashTable* musicTable, FILE* output);
+
+// Função para a 3ª query
+void query3(int ageMin, int ageMax, GHashTable* userTable, GHashTable* musicTable,FILE* output);
 #endif

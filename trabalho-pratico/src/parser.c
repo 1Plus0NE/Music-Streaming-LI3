@@ -1,6 +1,7 @@
 #include "../include/parser.h"
 #define MAX_FILENAME 1024
 #define MAX_LINE 2048
+#define MAX_QUERYLINE 150
 
 // Função que cria a diretoria "dataset-errors" e respetivos ficheiros com cabeçalhos
     // Possivelmente inutil, mudar módulo posteriormente
@@ -282,4 +283,88 @@ void parse_user(char* path, GHashTable* userTable, GHashTable* musicTable){
     printf("Foram lidos %d dados e foram encontrados %d erros.\n", parsed, erros);
 
     fclose(users);
+}
+
+void parse_queries(char* path, char* outputDir, GHashTable* userTable, GHashTable* musicTable, GHashTable* artistTable){
+    
+    char line[MAX_QUERYLINE];
+    char* linePtr;
+    FILE* queries;
+    FILE* outputQ1;
+    FILE* outputQ2;
+    FILE* outputQ3;
+    int command = 0; // Para escrita individual de ficheiros de output
+    char outputPath[MAX_FILENAME]; // Caminho para ficheiros de output individuais
+
+    
+    char* user; // Utilizador para a query 1
+    int nArtists = 0; // Nº de artistas para a query 2
+    char* country; // País para a query 2
+    int ageMin = 0; // Idade mínima para a query 3
+    int ageMax = 0; // Idade máxima para a query 3
+    
+    // Abertura ficheiro de input das queries
+    queries = fopen(path, "r");
+    if(!queries){
+        perror("Erro ao abrir o ficheiro input das queries.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    // Leitura query a query
+    while(fgets(line, sizeof(line), queries) != NULL){ 
+
+        linePtr = line;  
+        // Atualização do path para o ficheiro de output da query 
+        command++;
+        snprintf(outputPath, MAX_FILENAME, "%s/command%d_output.txt", outputDir, command);
+        
+        // Identificação da Query
+        if(line[0] == 0){
+            // Criação do ficheiro de output da query para argumento do função query1
+            outputQ1 = fopen(outputPath, "w");
+            if(!outputQ1){
+                perror("Erro ao criar o ficheiro de output da query 1.\n");
+                exit(EXIT_FAILURE);
+            }
+            // Tratamento da linha para a 1ª Query
+            strsep(&linePtr, " "); // Ignora o id da Query e o espaço 
+            user = strsep(&linePtr, "\n");
+            query1(user, userTable, outputQ1);
+            // Processo completo, fechar ficheiro
+            fclose(outputQ1);
+        }
+        else if(line[0] == 1){
+            outputQ2 = fopen(outputPath, "w");
+            if(!outputQ2){
+                perror("Erro ao criar o ficheiro de output da query 2.\n");
+                exit(EXIT_FAILURE);
+            }
+
+            strsep(&linePtr, " ");
+            nArtists = atoi(strsep(&linePtr, " ")); // Numero de artistas
+            country = remove_aspas(strsep(&linePtr, "\n")); // País sem aspas
+            if(country==NULL) query2(nArtists, artistTable, musicTable, outputQ2); // query 2 sem especificação de país
+            else query2b(nArtists, country, artistTable, musicTable, outputQ2); // query 2 com país especificado
+
+            fclose(outputQ2);
+        }
+        else if(line[0] == 2){
+            outputQ3 = fopen(outputPath, "w");
+            if(!outputQ3){
+                perror("Erro ao criar o ficheiro de output da query 3.\n");
+                exit(EXIT_FAILURE);
+            }
+
+            strsep(&linePtr, " ");
+            ageMin = atoi(strsep(&linePtr, " "));
+            ageMax = atoi(strsep(&linePtr, "\n"));
+            query3(ageMin, ageMax, userTable, musicTable, outputQ3);
+
+            fclose(outputQ3);
+        }
+        // Ignora Query inválida
+        // Criar um ficheiro vazio?
+        else continue;
+    }
+    fclose(queries);
 }

@@ -8,6 +8,7 @@
 #include "gestores/gestor_music.h"
 #include "gestores/gestor_user.h"
 #include "utils.h"
+#include "queries.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -31,4 +32,6 @@ void parse_music(char* path, GHashTable* music_table, GHashTable* artist_table);
 // Função para ler e fazer parse de um arquivo CSV de utilizadores.
 void parse_user(char* path, GHashTable* userTable, GHashTable* musicTable);
 
+// Função para ler e fazer parse das queries
+void parse_queries(char* path, char* outputDir, GHashTable* userTable, GHashTable* musicTable, GHashTable* artistTable);
 #endif
