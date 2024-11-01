@@ -85,6 +85,7 @@ void parse_artist(char* path, GHashTable* artist_table){
     char line[MAX_LINE];
     char original_line[MAX_LINE];
     char *tmp_line=NULL;
+    int erros = 0;
 
     //argumentos para a struct de artistas
     char *id_str;
@@ -134,10 +135,12 @@ void parse_artist(char* path, GHashTable* artist_table){
         }
        
         else{
+            erros++;
             writeErrors(original_line, 1);
         }   
 
     }
+    printf("Foram encontrados %d erros.\n", erros);
     fclose(artists);
 }
 
