@@ -1,6 +1,5 @@
 #ifndef PARSER_H
 #define PARSER_H
-#define _DEFAULT_SOURCE
 #include "entidades/artist.h"
 #include "entidades/music.h"
 #include "entidades/user.h"

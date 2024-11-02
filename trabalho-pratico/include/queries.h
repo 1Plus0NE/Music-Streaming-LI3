@@ -6,7 +6,7 @@
 #include "gestores/gestor_music.h"
 #include "gestores/gestor_artist.h"
 #include "entidades/artist.h"
-//#include <string.h>
+#include <string.h>
 
 // Lista ligada para a Query 2 
 typedef struct discography Discography;

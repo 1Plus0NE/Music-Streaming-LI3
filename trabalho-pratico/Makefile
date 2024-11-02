@@ -5,7 +5,7 @@ TESTES = programa-testes
 
 CC = gcc
 
-CFLAGS = -Wall -Wextra -std=c11 -g `pkg-config --cflags glib-2.0`
+CFLAGS = -Wall -Wextra -std=gnu11 -g `pkg-config --cflags glib-2.0`
 
 # Diretorias
 SRC_DIR = src
