@@ -6,6 +6,10 @@
 #include "gestores/gestor_music.h"
 #include "gestores/gestor_artist.h"
 #include "entidades/artist.h"
+//#include <string.h>
+
+// Lista ligada para a Query 2 
+typedef struct discography Discography;
 
 // função que calcula a idade através de uma data de nascimento dada como argumento.
 int calculaIdade(char* birthdate);
@@ -21,4 +25,9 @@ void query2b(int nArtists, char* country, GHashTable* artistTable, GHashTable* m
 
 // Função para a 3ª query
 void query3(int ageMin, int ageMax, GHashTable* userTable, GHashTable* musicTable,FILE* output);
+
+Discography* artistInsert(Discography* disco, long int id, const char* name, const char* country, ArtistType type);
+
+void durationAdd(Discography* disco, const char* duration, long int id);
+
 #endif

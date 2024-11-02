@@ -300,6 +300,7 @@ void parse_queries(char* path, char* outputDir, GHashTable* userTable, GHashTabl
     char* user; // Utilizador para a query 1
     int nArtists = 0; // Nº de artistas para a query 2
     char* country; // País para a query 2
+    // Discography* disco = NULL; // Discografia para a query 2
     int ageMin = 0; // Idade mínima para a query 3
     int ageMax = 0; // Idade máxima para a query 3
     
