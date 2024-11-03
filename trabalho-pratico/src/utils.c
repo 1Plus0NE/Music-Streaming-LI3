@@ -6,34 +6,48 @@
 char* remove_aspas(char* str) {
     if (!str) return NULL;  // Verifica se a string é nula
     
-    int len = strlen(str);
-    if (len == 0) return str;  // Se a string for vazia, retorne-a diretamente
-    
+    char* result = strdup(str);
+    if(!result){
+        return NULL;
+    }
+
+    int len = strlen(result);
+    if (len == 0) return result;  // Se a string for vazia, retorne-a diretamente
+
     // Se a string começa com aspas
-    if(str[0] == '"'){
-        str++;
+    if(result[0] == '"'){
+        memmove(result, result+1, len);
     }
+
+    len = strlen(result);
     // Se a string acaba com aspas
-    if(str[strlen(str) - 1] == '"'){
-        str[strlen(str) - 1] = '\0';
+    if(result[len - 1] == '"'){
+        result[len - 1] = '\0';
     }
     
-    return str;  // Retorna a string sem alterações se não houver aspas
+    return result;  // Retorna a string sem alterações se não houver aspas
 }
 
 // Função que remove espaços de uma dada string
 char* remove_espacos(char* input){
-    int i,j;
-    char *output=input;
-    int tam = strlen(input);
-    for (i = 0, j = 0; i<tam; i++,j++){
-        if (input[i]!=' ')                           
-            output[j]=input[i];                     
-        else
-            j--;                                     
+    if(!input){
+        return NULL;
     }
-    output[j]=0;
-    return output;
+
+    char* result = strdup(input);
+    if(!result){
+        return NULL;
+    }
+
+    int i,j;
+    int tam = strlen(result);
+    for (i = 0, j = 0; i<tam; i++){
+        if (result[i]!=' '){
+            result[j++]=result[i];
+        }                                
+    }
+    result[j] = '\0';
+    return result;
 }
 
 // função que verifica se toda a string é composta por dígitos
@@ -70,24 +84,51 @@ int nameVerify(char *name){
 
 // função que valida um endereço de email, dividindo por tokens e verificando se e qual o conteudo desses tokens.
 int emailVerify(char *email){
-    
     if(!email){
         return 1;
     }
 
-    // Testar com  casos práticos a divisao por tokens
-    char *user = strsep(&email, "@");
-    char *lDomain = strsep(&email, ".");
-    char *rDomain = strsep(&email, "\0");
-    if(!user || !lDomain || !rDomain) return 1;
-
-    if(strlen(user)<1) return 1;
-    for(int i=0;user[i]!='\0';i++){
-        if(isdigit(user[i])==0 && isalpha(user[i])==0) return 1;
+    char *email_cpy = strdup(email);
+    if(!email_cpy){
+        perror("erro ao duplicar o email.\n");
+        return 1;
     }
-    if(nameVerify(lDomain) != 0 || strlen(lDomain)<1) return 1;
-    if(nameVerify(rDomain) != 0 || strlen(rDomain)<2 || strlen(rDomain)>3) return 1;    
-    
+
+    char *original_cpy = email_cpy;
+
+    // Testar com  casos práticos a divisao por tokens
+    char *user = strsep(&email_cpy, "@");
+    char *lDomain = strsep(&email_cpy, ".");
+    char *rDomain = strsep(&email_cpy, "\0");
+
+    if(!user || !lDomain || !rDomain){
+        free(original_cpy);
+        return 1;
+    }
+
+    if(strlen(user)<1){
+        free(original_cpy);
+        return 1;
+    }
+
+    for(int i=0;user[i]!='\0';i++){
+        if(isdigit(user[i])==0 && isalpha(user[i])==0){
+            free(original_cpy);
+            return 1;
+        }
+    }
+
+    if(nameVerify(lDomain) != 0 || strlen(lDomain)<1){
+        free(original_cpy);
+        return 1;
+    }
+
+    if(nameVerify(rDomain) != 0 || strlen(rDomain)<2 || strlen(rDomain)>3){
+        free(original_cpy);
+        return 1;
+    }
+
+    free(original_cpy);
     return 0;
 }
 
@@ -99,25 +140,50 @@ int birthDateVerify(char* birth_date){
         return 1;
     }
 
-    if(birth_date[4] != '/' || birth_date[7] != '/' || birth_date[10] != '\0') return 1;
+    char* date_cpy = strdup(birth_date);
+    if(!date_cpy){
+        return 1;
+    }
 
-    char *ano = strsep(&birth_date, "/");
-    char *mes = strsep(&birth_date, "/");
-    char *dia = strsep(&birth_date, "\0");
+    if(date_cpy[4] != '/' || date_cpy[7] != '/' || date_cpy[10] != '\0'){
+        free(date_cpy);
+        return 1;
+    }
 
-    if(strDigit(ano)!=0 || strDigit(mes)!=0 || strDigit(dia)!=0) return 1;
-    
+    char *ano = strsep(&date_cpy, "/");
+    char *mes = strsep(&date_cpy, "/");
+    char *dia = strsep(&date_cpy, "\0");
+
+    if(strDigit(ano)!=0 || strDigit(mes)!=0 || strDigit(dia)!=0){
+        free(date_cpy);
+        return 1;
+    }
+
     // Data numérica verificada, transformar em int
     int anoInt = atoi(ano);
     int mesInt = atoi(mes);
     int diaInt = atoi(dia);
 
     // Verificação lógica
-    if(anoInt>2024 || (anoInt==2024 && mesInt>9) || (anoInt==2024 && mesInt==9 && diaInt>9)) return 1;
-    else if(anoInt<0) return 1;
-    else if(mesInt<=0 || mesInt>12) return 1;
-    else if(diaInt<=0 || diaInt>31) return 1;
-    else return 0;
+    if(anoInt>2024 || (anoInt==2024 && mesInt>9) || (anoInt==2024 && mesInt==9 && diaInt>9)){
+        free(date_cpy);
+        return 1;
+    }
+    else if(anoInt<0){
+        free(date_cpy);
+        return 1;
+    }
+    else if(mesInt<=0 || mesInt>12){
+        free(date_cpy);
+        return 1;
+    }
+    else if(diaInt<=0 || diaInt>31){
+        free(date_cpy);
+        return 1;
+    }
+    
+    free(date_cpy);
+    return 0;
 }
 
 // função que faz a validação sintática da duração de uma música.
@@ -200,32 +266,36 @@ long int* convertID(const char *input, int *count){
     // Verificar se tem um formato valido, pois existem entries sem []
     if (!isFormatValid(input)){
         *count = 0;
-        return 0;
+        return NULL;
     }
 
     char *input_copy = strdup(input);
-    
+    if(!input_copy){
+        perror("erro ao duplicar a string para o array de ids.\n");
+        exit(EXIT_FAILURE);
+    }
+
     // Remover os parentesis retos
-    input_copy++;
-    input_copy[strlen(input_copy) - 1] = '\0';
+    char* input_final = input_copy + 1;
+    input_final[strlen(input_final) - 1] = '\0';
 
     // Verificar se está empty
-    if(strlen(input_copy) == 0){
+    if(strlen(input_final) == 0){
         *count = 0;
-        free(input_copy - 1);
-        return 0;
+        free(input_copy);
+        return NULL;
     }
 
     // Contar o número de ids através das virgulas, o nosso contador começa 1, pois podemos ter um array de um só elemento
     *count = 1;
-    for (char *c = input_copy; *c != '\0'; c++){
+    for (char *c = input_final; *c != '\0'; c++){
         if (*c == ',') (*count)++;
     }
 
     // Após a contagem, alocamos memoria para este novo array
     long int *convertedIDs = (long int*) malloc(*count * sizeof(long int));
-    if (convertedIDs == NULL){
-        perror("Erro ao alocar memoria para o array de IDs\n");
+    if (!convertedIDs){
+        perror("Erro ao alocar memoria para o array de ids.\n");
         free(input_copy); 
         exit(EXIT_FAILURE);
     }
@@ -233,7 +303,7 @@ long int* convertID(const char *input, int *count){
     char *token;
     int index = 0;
     // Percorremos toda a linha até não encontrarmos uma virgula
-    while ((token = strsep(&input_copy, ",")) != NULL){
+    while ((token = strsep(&input_final, ",")) != NULL){
         remove_espacos(token);
         // Remover as plicas
         if (token[0] == '\'' && token[strlen(token) - 1] == '\'' ){
@@ -242,8 +312,7 @@ long int* convertID(const char *input, int *count){
         }
 
         // Convertemos o ID para um long int e damos store no array
-        convertedIDs[index] = strtol(token + 1, NULL, 10); 
-        index++;
+        convertedIDs[index++] = strtol(token, NULL, 10); 
     }
 
     free(input_copy);  // Libertamos a memoria do pointer original

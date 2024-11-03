@@ -271,6 +271,7 @@ void parse_user(char* path, GHashTable* userTable, GHashTable* musicTable){
 
             User* u = createUser(username, email, first_name, last_name, birth_date, country, subscription, liked_musics_id_converted, num_liked_musics);
             addUser(userTable, u);
+            free(liked_musics_id_converted);
 
             parsed++;
         // printf("ID: %li | Lyrics: %s \n",id,lyrics);
@@ -300,7 +301,7 @@ void parse_queries(char* path, GHashTable* userTable, GHashTable* musicTable, GH
     char* user; // Utilizador para a query 1
     int nArtists = 0; // Nº de artistas para a query 2
     char* country; // País para a query 2
-    // Discography* disco = NULL; // Discografia para a query 2
+    Discography* disco = NULL; // Discografia para a query 2
     int ageMin = 0; // Idade mínima para a query 3
     int ageMax = 0; // Idade máxima para a query 3
     
@@ -342,16 +343,22 @@ void parse_queries(char* path, GHashTable* userTable, GHashTable* musicTable, GH
             }
 
             // Discografia antes de resolver a Query2 
-            // disco = fillWithArtists(artistTable, disco);
-            // disco = updateArtistsDurationFromMusic(musicTable, disco);
-            // sortByDuration(disco);
+            disco = fillWithArtists(artistTable, disco);
+            disco = updateArtistsDurationFromMusic(musicTable, disco);
+            sortByDuration(disco);
             // discografia pronta para a 2ª query
             strsep(&linePtr, " ");
             nArtists = atoi(strsep(&linePtr, " ")); // Numero de artistas
             country = remove_aspas(strsep(&linePtr, "\n")); // País sem aspas
             // Substiruir os NULLs
-            if(country==NULL) query2(nArtists, NULL, outputQ2); // query 2 sem especificação de país
-            else query2b(nArtists, country, NULL, outputQ2); // query 2 com país especificado
+            if(country==NULL) query2(nArtists, disco, outputQ2); // query 2 sem especificação de país
+            else query2b(nArtists, country, disco, outputQ2); // query 2 com país especificado
+
+            freeDiscography(disco);
+
+            if(country != NULL){
+                free(country);
+            }
 
             fclose(outputQ2);
         }

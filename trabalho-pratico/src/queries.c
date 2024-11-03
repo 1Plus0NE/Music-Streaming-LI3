@@ -40,7 +40,7 @@ void query2(int nArtists, Discography* disco, FILE* output){
 
         head = head->next;
     }
-    free(disco);
+    freeDiscography(disco);
 }
 
 // Função para a 2ª query, com especificação de país
@@ -64,7 +64,7 @@ void query2b(int nArtists, char* country,Discography* disco, FILE* output){
             i--;
         }
     }
-    free(disco);
+    freeDiscography(disco);
 }
 
 void query3(int ageMin, int ageMax, GHashTable* userTable, GHashTable* musicTable,FILE* output){
@@ -177,6 +177,9 @@ void artistDurationAdd(gpointer _musicId, gpointer musicData, gpointer discoPtr)
         //long int artist_id = music->artist_id[i];
 //        durationAdd(disco, music->duration, music->artist_id[i]);
 //    }
+
+    free(duration);
+    free(musicArtistsId);
 }
 
 // Função para ordenar a discografia por durações
