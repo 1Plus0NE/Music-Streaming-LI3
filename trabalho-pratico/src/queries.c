@@ -142,9 +142,14 @@ Discography* fillWithArtists(GHashTable* table, Discography* disco){
 // Função callback para cada item da Hash Table
 void artistFromTableToLL(gpointer _artistId, gpointer artistData, gpointer discoPtr){
     
-    Artist* artist = (Artist*)artistData;
+    //Artist* artist = (Artist*)artistData;
     Discography** disco = (Discography**)discoPtr;
-    //*disco = artistInsert(*disco, artist->id, artist->name, artist->country, artist->type);
+    long int id = getArtistId(artistData);
+    char* name = getArtistName(artistData);
+    char* country = getArtistCountry(artistData);
+    ArtistType type = getArtistType(artistData);
+    
+    *disco = artistInsert(*disco, id, name, country, type);
 }
 
 // Função principal para percorrer a hash table e atualizar as durações dos artistas
@@ -157,8 +162,15 @@ Discography* updateArtistsDurationFromMusic(GHashTable* musicTable, Discography*
 // Função para processar cada música e atualizar a duração nos artistas correspondentes
 void artistDurationAdd(gpointer _musicId, gpointer musicData, gpointer discoPtr){
    
-    Music* music = (Music*)musicData;
+    //Music* music = (Music*)musicData;
     Discography* disco = (Discography*)discoPtr;
+    int numArtists = getMusicNumArtists(musicData);
+    char* duration = getMusicDuration(musicData);
+    long int* musicArtistsId = getMusicArtistIDs(musicData);
+    
+    for(int i=0; i<numArtists; i++){
+        durationAdd(disco, duration, musicArtistsId[i]);
+    }
 
     // Incrementação à duracao por cada artista na lista de artistas
 //    for (int i = 0; i < music->num_artists; i++) {
