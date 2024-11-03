@@ -11,7 +11,6 @@ GHashTable* createMusicTable(){
     return table;
 }
 
-
 // função que adiciona uma música á tabela de músicas.
 void addMusic(GHashTable* table, Music* music){
     g_hash_table_insert(table, getMusicID(music), music);

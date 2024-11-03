@@ -67,7 +67,7 @@ void query2b(int nArtists, char* country,Discography* disco, FILE* output){
     freeDiscography(disco);
 }
 
-void query3(int ageMin, int ageMax, GHashTable* userTable, GHashTable* musicTable,FILE* output){
+void query3(int ageMin, int ageMax, GHashTable* userTable, GHashTable* musicTable, FILE* output){
 
 }
 

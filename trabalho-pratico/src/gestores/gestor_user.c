@@ -39,7 +39,7 @@ bool containsMusicID(GHashTable* table, long int id){
 // Função que verifica se todos os ids das musicas pertencem à tabela
 bool validateMusicId(GHashTable* table, long int* id, int N){
     for(int i=0;i<N;i++){
-        if(!containsMusicID(table, id[i])==false) return false;
+        if(!containsMusicID(table, id[i])) return false;
     }
     return true;
 }

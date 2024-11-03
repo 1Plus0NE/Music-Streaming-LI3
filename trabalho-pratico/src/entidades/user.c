@@ -123,11 +123,11 @@ int userLineVerify(char *line, GHashTable* music_table){
                     if(birthDateVerify(remove_aspas(info))!=0) return 1;
                     break;
                 case 6:
-                info = remove_aspas(info);
+                    info = remove_aspas(info);
                     if(strcmp("premium",info)!=0 && strcmp("normal",info)!=0) return 1;
                     break;
                 case 7:
-                    info = remove_aspas(info);
+                    info = remove_aspas(strsep(&info,"\n"));
                     musicsIds=convertID(info,&N);
                     if(!validateMusicId(music_table, musicsIds, N)) return 1;
                     break;

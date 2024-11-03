@@ -122,9 +122,7 @@ void parse_artist(char* path, GHashTable* artist_table){
         recipe_per_stream = atof(remove_aspas(strsep(&tmp_line,";")));
         id_constituent = remove_aspas(strsep(&tmp_line,";"));
         country = remove_aspas(strsep(&tmp_line,";"));
-        type_str = remove_aspas(strsep(&tmp_line,";"));
-        removeEnters(type_str);
-        remove_aspas(type_str);
+        type_str = remove_aspas(strsep(&tmp_line,"\n"));
         //type = stringToArtistType(type_str); -> quero verificar primeiro se o field é válido
 
         if(isFormatValid(id_constituent) && verifyConstituent(type_str,id_constituent)){
@@ -189,9 +187,8 @@ void parse_music(char* path, GHashTable* music_table, GHashTable* artist_table){
         duration  = remove_aspas(strsep(&tmp_line,";"));
         genre  = remove_aspas(strsep(&tmp_line,";"));
         year = atoi(remove_aspas(strsep(&tmp_line,";")));
-        lyrics = remove_aspas(strsep(&tmp_line,";")); //as lyrics tem o \n lá porque é onde ha mudanca de linha
-        removeEnters(lyrics);
-        remove_aspas(lyrics);
+        lyrics = remove_aspas(strsep(&tmp_line,"\n")); //as lyrics tem o \n lá porque é onde ha mudanca de linha
+
         if(isFormatValid(artist_id) && verify_year(year) && verify_duration(duration)){
             artist_id_converted = convertID(artist_id, &num_artists); // daqui temos o array de ids de artistas + o num_artists calculado
             if(validateArtistIDs(artist_table, artist_id_converted ,num_artists)){
@@ -211,7 +208,7 @@ void parse_music(char* path, GHashTable* music_table, GHashTable* artist_table){
         }   
 
     }
-    printf("Foram encontrados %d erros",erros);
+    printf("Foram encontrados %d erros\n",erros);
     fclose(musics);
 }
 
@@ -268,7 +265,8 @@ void parse_user(char* path, GHashTable* userTable, GHashTable* musicTable){
             char* tmpSub = remove_aspas(strsep(&tmp_oriLine,";"));
             subscription = stringToSubscriptionType(tmpSub);
             liked_musics_id_converted = convertID(remove_aspas(strsep(&tmp_oriLine,"\n")), &num_liked_musics);
-
+            
+            
             User* u = createUser(username, email, first_name, last_name, birth_date, country, subscription, liked_musics_id_converted, num_liked_musics);
             addUser(userTable, u);
             free(liked_musics_id_converted);
@@ -285,7 +283,7 @@ void parse_user(char* path, GHashTable* userTable, GHashTable* musicTable){
 
     fclose(users);
 }
-
+/*
 void parse_queries(char* path, GHashTable* userTable, GHashTable* musicTable, GHashTable* artistTable){
     
     char line[MAX_QUERYLINE];
@@ -383,3 +381,4 @@ void parse_queries(char* path, GHashTable* userTable, GHashTable* musicTable, GH
     //freeDiscography(disco);
     fclose(queries);
 }
+*/
