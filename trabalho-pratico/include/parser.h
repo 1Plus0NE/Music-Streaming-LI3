@@ -32,5 +32,5 @@ void parse_music(char* path, GHashTable* music_table, GHashTable* artist_table);
 void parse_user(char* path, GHashTable* userTable, GHashTable* musicTable);
 
 // Função para ler e fazer parse das queries
-void parse_queries(char* path, char* outputDir, GHashTable* userTable, GHashTable* musicTable, GHashTable* artistTable);
+void parse_queries(char* path, GHashTable* userTable, GHashTable* musicTable, GHashTable* artistTable);
 #endif

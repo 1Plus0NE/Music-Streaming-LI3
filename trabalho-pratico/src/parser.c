@@ -285,10 +285,10 @@ void parse_user(char* path, GHashTable* userTable, GHashTable* musicTable){
     fclose(users);
 }
 
-void parse_queries(char* path, char* outputDir, GHashTable* userTable, GHashTable* musicTable, GHashTable* artistTable){
+void parse_queries(char* path, GHashTable* userTable, GHashTable* musicTable, GHashTable* artistTable){
     
     char line[MAX_QUERYLINE];
-    char* linePtr;
+    char* linePtr=NULL;
     FILE* queries;
     FILE* outputQ1;
     FILE* outputQ2;
@@ -317,10 +317,10 @@ void parse_queries(char* path, char* outputDir, GHashTable* userTable, GHashTabl
         linePtr = line;  
         // Atualização do path para o ficheiro de output da query 
         command++;
-        snprintf(outputPath, MAX_FILENAME, "%s/command%d_output.txt", outputDir, command);
+        snprintf(outputPath, MAX_FILENAME, "../resultados/command%d_output.txt", command);
         
         // Identificação da Query
-        if(line[0] == 1){
+        if(line[0] == '1'){
             // Criação do ficheiro de output da query para argumento do função query1
             outputQ1 = fopen(outputPath, "w");
             if(!outputQ1){
@@ -334,7 +334,7 @@ void parse_queries(char* path, char* outputDir, GHashTable* userTable, GHashTabl
             // Processo completo, fechar ficheiro
             fclose(outputQ1);
         }
-        else if(line[0] == 2){
+        else if(line[0] == '2'){
             outputQ2 = fopen(outputPath, "w");
             if(!outputQ2){
                 perror("Erro ao criar o ficheiro de output da query 2.\n");
@@ -355,7 +355,7 @@ void parse_queries(char* path, char* outputDir, GHashTable* userTable, GHashTabl
 
             fclose(outputQ2);
         }
-        else if(line[0] == 3){
+        else if(line[0] == '3'){
             outputQ3 = fopen(outputPath, "w");
             if(!outputQ3){
                 perror("Erro ao criar o ficheiro de output da query 3.\n");
