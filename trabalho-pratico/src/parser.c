@@ -283,7 +283,7 @@ void parse_user(char* path, GHashTable* userTable, GHashTable* musicTable){
 
     fclose(users);
 }
-/*
+
 void parse_queries(char* path, GHashTable* userTable, GHashTable* musicTable, GHashTable* artistTable){
     
     char line[MAX_QUERYLINE];
@@ -316,8 +316,8 @@ void parse_queries(char* path, GHashTable* userTable, GHashTable* musicTable, GH
         linePtr = line;  
         // Atualização do path para o ficheiro de output da query 
         command++;
-        snprintf(outputPath, MAX_FILENAME, "../resultados/command%d_output.txt", command);
-        
+        snprintf(outputPath, MAX_FILENAME, "resultados/command%d_output.txt", command);
+
         // Identificação da Query
         if(line[0] == '1'){
             // Criação do ficheiro de output da query para argumento do função query1
@@ -381,4 +381,3 @@ void parse_queries(char* path, GHashTable* userTable, GHashTable* musicTable, GH
     //freeDiscography(disco);
     fclose(queries);
 }
-*/

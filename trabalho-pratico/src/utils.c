@@ -4,22 +4,28 @@
 
 //função responsável por remover as aspas.
 char* remove_aspas(char* str) {
-    
     if (!str) return NULL;  // Verifica se a string é nula
+    
+    char* result = strdup(str);
+    if(!result){
+        return NULL;
+    }
 
-    int len = strlen(str);
-    if (len == 0) return str;  // Se a string for vazia, retorne-a diretamente
-    
+    int len = strlen(result);
+    if (len == 0) return result;  // Se a string for vazia, retorne-a diretamente
+
     // Se a string começa com aspas
-    if(str[0] == '"'){
-        str++;
+    if(result[0] == '"'){
+        memmove(result, result+1, len);
     }
+
+    len = strlen(result);
     // Se a string acaba com aspas
-    if(str[strlen(str) - 1] == '"'){
-        str[strlen(str) - 1] = '\0';
+    if(result[len - 1] == '"'){
+        result[len - 1] = '\0';
     }
     
-    return str;  // Retorna a string sem alterações se não houver aspas
+    return result;  // Retorna a string sem alterações se não houver aspas
 }
 
 // Função que remove espaços de uma dada string
@@ -71,24 +77,51 @@ int nameVerify(char *name){
 
 // função que valida um endereço de email, dividindo por tokens e verificando se e qual o conteudo desses tokens.
 int emailVerify(char *email){
-    
     if(!email){
         return 1;
     }
 
-    // Testar com  casos práticos a divisao por tokens
-    char *user = strsep(&email, "@");
-    char *lDomain = strsep(&email, ".");
-    char *rDomain = strsep(&email, "\0");
-    if(!user || !lDomain || !rDomain) return 1;
-
-    if(strlen(user)<1) return 1;
-    for(int i=0;user[i]!='\0';i++){
-        if(isdigit(user[i])==0 && isalpha(user[i])==0) return 1;
+    char *email_cpy = strdup(email);
+    if(!email_cpy){
+        perror("erro ao duplicar o email.\n");
+        return 1;
     }
-    if(nameVerify(lDomain) != 0 || strlen(lDomain)<1) return 1;
-    if(nameVerify(rDomain) != 0 || strlen(rDomain)<2 || strlen(rDomain)>3) return 1;    
-    
+
+    char *original_cpy = email_cpy;
+
+    // Testar com  casos práticos a divisao por tokens
+    char *user = strsep(&email_cpy, "@");
+    char *lDomain = strsep(&email_cpy, ".");
+    char *rDomain = strsep(&email_cpy, "\0");
+
+    if(!user || !lDomain || !rDomain){
+        free(original_cpy);
+        return 1;
+    }
+
+    if(strlen(user)<1){
+        free(original_cpy);
+        return 1;
+    }
+
+    for(int i=0;user[i]!='\0';i++){
+        if(isdigit(user[i])==0 && isalpha(user[i])==0){
+            free(original_cpy);
+            return 1;
+        }
+    }
+
+    if(nameVerify(lDomain) != 0 || strlen(lDomain)<1){
+        free(original_cpy);
+        return 1;
+    }
+
+    if(nameVerify(rDomain) != 0 || strlen(rDomain)<2 || strlen(rDomain)>3){
+        free(original_cpy);
+        return 1;
+    }
+
+    free(original_cpy);
     return 0;
 }
 
@@ -100,25 +133,50 @@ int birthDateVerify(char* birth_date){
         return 1;
     }
 
-    if(birth_date[4] != '/' || birth_date[7] != '/' || birth_date[10] != '\0') return 1;
+    char* date_cpy = strdup(birth_date);
+    if(!date_cpy){
+        return 1;
+    }
 
-    char *ano = strsep(&birth_date, "/");
-    char *mes = strsep(&birth_date, "/");
-    char *dia = strsep(&birth_date, "\0");
+    if(date_cpy[4] != '/' || date_cpy[7] != '/' || date_cpy[10] != '\0'){
+        free(date_cpy);
+        return 1;
+    }
 
-    if(strDigit(ano)!=0 || strDigit(mes)!=0 || strDigit(dia)!=0) return 1;
-    
+    char *ano = strsep(&date_cpy, "/");
+    char *mes = strsep(&date_cpy, "/");
+    char *dia = strsep(&date_cpy, "\0");
+
+    if(strDigit(ano)!=0 || strDigit(mes)!=0 || strDigit(dia)!=0){
+        free(date_cpy);
+        return 1;
+    }
+
     // Data numérica verificada, transformar em int
     int anoInt = atoi(ano);
     int mesInt = atoi(mes);
     int diaInt = atoi(dia);
 
     // Verificação lógica
-    if(anoInt>2024 || (anoInt==2024 && mesInt>9) || (anoInt==2024 && mesInt==9 && diaInt>9)) return 1;
-    else if(anoInt<0) return 1;
-    else if(mesInt<=0 || mesInt>12) return 1;
-    else if(diaInt<=0 || diaInt>31) return 1;
-    else return 0;
+    if(anoInt>2024 || (anoInt==2024 && mesInt>9) || (anoInt==2024 && mesInt==9 && diaInt>9)){
+        free(date_cpy);
+        return 1;
+    }
+    else if(anoInt<0){
+        free(date_cpy);
+        return 1;
+    }
+    else if(mesInt<=0 || mesInt>12){
+        free(date_cpy);
+        return 1;
+    }
+    else if(diaInt<=0 || diaInt>31){
+        free(date_cpy);
+        return 1;
+    }
+    
+    free(date_cpy);
+    return 0;
 }
 
 // função que faz a validação sintática da duração de uma música.

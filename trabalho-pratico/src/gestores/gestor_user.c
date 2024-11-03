@@ -23,7 +23,7 @@ void removeUser(GHashTable* table, char* username){
 
 // função que encontra um utilizador pelo username na tabela.
 User* searchUser(GHashTable* table, char* username){
-    return (User*) g_hash_table_lookup(table, &username);
+    return (User*) g_hash_table_lookup(table, username);
 }
 
 // função que libera a memória alocada para a tabela de utilizadores.
@@ -43,4 +43,3 @@ bool validateMusicId(GHashTable* table, long int* id, int N){
     }
     return true;
 }
-//TODO Verificação do user na table

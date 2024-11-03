@@ -16,12 +16,13 @@ void query1(char* user_username, GHashTable* user_table, FILE* output_file){
 
     if(!user){
         fprintf(output_file, "\n");
+        return;
     }
 
     int age = calculaIdade(getUserBirthDate(user));
 
     fprintf(output_file, "%s;%s;%s;%d;%s\n", getUserEmail(user), getUserFirstName(user), getUserLastName(user), age, getUserCountry(user));
-    
+
     freeUser(user);
 }
 

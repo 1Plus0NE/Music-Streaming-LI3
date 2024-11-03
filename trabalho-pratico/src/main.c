@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "../include/parser.h"
 #include "../include/queries.h"
-//#define OUTPUT_DIR "../resultados"
+#define OUTPUT_DIR "../resultados"
 
 int main(int argc, char* argv[]){
     if(argc < 2){
@@ -23,8 +23,7 @@ int main(int argc, char* argv[]){
     parse_user(dataDir, user_table, music_table);
 
     if(queriesFile){
-        //parse_queries(queriesFile, user_table, music_table, artist_table);
-        printf("Ainda nao vamos fazer nada aq\n");
+        parse_queries(queriesFile, user_table, music_table, artist_table);
     }
 
     freeArtistTable(artist_table);
