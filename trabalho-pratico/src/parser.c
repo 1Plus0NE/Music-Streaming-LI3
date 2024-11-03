@@ -320,7 +320,7 @@ void parse_queries(char* path, char* outputDir, GHashTable* userTable, GHashTabl
         snprintf(outputPath, MAX_FILENAME, "%s/command%d_output.txt", outputDir, command);
         
         // Identificação da Query
-        if(line[0] == 0){
+        if(line[0] == 1){
             // Criação do ficheiro de output da query para argumento do função query1
             outputQ1 = fopen(outputPath, "w");
             if(!outputQ1){
@@ -334,22 +334,28 @@ void parse_queries(char* path, char* outputDir, GHashTable* userTable, GHashTabl
             // Processo completo, fechar ficheiro
             fclose(outputQ1);
         }
-        else if(line[0] == 1){
+        else if(line[0] == 2){
             outputQ2 = fopen(outputPath, "w");
             if(!outputQ2){
                 perror("Erro ao criar o ficheiro de output da query 2.\n");
                 exit(EXIT_FAILURE);
             }
 
+            // Discografia antes de resolver a Query2 
+            // disco = fillWithArtists(artistTable, disco);
+            // disco = updateArtistsDurationFromMusic(musicTable, disco);
+            // sortByDuration(disco);
+            // discografia pronta para a 2ª query
             strsep(&linePtr, " ");
             nArtists = atoi(strsep(&linePtr, " ")); // Numero de artistas
             country = remove_aspas(strsep(&linePtr, "\n")); // País sem aspas
-            if(country==NULL) query2(nArtists, artistTable, musicTable, outputQ2); // query 2 sem especificação de país
-            else query2b(nArtists, country, artistTable, musicTable, outputQ2); // query 2 com país especificado
+            // Substiruir os NULLs
+            if(country==NULL) query2(nArtists, NULL, outputQ2); // query 2 sem especificação de país
+            else query2b(nArtists, country, NULL, outputQ2); // query 2 com país especificado
 
             fclose(outputQ2);
         }
-        else if(line[0] == 2){
+        else if(line[0] == 3){
             outputQ3 = fopen(outputPath, "w");
             if(!outputQ3){
                 perror("Erro ao criar o ficheiro de output da query 3.\n");
@@ -367,5 +373,6 @@ void parse_queries(char* path, char* outputDir, GHashTable* userTable, GHashTabl
         // Criar um ficheiro vazio?
         else continue;
     }
+    //freeDiscography(disco);
     fclose(queries);
 }

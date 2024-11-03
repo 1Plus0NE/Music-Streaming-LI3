@@ -26,12 +26,13 @@ void query1(char* user_username, GHashTable* user_table, FILE* output_file){
 }
 
 // Função para a 2ª query sem especificação de país
-void query2(int nArtists, GHashTable* artistTable, GHashTable* musicTable, FILE* output){
-    
+void query2(int nArtists, Discography* disco, FILE* output){
+    // Ciclo for de escrita no ficheiro de output
+
 }
 
 // Função para a 2ª query, com especificação de país
-void query2b(int nArtists, char* country, GHashTable* artistTable, GHashTable* musicTable, FILE* output){
+void query2b(int nArtists, char* country,Discography* disco, FILE* output){
 
 }
 
@@ -39,40 +40,25 @@ void query3(int ageMin, int ageMax, GHashTable* userTable, GHashTable* musicTabl
 
 }
 
-// Função que adiciona por ordem crescente de id de artista, um novo artista à lista ligada
+//----------------Funções referentes à discografia------------------
+
+// Função que adiciona artista por artista numa lista ligada, ignorando a ordem 
 Discography* artistInsert(Discography* disco, long int id, const char* name, const char* country, ArtistType type){
-    
-    // disco -> lista ligada recebida como argumento
-    // newDisco -> lista para para guardar o novo artista
-    // newHead -> auxiliar para percorrer a lista
 
     // Atribuição dos valores do novo artista a uma nova lista
     Discography* newDisco = (Discography*)malloc(sizeof(Discography));
+    if (!newDisco) {
+        perror("Erro ao alocar memória para o novo artista.\n");
+        exit(EXIT_FAILURE);
+    }
     newDisco->id = id;
     newDisco->name = strdup(name);
     newDisco->country = strdup(country);
     newDisco->duration = 0; // Duração sempre 0
     newDisco->type = type;
-    newDisco->next = NULL;
-
-    // Caso o novo artista seja o 1º ou seja menor que o artista na cabeça da lista
-    if (disco==NULL || id < disco->id) {
-        newDisco->next = disco;
-        return newDisco;
-    }
-
-    // Percorrer a lista até que o id do novo artista seja menor que a cabeça da lista
-    Discography* newHead = disco;
-    while (newHead->next && newHead->next->id < id) {
-        newHead = newHead->next;
-    }
-    // O proximo id seria maior que o novo id, logo o novo id fica a apontar para esse proximo id
-    newDisco->next = newHead->next;
-    // A lista atual aponta para o novo id que tambem já aponta para um id maior (ordenado)
-    newHead->next = newDisco;
+    newDisco->next = disco;
     
-    // Devolve a lista original com a lista do novo artista inserido ordenadamente
-    return disco;
+    return newDisco;
 }
 
 // Função para incrementar em segundos, a duração da discografia de um artista
@@ -102,17 +88,95 @@ void durationAdd(Discography* disco, const char* duration, long int id){
     printf("Artista com ID %ld não encontrado.\n", id);
 }
 
-// Função callback para cada item da Hash Table
-/*void add_artist_to_discography(gpointer key, gpointer value, gpointer user_data) {
-    Artist* artist = (Artist*)value;
-    Discography** head = (Discography**)user_data;
-    *head = insert_discography_ordered(*head, artist->id, artist->name, artist->country, artist->type);
+void freeDiscography(Discography* disco) {
+    Discography* currentDisco = disco;
+    Discography* nextDisco;
+
+    while (currentDisco != NULL) {
+        nextDisco = currentDisco->next;
+        free(currentDisco->name);
+        free(currentDisco->country);
+        free(currentDisco);
+        currentDisco = nextDisco;
+    }
 }
 
 // Função que percorre a Hash Table e insere cada artista na lista Discography
-Discography* populateDiscographyList(GHashTable* table) {
-    Discography* head = init_discography();
-    g_hash_table_foreach(table, add_artist_to_discography, &head);
-    return head;
+Discography* fillWithArtists(GHashTable* table, Discography* disco){
+
+    g_hash_table_foreach(table, artistFromTableToLL, &disco);
+    return disco;
 }
-*/
+
+// Função callback para cada item da Hash Table
+void artistFromTableToLL(gpointer _artistId, gpointer artistData, gpointer discoPtr){
+    
+    Artist* artist = (Artist*)artistData;
+    Discography** disco = (Discography**)discoPtr;
+   // *disco = artistInsert(*disco, artist->id, artist->name, artist->country, artist->type);
+}
+
+// Função principal para percorrer a hash table e atualizar as durações dos artistas
+Discography* updateArtistsDurationFromMusic(GHashTable* musicTable, Discography* disco){
+
+    g_hash_table_foreach(musicTable, artistDurationAdd, &disco);
+    return disco;
+}
+
+// Função para processar cada música e atualizar a duração nos artistas correspondentes
+void artistDurationAdd(gpointer _musicId, gpointer musicData, gpointer discoPtr){
+   
+    Music* music = (Music*)musicData;
+    Discography* disco = (Discography*)discoPtr;
+
+    // Incrementação à duracao por cada artista na lista de artistas
+//    for (int i = 0; i < music->num_artists; i++) {
+        //long int artist_id = music->artist_id[i];
+//        durationAdd(disco, music->duration, music->artist_id[i]);
+//    }
+}
+
+// Função para ordenar a discografia por durações
+void sortByDuration(Discography** head) {
+    if (*head == NULL || (*head)->next == NULL) {
+        // Lista vazia ou com um único elemento não precisa de ordenação
+        return;
+    }
+
+    int swapped;
+    Discography *ptr1;
+    Discography *lptr = NULL;
+
+    do {
+        swapped = 0;
+        ptr1 = *head;
+
+        while (ptr1->next != lptr) {
+            if (ptr1->duration > ptr1->next->duration) {
+                // Trocar os dados dos artistas
+                long int tempId = ptr1->id;
+                char* tempName = ptr1->name;
+                char* tempCountry = ptr1->country;
+                int tempDuration = ptr1->duration;
+                ArtistType tempType = ptr1->type;
+
+                ptr1->id = ptr1->next->id;
+                ptr1->name = ptr1->next->name;
+                ptr1->country = ptr1->next->country;
+                ptr1->duration = ptr1->next->duration;
+                ptr1->type = ptr1->next->type;
+
+                ptr1->next->id = tempId;
+                ptr1->next->name = tempName;
+                ptr1->next->country = tempCountry;
+                ptr1->next->duration = tempDuration;
+                ptr1->next->type = tempType;
+
+                swapped = 1; // Indica que uma troca ocorreu
+            }
+            ptr1 = ptr1->next;
+        }
+        lptr = ptr1; // O último elemento já está ordenado
+    } while (swapped);
+}
+
