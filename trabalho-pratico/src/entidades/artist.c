@@ -231,3 +231,22 @@ void setArtistCountry(Artist* a, char* country){
 void setArtistType(Artist* a, ArtistType type){
     a -> type = type;
 }
+
+// Função para transformar o enum type em string para impressão nas queries
+char* typeToString(ArtistType type){
+    switch(type){
+        case INDIVIDUAL:{
+            char* typeStr = (char*)malloc(11 * sizeof(char));
+            strcpy(typeStr, "individual");
+            return typeStr;
+            }  
+        case GRUPO:{
+            char* typeStr = (char*)malloc(6 * sizeof(char));
+            strcpy(typeStr, "group");
+            return typeStr;
+            }
+        default:
+        // Em principio nunca acontece
+            return NULL;
+    }
+}

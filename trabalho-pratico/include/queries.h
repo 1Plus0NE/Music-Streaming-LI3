@@ -42,4 +42,8 @@ void artistFromTableToLL(gpointer artistId, gpointer artistData, gpointer discoP
 Discography* updateArtistsDurationFromMusic(GHashTable* musicTable, Discography* disco);
 
 void artistDurationAdd(gpointer musicId, gpointer musicData, gpointer discoPtr);
+
+void sortByDuration(Discography** head);
+
+char* secondsToString(int totSeconds);
 #endif

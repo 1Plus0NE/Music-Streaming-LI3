@@ -59,4 +59,6 @@ void setArtistCountry(Artist* a, char* country);
 
 void setArtistType(Artist* a, ArtistType type);
 
+char* typeToString(ArtistType type);
+
 #endif
