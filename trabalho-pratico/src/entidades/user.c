@@ -79,6 +79,7 @@ User* createUser(char* username, char* email, char* first_name, char* last_name,
     user -> liked_musics_id = malloc(num_liked_musics * sizeof(long int));
     if (!user -> liked_musics_id) {
         perror("Erro ao alocar memória para a lista de músicas com gosto.\n");
+        free(user -> liked_musics_id);
         free(user -> country);
         free(user -> last_name);
         free(user -> first_name);
@@ -97,6 +98,7 @@ User* createUser(char* username, char* email, char* first_name, char* last_name,
 
 // Função para libertar a memória de uma entidade do tipo utilizador.
 void freeUser(User* user){
+    free(user -> liked_musics_id);
     free(user -> country);
     free(user -> last_name);
     free(user -> first_name);
@@ -129,7 +131,11 @@ int userLineVerify(char *line, GHashTable* music_table){
                 case 7:
                     info = remove_aspas(strsep(&info,"\n"));
                     musicsIds=convertID(info,&N);
-                    if(!validateMusicId(music_table, musicsIds, N)) return 1;
+                    if(!validateMusicId(music_table, musicsIds, N)){
+                        free(musicsIds);
+                        return 1;
+                    }
+                    free(musicsIds);
                     break;
                 default:
                     break;
