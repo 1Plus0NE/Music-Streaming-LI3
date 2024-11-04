@@ -1,4 +1,5 @@
 #include "../include/queries.h"
+#define MAX_GENRES 11
 
 // Lista ligada para a Query 2
 struct discography {
@@ -74,9 +75,126 @@ void query2b(int nArtists, char* country, Discography* disco, FILE* output){
     }
 }
 
+int isUserInRange(User *user, int minAge, int maxAge){
+    int userAge = calculaIdade(getUserBirthDate(user));
+    return userAge > minAge && userAge < maxAge;
+}
+
+int getGenreIndex(char *genre, char **genre_array, int genre_count){
+    for(int i = 0; i < genre_count; i++){
+        if(strcmp(genre_array[i], genre) == 0){
+            return i;
+        }
+    }
+    return -1;
+}
+
 void query3(int ageMin, int ageMax, GHashTable* userTable, GHashTable* musicTable, FILE* output){
 
+    fprintf(output, "\n");
+
 }
+
+/*
+void query3(int ageMin, int ageMax, GHashTable* userTable, GHashTable* musicTable, FILE* output){
+    
+    if (ageMin == 100 || ageMax == 0){
+        fprintf(output, "\n");
+        return;
+    }
+
+    // Para iterar os users
+    GHashTableIter user_iter;
+    gpointer user_key, user_value;
+
+    // Info do user
+    User* user = NULL;
+    long int *likedMusics = NULL;
+    int numLikedMusics = 0;
+
+    // Info da musica
+    Music* music = NULL;
+    long int musicID = 0;
+
+    // Variaveis para dar store aos valores
+    char *genres[MAX_GENRES];
+    long int genre_likes[MAX_GENRES] = {0};
+    int genre_count = 0;
+    int index = 0;
+    char* genre;
+
+    // Flag para caso os intervalos de idades sejam validos mas não haja users compreendidos nessas idades
+    int flag = 0;
+
+    // Iterar pela table de users
+    g_hash_table_iter_init(&user_iter, userTable);
+    while (g_hash_table_iter_next(&user_iter, &user_key, &user_value)){
+        user = (User *)user_value;
+
+        if(isUserInRange(user, ageMin, ageMax)){
+            flag = 1;
+            likedMusics = getUserLikedMusics(user);
+            numLikedMusics = getUserNumLikedMusics(user);
+
+            // Para cada id de musicas com likes do user vamos contar para cada genero
+            for(int i = 0; i < numLikedMusics; i++){
+                musicID = likedMusics[i];
+                music = searchMusic(musicTable, musicID);
+
+                if(music != NULL){ // em principio nunca é null
+                    genre = getMusicGenre(music); // para construir o array de generos 
+                    index = getGenreIndex(genre, genres, genre_count); // para construir o array de likes
+                    
+                    if(index == -1){
+                        // Caso de um genero novo e temos que adicionar ao array
+                        if(genre_count < MAX_GENRES){
+                            genres[genre_count] = genre;
+                            genre_likes[genre_count] = 1;
+                            genre_count++;
+                        }
+                    }
+                    else{
+                        // Caso o genero ja exista, é porque deu match e entao incrementamos o valor de likes para esse genero
+                        genre_likes[index]++;
+                    }
+                }
+            }
+            
+            free(likedMusics);
+        }
+    }
+
+    // No caso de nao termos encontrado um user na range de idades
+    if(!flag){
+        fprintf(output, "\n");
+        return;
+    }
+
+    // Ordenar os arrays de generos e likes respetivos
+    for(int i = 0; i < genre_count - 1; i++){
+        for(int j = i + 1; j < genre_count; j++){
+            if(genre_likes[i] < genre_likes[j]){
+                // Swap de generos
+                char *temp_genre = genres[i];
+                genres[i] = genres[j];
+                genres[j] = temp_genre;
+
+                // Swap de likes
+                long int temp_likes = genre_likes[i];
+                genre_likes[i] = genre_likes[j];
+                genre_likes[j] = temp_likes;
+            }
+        }
+    }
+
+    // Escrever no ficheiro o resultado final
+    for(int i = 0; i < genre_count; i++){
+        fprintf(output, "%s;%ld\n", genres[i], genre_likes[i]);  
+        free(genres[i]);
+    }
+
+}
+*/
 
 //----------------Funções referentes à discografia------------------
 
@@ -235,7 +353,6 @@ void sortByDuration(Discography** head){
         lptr = ptr1; // O último elemento já está ordenado
     } while (swapped);
 }
-
 
 // Função para voltar a transformar o total de segundos na discografia no formato "hh:mm:ss"
 char* secondsToString(int totSeconds){

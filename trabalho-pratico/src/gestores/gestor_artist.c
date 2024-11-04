@@ -23,7 +23,7 @@ void removeArtist(GHashTable* table, long int id){
 
 // função que encontra um artista pelo id na tabela.
 Artist* searchArtist(GHashTable* table, long int id){
-    return (Artist*) g_hash_table_lookup(table, id);
+    return (Artist*) g_hash_table_lookup(table, &id);
 }
 
 // função que libera a memória alocada para a tabela de artistas.

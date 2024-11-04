@@ -174,10 +174,10 @@ SubscriptionType getUserSubscriptionType(User* u){
     return u->subscription_type;
 }
 
-int* getUserLikedMusics(User* u){
+long int* getUserLikedMusics(User* u){
     if (u->num_liked_musics > 0) {
-        int* cpy = malloc(u->num_liked_musics * sizeof(int));
-        memcpy(cpy, u->liked_musics_id, u->num_liked_musics * sizeof(int));
+        long int* cpy = malloc(u->num_liked_musics * sizeof(long int));
+        memcpy(cpy, u->liked_musics_id, u->num_liked_musics * sizeof(long int));
         return cpy;
     }
     return NULL;

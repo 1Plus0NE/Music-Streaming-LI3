@@ -15,10 +15,10 @@ void addMusic(GHashTable* table, Music* music);
 
 
 // função que remove uma música da tabela de músicas.
-void removeMusic(GHashTable* table, int id);
+void removeMusic(GHashTable* table, long int id);
 
 // função que encontra uma música pelo id na tabela.
-Music* searchMusic(GHashTable* table, int id);
+Music* searchMusic(GHashTable* table, long int id);
 
 // função que libera a memória alocada para a tabela de músicas.
 void freeMusicTable(GHashTable* table);

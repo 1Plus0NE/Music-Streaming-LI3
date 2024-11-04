@@ -43,7 +43,7 @@ char* getUserCountry(User* u);
 
 SubscriptionType getUserSubscriptionType(User* u);
 
-int* getUserLikedMusics(User* u);
+long int* getUserLikedMusics(User* u);
 
 int getUserNumLikedMusics(User* u);
 
