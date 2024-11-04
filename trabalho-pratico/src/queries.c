@@ -30,6 +30,8 @@ void query1(char* user_username, GHashTable* user_table, FILE* output_file){
 // Função para a query 2
 void query2(int nArtists, Discography* disco, FILE* output){
     Discography* head = disco;
+
+    if(nArtists == 0) fprintf(output, "\n"); // Caso de ficheiro "vazio"
     for(int i=0; i<nArtists && head!=NULL; i++){
         char* time = secondsToString(head->duration); // Transformação em formato char*
         char* typeInChar = typeToString(head->type); // Transformação em formato char*
@@ -41,7 +43,6 @@ void query2(int nArtists, Discography* disco, FILE* output){
 
         head = head->next;
     }
-    //freeDiscography(head); // Linha comentada, não deve ser chamada aqui
 }
 
 // Função para a query 2 com especificação do pais
@@ -59,12 +60,16 @@ void query2b(int nArtists, char* country, Discography* disco, FILE* output){
 
             head = head->next; 
         }
+        else if(head->next == NULL && i==0){ // Caso de ficheiro "vazio"
+            fprintf(output, "\n");
+            head = head->next;
+            i--; // Mantém o contador para processar o próximo artista
+        }
         else{
             head = head->next;
             i--; // Mantém o contador para processar o próximo artista
         }
     }
-    //freeDiscography(head); // Linha comentada, não deve ser chamada aqui
 }
 
 
@@ -119,7 +124,7 @@ void durationAdd(Discography* disco, const char* duration, long int id){
     if(newDisco == NULL) printf("Artista com ID %ld não encontrado.\n", id);
 }
 
-void freeDiscography(Discography* disco) {
+void freeDiscography(Discography* disco){
     Discography* currentDisco = disco;
     Discography* nextDisco;
 
@@ -185,8 +190,8 @@ void artistDurationAdd(gpointer _musicId, gpointer musicData, gpointer discoPtr)
 }
 
 // Função para ordenar a discografia por durações
-void sortByDuration(Discography** head) {
-    if (*head == NULL || (*head)->next == NULL) {
+void sortByDuration(Discography** head){
+    if(*head == NULL || (*head)->next == NULL){
         // Lista vazia ou com um único elemento não precisa de ordenação
         return;
     }
