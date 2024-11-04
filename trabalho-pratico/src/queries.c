@@ -48,6 +48,8 @@ void query2(int nArtists, Discography* disco, FILE* output){
 // Função para a query 2 com especificação do pais
 void query2b(int nArtists, char* country, Discography* disco, FILE* output){
     Discography* head = disco;
+
+    if(nArtists == 0) fprintf(output, "\n"); // Caso de ficheiro "vazio"
     for(int i=0; i<nArtists && head!=NULL; i++){
         if(strcmp(head->country, country) == 0){ // Verificação do país do artista
             char* time = secondsToString(head->duration); // Transformação em formato char*
@@ -71,7 +73,6 @@ void query2b(int nArtists, char* country, Discography* disco, FILE* output){
         }
     }
 }
-
 
 void query3(int ageMin, int ageMax, GHashTable* userTable, GHashTable* musicTable, FILE* output){
 
