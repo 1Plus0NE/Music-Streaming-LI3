@@ -28,71 +28,45 @@ void query1(char* user_username, GHashTable* user_table, FILE* output_file){
 
 // Results é necessário para escrever pela ordem pedida
 // Função para a query 2
-void query2(int nArtists, Discography* disco, FILE* output) {
+void query2(int nArtists, Discography* disco, FILE* output){
     Discography* head = disco;
-    char** results = malloc(nArtists * sizeof(char*)); // Array para armazenar os resultados
-    int count = 0; // Contador de artistas correspondentes
-
-    // Armazenar os resultados
-    while (head != NULL && count < nArtists) {
+    for(int i=0; i<nArtists && head!=NULL; i++){
         char* time = secondsToString(head->duration); // Transformação em formato char*
         char* typeInChar = typeToString(head->type); // Transformação em formato char*
-
-        // Formatar a string e armazenar no array
-        int length = strlen(head->name) + strlen(typeInChar) + strlen(time) + strlen(head->country) + 4; // +4 para os delimitadores e o null terminator
-        results[count] = malloc(length * sizeof(char));
-        snprintf(results[count], length, "%s;%s;%s;%s", head->name, typeInChar, time, head->country);
-
+        
+        fprintf(output, "%s;%s;%s;%s\n", head->name, typeInChar, time, head->country);  
+        
         free(time);
         free(typeInChar);
 
-        count++; // Incrementa o contador
-        head = head->next; // Avança para o próximo nó
+        head = head->next;
     }
-
-    // Escrever no arquivo em ordem inversa
-    for (int i = count - 1; i >= 0; i--) {
-        fprintf(output, "%s\n", results[i]);
-        free(results[i]); // Liberar a memória alocada para cada resultado
-    }
-
-    free(results); // Liberar o array de resultados
+    //freeDiscography(head); // Linha comentada, não deve ser chamada aqui
 }
 
 // Função para a query 2 com especificação do pais
-// results é necessário para escrever pela ordem pedida
-void query2b(int nArtists, char* country, Discography* disco, FILE* output) {
+void query2b(int nArtists, char* country, Discography* disco, FILE* output){
     Discography* head = disco;
-    char** results = malloc(nArtists * sizeof(char*)); // Array para armazenar os resultados
-    int count = 0; // Contador de artistas correspondentes
-
-    // Armazenar os resultados
-    while (head != NULL && count < nArtists) {
-        if (strcmp(head->country, country) == 0) { // Verificação do país do artista
+    for(int i=0; i<nArtists && head!=NULL; i++){
+        if(strcmp(head->country, country) == 0){ // Verificação do país do artista
             char* time = secondsToString(head->duration); // Transformação em formato char*
             char* typeInChar = typeToString(head->type); // Transformação em formato char*
-
-            // Formatar a string e armazenar no array
-            int length = strlen(head->name) + strlen(typeInChar) + strlen(time) + strlen(head->country) + 4; // +4 para os delimitadores e o null terminator
-            results[count] = malloc(length * sizeof(char));
-            snprintf(results[count], length, "%s;%s;%s;%s", head->name, typeInChar, time, head->country);
-
+        
+            fprintf(output, "%s;%s;%s;%s\n", head->name, typeInChar, time, head->country);  
+        
             free(time);
             free(typeInChar);
 
-            count++; // Incrementa o contador
+            head = head->next; 
         }
-        head = head->next; // Avança para o próximo nó
+        else{
+            head = head->next;
+            i--; // Mantém o contador para processar o próximo artista
+        }
     }
-
-    // Escrever no arquivo em ordem inversa
-    for (int i = count - 1; i >= 0; i--) {
-        fprintf(output, "%s\n", results[i]);
-        free(results[i]); // Liberar a memória alocada para cada resultado
-    }
-    
-    free(results); // Liberar o array de resultados
+    //freeDiscography(head); // Linha comentada, não deve ser chamada aqui
 }
+
 
 void query3(int ageMin, int ageMax, GHashTable* userTable, GHashTable* musicTable, FILE* output){
 
@@ -211,7 +185,7 @@ void artistDurationAdd(gpointer _musicId, gpointer musicData, gpointer discoPtr)
 }
 
 // Função para ordenar a discografia por durações
-void sortByDuration(Discography** head){
+void sortByDuration(Discography** head) {
     if (*head == NULL || (*head)->next == NULL) {
         // Lista vazia ou com um único elemento não precisa de ordenação
         return;
@@ -226,7 +200,8 @@ void sortByDuration(Discography** head){
         ptr1 = *head;
 
         while (ptr1->next != lptr) {
-            if (ptr1->duration > ptr1->next->duration) {
+            // Mudança na condição de comparação para ordem decrescente
+            if (ptr1->duration < ptr1->next->duration) {
                 // Trocar os dados dos artistas
                 long int tempId = ptr1->id;
                 char* tempName = ptr1->name;
@@ -234,6 +209,7 @@ void sortByDuration(Discography** head){
                 int tempDuration = ptr1->duration;
                 ArtistType tempType = ptr1->type;
 
+                // Efetua a troca
                 ptr1->id = ptr1->next->id;
                 ptr1->name = ptr1->next->name;
                 ptr1->country = ptr1->next->country;
@@ -253,6 +229,7 @@ void sortByDuration(Discography** head){
         lptr = ptr1; // O último elemento já está ordenado
     } while (swapped);
 }
+
 
 // Função para voltar a transformar o total de segundos na discografia no formato "hh:mm:ss"
 char* secondsToString(int totSeconds){
