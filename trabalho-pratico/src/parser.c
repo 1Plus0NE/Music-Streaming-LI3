@@ -310,6 +310,18 @@ void parse_queries(char* path, GHashTable* userTable, GHashTable* musicTable, GH
         exit(EXIT_FAILURE);
     }
 
+
+    // Discografia antes de resolver a Query2 
+    disco = fillWithArtists(artistTable, disco);
+    //printf("Preenchimento com artistas bem sucedido\n");
+
+    disco = updateArtistsDurationFromMusic(musicTable, disco);
+    //printf("Duração de cada discografia bem sucedida\n");
+
+    sortByDuration(&disco);
+    //printf("Ordenação bem sucedida\n");
+    // discografia pronta para a 2ª query
+
     // Leitura query a query
     while(fgets(line, sizeof(line), queries) != NULL){ 
 
@@ -333,18 +345,13 @@ void parse_queries(char* path, GHashTable* userTable, GHashTable* musicTable, GH
             // Processo completo, fechar ficheiro
             fclose(outputQ1);
         }
-        /* else if(line[0] == '2'){
+        else if(line[0] == '2'){
             outputQ2 = fopen(outputPath, "w");
             if(!outputQ2){
                 perror("Erro ao criar o ficheiro de output da query 2.\n");
                 exit(EXIT_FAILURE);
             }
 
-            // Discografia antes de resolver a Query2 
-            disco = fillWithArtists(artistTable, disco);
-            disco = updateArtistsDurationFromMusic(musicTable, disco);
-            sortByDuration(disco);
-            // discografia pronta para a 2ª query
             strsep(&linePtr, " ");
             nArtists = atoi(strsep(&linePtr, " ")); // Numero de artistas
             country = remove_aspas(strsep(&linePtr, "\n")); // País sem aspas
@@ -352,14 +359,12 @@ void parse_queries(char* path, GHashTable* userTable, GHashTable* musicTable, GH
             if(country==NULL) query2(nArtists, disco, outputQ2); // query 2 sem especificação de país
             else query2b(nArtists, country, disco, outputQ2); // query 2 com país especificado
 
-            freeDiscography(disco);
-
             if(country != NULL){
                 free(country);
             }
 
             fclose(outputQ2);
-        }
+        }/*
         else if(line[0] == '3'){
             outputQ3 = fopen(outputPath, "w");
             if(!outputQ3){
@@ -378,6 +383,6 @@ void parse_queries(char* path, GHashTable* userTable, GHashTable* musicTable, GH
         // Criar um ficheiro vazio?
         else continue;
     }
-    //freeDiscography(disco);
+    freeDiscography(disco);
     fclose(queries);
 }

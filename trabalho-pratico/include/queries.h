@@ -29,8 +29,7 @@ void query3(int ageMin, int ageMax, GHashTable* userTable, GHashTable* musicTabl
 
 //--------------- Discografia-------------
 
-Discography* artistInsert(Discography* disco, long int id, const char* name, const char* country, ArtistType type);
-
+void artistInsert(Discography** disco, long int id, const char* name, const char* country, ArtistType type);
 void durationAdd(Discography* disco, const char* duration, long int id);
 
 void freeDiscography(Discography* disco);
