@@ -1,5 +1,5 @@
 #include "../include/queries.h"
-#define MAX_GENRES 11
+#define MAX_GENRES 10
 
 // Lista ligada para a Query 2
 struct discography {
@@ -75,7 +75,7 @@ void query2b(int nArtists, char* country, Discography* disco, FILE* output){
 
 int isUserInRange(User *user, int minAge, int maxAge){
     int userAge = calculaIdade(getUserBirthDate(user));
-    return userAge > minAge && userAge < maxAge;
+    return userAge >= minAge && userAge <= maxAge;
 }
 
 int getGenreIndex(char *genre, char **genre_array, int genre_count){
@@ -86,14 +86,14 @@ int getGenreIndex(char *genre, char **genre_array, int genre_count){
     }
     return -1;
 }
-
+/*
 void query3(int ageMin, int ageMax, GHashTable* userTable, GHashTable* musicTable, FILE* output){
 
     fprintf(output, "\n");
 
 }
+*/
 
-/*
 void query3(int ageMin, int ageMax, GHashTable* userTable, GHashTable* musicTable, FILE* output){
     
     if (ageMin == 100 || ageMax == 0){
@@ -192,7 +192,7 @@ void query3(int ageMin, int ageMax, GHashTable* userTable, GHashTable* musicTabl
     }
 
 }
-*/
+
 
 //----------------Funções referentes à discografia------------------
 

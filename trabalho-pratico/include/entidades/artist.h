@@ -27,7 +27,7 @@ int verify_artist(Artist* artist);
 void freeArtist(Artist* artist);
 
 // Função para libertar a memória de uma entidade do tipo artista contida numa hash table
-void freeArtistInTable(gpointer key, gpointer value, gpointer user_data);
+gboolean freeArtistInTable(gpointer key, gpointer value, gpointer user_data);
 
 //função que passa uma string do tipo do artista para o enum type
 ArtistType stringToArtistType(char* type_str);

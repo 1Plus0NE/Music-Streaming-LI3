@@ -74,6 +74,7 @@ User* createUser(char* username, char* email, char* first_name, char* last_name,
     user -> country = malloc(strlen(country) + 1);
     if (!user -> country) {
         perror("Erro ao alocar memória para o país.\n");
+        free(user -> birth_date);
         free(user -> last_name);
         free(user -> first_name);
         free(user -> email);
@@ -89,6 +90,7 @@ User* createUser(char* username, char* email, char* first_name, char* last_name,
     if (!user -> liked_musics_id) {
         perror("Erro ao alocar memória para a lista de músicas com gosto.\n");
         free(user -> country);
+        free(user -> birth_date);
         free(user -> last_name);
         free(user -> first_name);
         free(user -> email);
@@ -107,6 +109,7 @@ User* createUser(char* username, char* email, char* first_name, char* last_name,
 // Função para libertar a memória de uma entidade do tipo utilizador.
 void freeUser(User* user){
     free(user -> liked_musics_id);
+    free(user -> birth_date);
     free(user -> country);
     free(user -> last_name);
     free(user -> first_name);
@@ -116,17 +119,20 @@ void freeUser(User* user){
 }
 
 // Função para libertar a memória de uma entidade do tipo utilizador contida numa hash table
-void freeUserInTable(gpointer key, gpointer value, gpointer user_data){
+gboolean freeUserInTable(gpointer key, gpointer value, gpointer user_data){
     (void)key;
     (void)user_data;
     User* user = (User*)value;
     free(user -> liked_musics_id);
+    free(user -> birth_date);
     free(user -> country);
     free(user -> last_name);
     free(user -> first_name);
     free(user -> email);
     free(user -> username);
-    free(value);
+    free(user);
+
+    return TRUE;
 }
 
 // Função de verificação da validade de um user

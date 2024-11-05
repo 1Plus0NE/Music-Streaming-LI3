@@ -39,6 +39,6 @@ void setMusicLyrics(Music* m, char* newLyrics);
 // Função para libertar a memória de uma entidade do tipo música.
 void freeMusic(Music* music);
 // Função para libertar a memória de uma entidade do tipo música contida numa hash table
-void freeMusicInTable(gpointer key, gpointer value, gpointer user_data);
+gboolean freeMusicInTable(gpointer key, gpointer value, gpointer user_data);
 
 #endif
