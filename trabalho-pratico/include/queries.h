@@ -27,6 +27,8 @@ void query2b(int nArtists, char* country, Discography* disco, FILE* output);
 // Funções de auxilio para a query 3 (depois passo para outro file)
 int isUserInRange(User *user, int minAge, int maxAge);
 int getGenreIndex(char *genre, char **genre_array, int genre_count);
+void countUserLikedMusics(User* user, GHashTable* musicTable, char* genres[], long int genre_likes[], int* genre_count);
+void sortGenresByLikes(char* genres[], long int genre_likes[], int genre_count);
 
 // Função para a 3ª query
 void query3(int ageMin, int ageMax, GHashTable* userTable, GHashTable* musicTable,FILE* output);

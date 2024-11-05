@@ -13,7 +13,6 @@ GHashTable* createMusicTable();
 // função que adiciona uma música á tabela de músicas.
 void addMusic(GHashTable* table, Music* music);
 
-
 // função que remove uma música da tabela de músicas.
 void removeMusic(GHashTable* table, long int id);
 
