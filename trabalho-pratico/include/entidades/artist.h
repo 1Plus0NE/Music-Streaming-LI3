@@ -7,6 +7,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "../utils.h"
+//#include "glib.h"
 
 // Forma de enunciar a entidade artista.
 typedef struct artist Artist;
@@ -24,6 +25,9 @@ int verify_artist(Artist* artist);
 
 // Função para libertar a memória de uma entidade do tipo artista.
 void freeArtist(Artist* artist);
+
+// Função para libertar a memória de uma entidade do tipo artista contida numa hash table
+//void freeArtistInTable(gpointer key, gpointer value, gpointer user_data);
 
 //função que passa uma string do tipo do artista para o enum type
 ArtistType stringToArtistType(char* type_str);

@@ -27,6 +27,7 @@ Artist* searchArtist(GHashTable* table, long int id){
 
 // função que libera a memória alocada para a tabela de artistas.
 void freeArtistTable(GHashTable* table){
+    //g_hash_table_foreach(table,freeArtistInTable,NULL);
     g_hash_table_destroy(table);
 }
 

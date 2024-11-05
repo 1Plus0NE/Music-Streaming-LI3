@@ -28,6 +28,7 @@ User* searchUser(GHashTable* table, char* username){
 
 // função que libera a memória alocada para a tabela de utilizadores.
 void freeUserTable(GHashTable* table){
+    //g_hash_table_foreach(table,freeUserInTable,NULL);
     g_hash_table_destroy(table);
 }
 
