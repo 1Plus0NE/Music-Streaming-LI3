@@ -28,6 +28,6 @@ Music* searchMusic(GHashTable* table, long int id){
 
 // Função para liberar a memória da tabela de músicas.
 void freeMusicTable(GHashTable* table){
-    //g_hash_table_foreach(table,freeMusicInTable,NULL);
+    g_hash_table_foreach(table,freeMusicInTable,NULL);
     g_hash_table_destroy(table);
 }

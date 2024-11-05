@@ -270,17 +270,7 @@ void parse_user(char* path, GHashTable* userTable, GHashTable* musicTable){
             addUser(userTable, u);
 
             free(liked_musics_id_converted);
-            // Possivelmente desnecessário
-            free(username);
-            free(email);
-            free(first_name);
-            free(last_name);
-            free(country);
-            free(tmpSub);
-            free(birth_date);
-
             parsed++;
-        // printf("ID: %li | Lyrics: %s \n",id,lyrics);
         }
         else{
             erros++;
@@ -339,7 +329,7 @@ void parse_queries(char* path, GHashTable* userTable, GHashTable* musicTable, GH
         // Atualização do path para o ficheiro de output da query 
         command++;
         snprintf(outputPath, MAX_FILENAME, "resultados/command%d_output.txt", command);
-
+        
         // Identificação da Query
         if(line[0] == '1'){
             // Criação do ficheiro de output da query para argumento do função query1
@@ -368,11 +358,11 @@ void parse_queries(char* path, GHashTable* userTable, GHashTable* musicTable, GH
             // Substiruir os NULLs
             if(country==NULL) query2(nArtists, disco, outputQ2); // query 2 sem especificação de país
             else query2b(nArtists, country, disco, outputQ2); // query 2 com país especificado
-
+            
             if(country != NULL){
                 free(country);
             }
-
+            
             fclose(outputQ2);
         }*/
         else if(line[0] == '3'){
@@ -392,6 +382,7 @@ void parse_queries(char* path, GHashTable* userTable, GHashTable* musicTable, GH
         // Ignora Query inválida
         // Criar um ficheiro vazio?
         else continue;
+        
     }
     //freeDiscography(disco);
     fclose(queries);

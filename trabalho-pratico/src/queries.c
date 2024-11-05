@@ -24,7 +24,7 @@ void query1(char* user_username, GHashTable* user_table, FILE* output_file){
 
     fprintf(output_file, "%s;%s;%s;%d;%s\n", getUserEmail(user), getUserFirstName(user), getUserLastName(user), age, getUserCountry(user));
 
-    freeUser(user);
+    //freeUser(user);
 }
 
 // Results é necessário para escrever pela ordem pedida
@@ -303,9 +303,10 @@ void artistDurationAdd(G_GNUC_UNUSED gpointer musicId, gpointer musicData, gpoin
     for(int i=0; i<numArtists; i++){
         durationAdd(disco, duration, musicArtistsId[i]);
     }
-
+    /*
     free(duration);
     free(musicArtistsId);
+    */
 }
 
 // Função para ordenar a discografia por durações
