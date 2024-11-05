@@ -17,13 +17,13 @@ void addMusic(GHashTable* table, Music* music){
 }
 
 // função que remove uma música da tabela de músicas.
-void removeMusic(GHashTable* table, int id){
+void removeMusic(GHashTable* table, long int id){
     g_hash_table_remove(table, &id);
 }
 
 // função que encontra uma música pelo id na tabela.
-Music* searchMusic(GHashTable* table, int id){
-    return (Music*) g_hash_table_lookup(table, id);
+Music* searchMusic(GHashTable* table, long int id){
+    return (Music*) g_hash_table_lookup(table, &id);
 }
 
 // Função para liberar a memória da tabela de músicas.
