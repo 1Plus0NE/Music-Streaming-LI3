@@ -222,11 +222,11 @@ void parse_user(char* path, GHashTable* userTable, GHashTable* musicTable){
     char *tmp_oriLine=NULL;
 
     //argumentos para a struct de artistas
-    char *username;
+    char* username;
     char* email;
     char* first_name;
     char* last_name;
-    char birth_date[10];
+    char* birth_date;
     char* country;
     SubscriptionType subscription;
     long int* liked_musics_id_converted;
@@ -251,16 +251,15 @@ void parse_user(char* path, GHashTable* userTable, GHashTable* musicTable){
         tmp_oriLine = original_line;
 
         // Antes da função atribuir valor as variaveis, verifica a sua validação
-        // line para analise
-        // original_line para escrita de resultado
-        // tmp_oriLine desnecessária?
         if(userLineVerify(line, musicTable) == 0){
+            // Trocar tmp_oriLine para original_line?
             username = remove_aspas(strsep(&tmp_oriLine, ";"));
             email = remove_aspas(strsep(&tmp_oriLine, ";"));
             first_name = remove_aspas(strsep(&tmp_oriLine,";"));
             last_name = remove_aspas(strsep(&tmp_oriLine,";"));
-            strncpy(birth_date, remove_aspas(strsep(&tmp_oriLine, ";")), sizeof(birth_date) - 1);
-            birth_date[10] = '\0';
+            birth_date = remove_aspas(strsep(&tmp_oriLine,";"));
+            //strncpy(birth_date, remove_aspas(strsep(&tmp_oriLine, ";")), sizeof(birth_date) - 1);
+            //birth_date[10] = '\0';
             country = remove_aspas(strsep(&tmp_oriLine,";"));
             char* tmpSub = remove_aspas(strsep(&tmp_oriLine,";"));
             subscription = stringToSubscriptionType(tmpSub);
@@ -269,14 +268,17 @@ void parse_user(char* path, GHashTable* userTable, GHashTable* musicTable){
             
             User* u = createUser(username, email, first_name, last_name, birth_date, country, subscription, liked_musics_id_converted, num_liked_musics);
             addUser(userTable, u);
-            
+
             free(liked_musics_id_converted);
+            // Possivelmente desnecessário
             free(username);
             free(email);
             free(first_name);
             free(last_name);
             free(country);
             free(tmpSub);
+            free(birth_date);
+
             parsed++;
         // printf("ID: %li | Lyrics: %s \n",id,lyrics);
         }
@@ -319,13 +321,14 @@ void parse_queries(char* path, GHashTable* userTable, GHashTable* musicTable, GH
 
     // Discografia antes de resolver a Query2 
     disco = fillWithArtists(artistTable, disco);
-    //printf("Preenchimento com artistas bem sucedido\n");
+    printf("Preenchimento disco com artistas bem sucedido\n");
 
     disco = updateArtistsDurationFromMusic(musicTable, disco);
-    //printf("Duração de cada discografia bem sucedida\n");
+    printf("Duração de cada discografia bem sucedida\n");
 
     sortByDuration(&disco);
-    //printf("Ordenação bem sucedida\n");
+    printf("Ordenação disco bem sucedida\n");
+    printf("Inicio Queries\n");
     // discografia pronta para a 2ª query
 
     // Leitura query a query
