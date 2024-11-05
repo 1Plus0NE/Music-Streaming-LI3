@@ -264,7 +264,7 @@ Discography* fillWithArtists(GHashTable* table, Discography* disco){
 }
 
 // Função  para cada item da Hash Table
-void artistFromTableToLL(gpointer _artistId, gpointer artistData, gpointer discoPtr){
+void artistFromTableToLL(G_GNUC_UNUSED gpointer artistId, gpointer artistData, gpointer discoPtr){
     
     Artist* artist = (Artist*)artistData;
     Discography** disco = (Discography**)discoPtr;
@@ -292,7 +292,7 @@ Discography* updateArtistsDurationFromMusic(GHashTable* musicTable, Discography*
 }
 
 // Função para processar cada música e atualizar a duração nos artistas correspondentes
-void artistDurationAdd(gpointer _musicId, gpointer musicData, gpointer discoPtr){
+void artistDurationAdd(G_GNUC_UNUSED gpointer musicId, gpointer musicData, gpointer discoPtr){
    
     //Music* music = (Music*)musicData;
     Discography* disco = *((Discography**)discoPtr);

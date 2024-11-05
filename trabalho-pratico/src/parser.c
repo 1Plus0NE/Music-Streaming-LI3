@@ -269,8 +269,14 @@ void parse_user(char* path, GHashTable* userTable, GHashTable* musicTable){
             
             User* u = createUser(username, email, first_name, last_name, birth_date, country, subscription, liked_musics_id_converted, num_liked_musics);
             addUser(userTable, u);
+            
             free(liked_musics_id_converted);
-
+            free(username);
+            free(email);
+            free(first_name);
+            free(last_name);
+            free(country);
+            free(tmpSub);
             parsed++;
         // printf("ID: %li | Lyrics: %s \n",id,lyrics);
         }

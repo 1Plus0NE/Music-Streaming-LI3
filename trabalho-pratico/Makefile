@@ -44,3 +44,4 @@ $(PRINCIPAL): $(OBJ_PRINCIPAL)
 # Limpar os objetos e os execs
 clean:
 	rm -f $(OBJ_PRINCIPAL) $(PRINCIPAL)
+	rm -f resultados/*
