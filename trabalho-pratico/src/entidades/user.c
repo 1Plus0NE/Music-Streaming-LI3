@@ -69,8 +69,7 @@ User* createUser(char* username, char* email, char* first_name, char* last_name,
         free(user);
         exit(EXIT_FAILURE);
     }
-    strncpy(user -> birth_date, birth_date, 10);
-    user -> birth_date[10] = '\0';
+    strcpy(user -> birth_date, birth_date);
 
     user -> country = malloc(strlen(country) + 1);
     if (!user -> country) {
