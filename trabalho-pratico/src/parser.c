@@ -270,12 +270,6 @@ void parse_user(char* path, GHashTable* userTable, GHashTable* musicTable){
             addUser(userTable, u);
 
             free(liked_musics_id_converted);
-            free(username);
-            free(email);
-            free(first_name);
-            free(last_name);
-            free(country);
-            free(tmpSub);
             parsed++;
         }
         else{
