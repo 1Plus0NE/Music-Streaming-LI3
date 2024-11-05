@@ -144,6 +144,7 @@ ArtistType stringToArtistType(char* type_str){
 
 // Função para libertar a memória de uma entidade do tipo artista.
 void freeArtist(Artist* artist){
+    if(!artist) return;
     free(artist -> country);
     free(artist -> id_constituent);
     free(artist -> description);

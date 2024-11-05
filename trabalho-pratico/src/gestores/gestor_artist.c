@@ -7,7 +7,6 @@ GHashTable* createArtistTable(){
         perror("Falha ao criar a tabela de hashing de artistas.\n");
         return NULL;
     }
-
     return table;
 }
 

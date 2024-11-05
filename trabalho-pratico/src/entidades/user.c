@@ -6,7 +6,7 @@ struct user {
     char* email;
     char* first_name;
     char* last_name;
-    char birth_date[10]; // data base 2024/09/09
+    char* birth_date; // data base 2024/09/09
     char* country;
     SubscriptionType subscription_type;
     long int* liked_musics_id;
@@ -59,6 +59,16 @@ User* createUser(char* username, char* email, char* first_name, char* last_name,
     }
     strcpy(user -> last_name, last_name);
 
+    user -> birth_date = malloc(strlen(birth_date) + 1);
+    if(!user -> birth_date){
+        perror("Erro ao alocar memória para a data de nascimento.\n");
+        free(user -> last_name);
+        free(user -> first_name);
+        free(user -> email);
+        free(user -> username);
+        free(user);
+        exit(EXIT_FAILURE);
+    }
     strncpy(user -> birth_date, birth_date, 10);
     user -> birth_date[10] = '\0';
 
@@ -79,7 +89,6 @@ User* createUser(char* username, char* email, char* first_name, char* last_name,
     user -> liked_musics_id = malloc(num_liked_musics * sizeof(long int));
     if (!user -> liked_musics_id) {
         perror("Erro ao alocar memória para a lista de músicas com gosto.\n");
-        free(user -> liked_musics_id);
         free(user -> country);
         free(user -> last_name);
         free(user -> first_name);
@@ -174,10 +183,10 @@ SubscriptionType getUserSubscriptionType(User* u){
     return u->subscription_type;
 }
 
-int* getUserLikedMusics(User* u){
+long int* getUserLikedMusics(User* u){
     if (u->num_liked_musics > 0) {
-        int* cpy = malloc(u->num_liked_musics * sizeof(int));
-        memcpy(cpy, u->liked_musics_id, u->num_liked_musics * sizeof(int));
+        long int* cpy = malloc(u->num_liked_musics * sizeof(long int));
+        memcpy(cpy, u->liked_musics_id, u->num_liked_musics * sizeof(long int));
         return cpy;
     }
     return NULL;
@@ -232,12 +241,12 @@ void setUserSubscriptionType(User* u, SubscriptionType subscription_type){
     u->subscription_type = subscription_type;
 }
 
-void setUserLikedMusics(User* u, int* liked_musics_id, int num_liked_musics){
+void setUserLikedMusics(User* u, long int* liked_musics_id, int num_liked_musics){
     if (u->liked_musics_id) {
         free(u->liked_musics_id);
     }
-    u->liked_musics_id = malloc(num_liked_musics * sizeof(int));
-    memcpy(u->liked_musics_id, liked_musics_id, num_liked_musics * sizeof(int));
+    u->liked_musics_id = malloc(num_liked_musics * sizeof(long int));
+    memcpy(u->liked_musics_id, liked_musics_id, num_liked_musics * sizeof(long int));
     u->num_liked_musics = num_liked_musics;
 }
 

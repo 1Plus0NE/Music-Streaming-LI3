@@ -43,7 +43,7 @@ char* getUserCountry(User* u);
 
 SubscriptionType getUserSubscriptionType(User* u);
 
-int* getUserLikedMusics(User* u);
+long int* getUserLikedMusics(User* u);
 
 int getUserNumLikedMusics(User* u);
 
@@ -62,7 +62,7 @@ void setUserCountry(User* u, char* country);
 
 void setUserSubscriptionType(User* u, SubscriptionType subscription_type);
 
-void setUserLikedMusics(User* u, int* liked_musics_id, int num_liked_musics);
+void setUserLikedMusics(User* u, long int* liked_musics_id, int num_liked_musics);
 
 void setUserNumLikedMusics(User* u, int num_liked_musics);
 

@@ -133,13 +133,8 @@ void setMusicID(Music* m, int newID){
 void setMusicTitle(Music* m, char* newTitle){
     if(m->title){
         free(m->title);
-        m->title = NULL;
-    }        
-    m->title = strdup(newTitle);
-    if(m->title == NULL){
-        perror("Erro ao alocar memoria para o novo titulo da musica");
-        exit(EXIT_FAILURE);
     }
+    m->title = newTitle ? strdup(newTitle) : strdup("");
 }
 
 // Função que altera o array de ID's de artistas da música
