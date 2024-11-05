@@ -115,7 +115,21 @@ void freeUser(User* user){
     free(user -> username);
     free(user);
 }
-
+/*
+// Função para libertar a memória de uma entidade do tipo utilizador contida numa hash table
+void freeUserInTable(gpointer key, gpointer value, gpointer user_data){
+    (void)key;
+    (void)user_data;
+    User* user = (User*)value;
+    free(user -> liked_musics_id);
+    free(user -> country);
+    free(user -> last_name);
+    free(user -> first_name);
+    free(user -> email);
+    free(user -> username);
+    free(value);
+}
+*/
 // Função de verificação da validade de um user
 int userLineVerify(char *line, GHashTable* music_table){
     //char *info = strsep(&line, ";");

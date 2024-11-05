@@ -151,7 +151,19 @@ void freeArtist(Artist* artist){
     free(artist -> name);
     free(artist);
 }
-
+/*
+// Função para libertar a memória de uma entidade do tipo artista contida numa hash table
+void freeArtistInTable(gpointer key, gpointer value, gpointer user_data){
+    (void)key;
+    (void)user_data;
+    Artist* artist = (Artist*)value;
+    free(artist -> country);
+    free(artist -> id_constituent);
+    free(artist -> description);
+    free(artist -> name);
+    free(value);
+}
+*/
 // getters de artista.
 long int* getArtistId(Artist* a){
     return a ? &(a->id) : NULL;

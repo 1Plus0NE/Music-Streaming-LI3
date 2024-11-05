@@ -205,3 +205,17 @@ void freeMusic(Music* music){
     free(music -> lyrics);
     free(music);
 }
+/*
+// Função para libertar a memória de uma entidade do tipo música contida numa hash table
+void freeMusicInTable(gpointer key, gpointer value, gpointer user_data){
+    (void)key;
+    (void)user_data;
+    Music* music = (Music*)value;
+    free(music -> title);
+    free(music -> artist_id);
+    free(music -> duration);
+    free(music -> genre);
+    free(music -> lyrics);
+    free(value);
+}
+*/

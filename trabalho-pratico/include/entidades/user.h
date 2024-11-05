@@ -23,6 +23,9 @@ User* createUser(char* username, char* email, char* first_name, char* last_name,
 // Função para libertar a memória de uma entidade do tipo utilizador.
 void freeUser(User* user);
 
+// Função para libertar a memória de uma entidade do tipo utilizador contida numa hash table
+//void freeUserInTable(gpointer key, gpointer value, gpointer user_data);
+
 // Função de verificação da validade de um utilizador.
 int userLineVerify(char *line, GHashTable* music_table);
 
