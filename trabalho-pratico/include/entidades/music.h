@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "../utils.h"
-//#include "glib.h"
+#include "glib.h"
 
 // Forma de enunciar a entidade música.
 typedef struct music Music;
@@ -39,6 +39,6 @@ void setMusicLyrics(Music* m, char* newLyrics);
 // Função para libertar a memória de uma entidade do tipo música.
 void freeMusic(Music* music);
 // Função para libertar a memória de uma entidade do tipo música contida numa hash table
-//void freeMusicInTable(gpointer key, gpointer value, gpointer user_data);
+void freeMusicInTable(gpointer key, gpointer value, gpointer user_data);
 
 #endif

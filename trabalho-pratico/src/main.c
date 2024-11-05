@@ -24,6 +24,7 @@ int main(int argc, char* argv[]){
 
     if(queriesFile){
         parse_queries(queriesFile, user_table, music_table, artist_table);
+        printf("Entrei no if de parser de queries\n");
     }
 
     freeArtistTable(artist_table);
