@@ -147,23 +147,36 @@ int userLineVerify(char *line, GHashTable* music_table){
         if(info){
             switch(i){
                 case 1:
-                    if(emailVerify(remove_aspas(info))!=0) return 1;
+                    info = remove_aspas(info);
+                    if(emailVerify(info)!=0){
+                        free(info);
+                        return 1;
+                    }
                     break;
                 case 4:
-                    if(birthDateVerify(remove_aspas(info))!=0) return 1;
+                    info = remove_aspas(info);
+                    if(birthDateVerify(remove_aspas(info))!=0){
+                        free(info);
+                        return 1;
+                    }
                     break;
                 case 6:
                     info = remove_aspas(info);
-                    if(strcmp("premium",info)!=0 && strcmp("normal",info)!=0) return 1;
+                    if(strcmp("premium",info)!=0 && strcmp("normal",info)!=0){
+                        free(info);
+                        return 1;
+                    }
                     break;
                 case 7:
                     info = remove_aspas(strsep(&info,"\n"));
                     musicsIds=convertID(info,&N);
                     if(!validateMusicId(music_table, musicsIds, N)){
                         free(musicsIds);
+                        free(info);
                         return 1;
                     }
                     free(musicsIds);
+                    free(info);
                     break;
                 default:
                     break;

@@ -208,7 +208,7 @@ void parse_music(char* path, GHashTable* music_table, GHashTable* artist_table){
                     free(artist_id_converted);
             }
             else{
-                //erros++;
+                free(artist_id_converted); // fazemos free se ele nao entra no if
                 writeErrors(original_line, 2);
             }         
         }
