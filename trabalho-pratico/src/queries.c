@@ -85,7 +85,9 @@ void query2b(int nArtists, char* country, Discography* disco, FILE* output){
 
 // Função que Dado um user, verifica se está compreendido entre os intervalos de idades
 int isUserInRange(User *user, int minAge, int maxAge){
-    int userAge = calculaIdade(getUserBirthDate(user));
+    char* tmp_userAge = getUserBirthDate(user);
+    int userAge = calculaIdade(tmp_userAge);
+    free(tmp_userAge);
     return userAge >= minAge && userAge <= maxAge;
 }
 
@@ -276,6 +278,9 @@ void artistFromTableToLL(G_GNUC_UNUSED gpointer artistId, gpointer artistData, g
     
     //*disco = artistInsert(*disco, id, name, country, type);
     artistInsert(disco, id, name, country, type);
+    free(name);
+    free(country);
+    
 }
 
 // Função principal para percorrer a hash table e atualizar as durações dos artistas
