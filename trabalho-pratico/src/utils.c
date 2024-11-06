@@ -138,8 +138,10 @@ int birthDateVerify(char* birth_date){
         return 1;
     }
 
+    char* original_cpy = date_cpy;
+
     if(date_cpy[4] != '/' || date_cpy[7] != '/' || date_cpy[10] != '\0'){
-        free(date_cpy);
+        free(original_cpy);
         return 1;
     }
 
@@ -148,7 +150,7 @@ int birthDateVerify(char* birth_date){
     char *dia = strsep(&date_cpy, "\0");
 
     if(strDigit(ano)!=0 || strDigit(mes)!=0 || strDigit(dia)!=0){
-        free(date_cpy);
+        free(original_cpy);
         return 1;
     }
 
@@ -159,23 +161,23 @@ int birthDateVerify(char* birth_date){
 
     // Verificação lógica
     if(anoInt>2024 || (anoInt==2024 && mesInt>9) || (anoInt==2024 && mesInt==9 && diaInt>9)){
-        free(date_cpy);
+        free(original_cpy);
         return 1;
     }
     else if(anoInt<0){
-        free(date_cpy);
+        free(original_cpy);
         return 1;
     }
     else if(mesInt<=0 || mesInt>12){
-        free(date_cpy);
+        free(original_cpy);
         return 1;
     }
     else if(diaInt<=0 || diaInt>31){
-        free(date_cpy);
+        free(original_cpy);
         return 1;
     }
     
-    free(date_cpy);
+    free(original_cpy);
     return 0;
 }
 
