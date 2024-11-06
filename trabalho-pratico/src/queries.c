@@ -19,10 +19,19 @@ void query1(char* user_username, GHashTable* user_table, FILE* output_file){
         fprintf(output_file, "\n");
         return;
     }
+    char* email = getUserEmail(user);
+    char* first_name = getUserFirstName(user);
+    char* last_name = getUserLastName(user);
+    char* age_str = getUserBirthDate(user);
+    int age = calculaIdade(age_str);
+    char* country = getUserCountry(user);
 
-    int age = calculaIdade(getUserBirthDate(user));
-
-    fprintf(output_file, "%s;%s;%s;%d;%s\n", getUserEmail(user), getUserFirstName(user), getUserLastName(user), age, getUserCountry(user));
+    fprintf(output_file, "%s;%s;%s;%d;%s\n", email, first_name, last_name, age, country);
+    free(email);
+    free(first_name);
+    free(last_name);
+    free(age_str);
+    free(country);
 }
 
 // Results é necessário para escrever pela ordem pedida
@@ -135,8 +144,6 @@ void sortGenresByLikes(char* genres[], long int genre_likes[], int genre_count){
     }
 }
 
-
-
 // Função responsável da query 3
 void query3(int ageMin, int ageMax, GHashTable* userTable, GHashTable* musicTable, FILE* output){
     
@@ -172,7 +179,7 @@ void query3(int ageMin, int ageMax, GHashTable* userTable, GHashTable* musicTabl
         fprintf(output, "\n");
         return;
     }
-    
+
     sortGenresByLikes(genres, genre_likes, genre_count);
     // Escrever no ficheiro o resultado final
     for(int i = 0; i < genre_count; i++){
