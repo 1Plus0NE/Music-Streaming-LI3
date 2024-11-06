@@ -391,7 +391,7 @@ void parse_queries(char* path, GHashTable* userTable, GHashTable* musicTable, GH
             
             fclose(outputQ2);
         }*/
-       /*
+       
         else if(line[0] == '3'){
             outputQ3 = fopen(outputPath, "w");
             if(!outputQ3){
@@ -409,7 +409,7 @@ void parse_queries(char* path, GHashTable* userTable, GHashTable* musicTable, GH
         // Ignora Query inválida
         // Criar um ficheiro vazio?
         else continue;
-        */
+        
     }
     //freeDiscography(disco);
     fclose(queries);
