@@ -247,6 +247,7 @@ void parse_user(char* path, GHashTable* userTable, GHashTable* musicTable){
     char* birth_date;
     char* country;
     SubscriptionType subscription;
+    char* liked_musics_id; // Para depois converter para long int
     long int* liked_musics_id_converted;
     int num_liked_musics=0;
 
@@ -276,18 +277,17 @@ void parse_user(char* path, GHashTable* userTable, GHashTable* musicTable){
             first_name = remove_aspas(strsep(&tmp_oriLine,";"));
             last_name = remove_aspas(strsep(&tmp_oriLine,";"));
             birth_date = remove_aspas(strsep(&tmp_oriLine,";"));
-            //strncpy(birth_date, remove_aspas(strsep(&tmp_oriLine, ";")), sizeof(birth_date) - 1);
-            //birth_date[10] = '\0';
             country = remove_aspas(strsep(&tmp_oriLine,";"));
             char* tmpSub = remove_aspas(strsep(&tmp_oriLine,";"));
             subscription = stringToSubscriptionType(tmpSub);
-            liked_musics_id_converted = convertID(remove_aspas(strsep(&tmp_oriLine,"\n")), &num_liked_musics);
-            
-            
+            //liked_musics_id_converted = convertID(remove_aspas(strsep(&tmp_oriLine,"\n")), &num_liked_musics);
+            liked_musics_id = remove_aspas(strsep(&tmp_oriLine,"\n"));
+            liked_musics_id_converted = convertID(liked_musics_id,&num_liked_musics);
             User* u = createUser(username, email, first_name, last_name, birth_date, country, subscription, liked_musics_id_converted, num_liked_musics);
             addUser(userTable, u);
 
             free(liked_musics_id_converted);
+            free(liked_musics_id);
             free(username);
             free(email);
             free(first_name);
