@@ -93,6 +93,7 @@ void parse_artist(char* path, GHashTable* artist_table){
     long int id;
     char* name;
     char* description;
+    char* rps_str;
     float recipe_per_stream;
     char* id_constituent;
     long int* id_constituent_converted;
@@ -119,7 +120,9 @@ void parse_artist(char* path, GHashTable* artist_table){
         id = strtol(id_str + 1, NULL, 10);
         name = remove_aspas(strsep(&tmp_line,";"));
         description = remove_aspas(strsep(&tmp_line,";"));
-        recipe_per_stream = atof(remove_aspas(strsep(&tmp_line,";")));
+        rps_str = (remove_aspas(strsep(&tmp_line,";")));
+        recipe_per_stream = atof(rps_str);
+        free(rps_str);
         id_constituent = remove_aspas(strsep(&tmp_line,";"));
         country = remove_aspas(strsep(&tmp_line,";"));
         type_str = remove_aspas(strsep(&tmp_line,"\n"));
@@ -137,7 +140,12 @@ void parse_artist(char* path, GHashTable* artist_table){
             erros++;
             writeErrors(original_line, 1);
         }   
-
+        free(id_str);
+        free(name);
+        free(description);
+        free(id_constituent);
+        free(country);
+        free(type_str);
     }
     printf("Foram encontrados %d erros.\n", erros);
     fclose(artists);
@@ -161,6 +169,7 @@ void parse_music(char* path, GHashTable* music_table, GHashTable* artist_table){
     int num_artists;
     char* duration;
     char* genre;
+    char* year_str;
     int year;
     char* lyrics;
     
@@ -186,7 +195,9 @@ void parse_music(char* path, GHashTable* music_table, GHashTable* artist_table){
         artist_id  = remove_aspas(strsep(&tmp_line,";"));
         duration  = remove_aspas(strsep(&tmp_line,";"));
         genre  = remove_aspas(strsep(&tmp_line,";"));
-        year = atoi(remove_aspas(strsep(&tmp_line,";")));
+        year_str = (remove_aspas(strsep(&tmp_line,";")));
+        year = atoi(year_str);
+        free(year_str); // Fazemos free já que não vamos precisar mais 
         lyrics = remove_aspas(strsep(&tmp_line,"\n")); //as lyrics tem o \n lá porque é onde ha mudanca de linha
 
         if(isFormatValid(artist_id) && verify_year(year) && verify_duration(duration)){
@@ -206,6 +217,13 @@ void parse_music(char* path, GHashTable* music_table, GHashTable* artist_table){
             erros++;
             writeErrors(original_line, 2);
         }   
+
+        free(id_str);
+        free(title);
+        free(artist_id);
+        free(duration);
+        free(genre);
+        free(lyrics);
 
     }
     printf("Foram encontrados %d erros\n",erros);
@@ -270,12 +288,20 @@ void parse_user(char* path, GHashTable* userTable, GHashTable* musicTable){
             addUser(userTable, u);
 
             free(liked_musics_id_converted);
+            free(username);
+            free(email);
+            free(first_name);
+            free(last_name);
+            free(birth_date);
+            free(country);
+            free(tmpSub);
             parsed++;
         }
         else{
             erros++;
             writeErrors(original_line, 3);
-        }   
+        } 
+
     }
     printf("Foram lidos %d dados e foram encontrados %d erros.\n", parsed, erros);
 
