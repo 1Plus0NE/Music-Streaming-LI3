@@ -152,6 +152,7 @@ int userLineVerify(char *line, GHashTable* music_table){
                         free(info);
                         return 1;
                     }
+                    free(info);
                     break;
                 case 4:
                     info = remove_aspas(info);
@@ -159,6 +160,7 @@ int userLineVerify(char *line, GHashTable* music_table){
                         free(info);
                         return 1;
                     }
+                    free(info);
                     break;
                 case 6:
                     info = remove_aspas(info);
@@ -166,6 +168,7 @@ int userLineVerify(char *line, GHashTable* music_table){
                         free(info);
                         return 1;
                     }
+                    free(info);
                     break;
                 case 7:
                     info = remove_aspas(strsep(&info,"\n"));
