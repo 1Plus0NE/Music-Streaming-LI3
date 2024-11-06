@@ -323,7 +323,7 @@ void parse_queries(char* path, GHashTable* userTable, GHashTable* musicTable, GH
     char* user; // Utilizador para a query 1
     int nArtists = 0; // Nº de artistas para a query 2
     char* country; // País para a query 2
-    //Discography* disco = NULL; // Discografia para a query 2
+    Discography* disco = NULL; // Discografia para a query 2
     int ageMin = 0; // Idade mínima para a query 3
     int ageMax = 0; // Idade máxima para a query 3
     
@@ -335,7 +335,7 @@ void parse_queries(char* path, GHashTable* userTable, GHashTable* musicTable, GH
     }
 
 
-    /*// Discografia antes de resolver a Query2 
+    // Discografia antes de resolver a Query2 
     disco = fillWithArtists(artistTable, disco);
     printf("Preenchimento disco com artistas bem sucedido\n");
 
@@ -346,7 +346,7 @@ void parse_queries(char* path, GHashTable* userTable, GHashTable* musicTable, GH
     printf("Ordenação disco bem sucedida\n");
     printf("Inicio Queries\n");
     // discografia pronta para a 2ª query
-    */
+
 
     // Leitura query a query
     while(fgets(line, sizeof(line), queries) != NULL){ 
@@ -370,7 +370,7 @@ void parse_queries(char* path, GHashTable* userTable, GHashTable* musicTable, GH
             query1(user, userTable, outputQ1);
             // Processo completo, fechar ficheiro
             fclose(outputQ1);
-        }/*
+        }
         else if(line[0] == '2'){
             outputQ2 = fopen(outputPath, "w");
             if(!outputQ2){
@@ -390,8 +390,8 @@ void parse_queries(char* path, GHashTable* userTable, GHashTable* musicTable, GH
             }
             
             fclose(outputQ2);
-        }*/
-       /*
+        }
+       
         else if(line[0] == '3'){
             outputQ3 = fopen(outputPath, "w");
             if(!outputQ3){
@@ -409,8 +409,8 @@ void parse_queries(char* path, GHashTable* userTable, GHashTable* musicTable, GH
         // Ignora Query inválida
         // Criar um ficheiro vazio?
         else continue;
-    */  
+     
     }
-    //freeDiscography(disco);
+    freeDiscography(disco);
     fclose(queries);
 }

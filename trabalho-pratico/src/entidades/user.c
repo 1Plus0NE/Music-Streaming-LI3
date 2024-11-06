@@ -156,7 +156,7 @@ int userLineVerify(char *line, GHashTable* music_table){
                     break;
                 case 4:
                     info = remove_aspas(info);
-                    if(birthDateVerify(remove_aspas(info))!=0){
+                    if(birthDateVerify(info)!=0){
                         free(info);
                         return 1;
                     }
