@@ -16,8 +16,6 @@ int main(int argc, char* argv[]){
     GHashTable* music_table = createMusicTable();
     GHashTable* user_table = createUserTable();
 
-    errosDir();
-
     parse_artist(dataDir, artist_table);
     printf("parse_artist bem sucedido\n");
     parse_music(dataDir, music_table, artist_table);

@@ -265,7 +265,7 @@ long int* convertID(const char *input, int *count){
     }
 
     char *input_copy = strdup(input);
-    
+    char *input_copy_index=input_copy;
     // Remover os parentesis retos
     input_copy++;
     input_copy[strlen(input_copy) - 1] = '\0';
@@ -273,7 +273,7 @@ long int* convertID(const char *input, int *count){
     // Verificar se está empty
     if(strlen(input_copy) == 0){
         *count = 0;
-        free(input_copy - 1);
+        free(input_copy_index);
         return 0;
     }
 
@@ -307,7 +307,7 @@ long int* convertID(const char *input, int *count){
         index++;
     }
 
-    free(input_copy);  // Libertamos a memoria do pointer original
+    free(input_copy_index);  // Libertamos a memoria do pointer original
     
     return convertedIDs;
 }

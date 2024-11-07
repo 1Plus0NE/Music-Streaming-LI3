@@ -130,6 +130,7 @@ gboolean freeUserInTable(gpointer key, gpointer value, gpointer user_data){
     free(user -> first_name);
     free(user -> email);
     free(user -> username);
+    free(key);
     free(user);
 
     return TRUE;

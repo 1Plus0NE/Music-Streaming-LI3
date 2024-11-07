@@ -51,4 +51,5 @@ void artistDurationAdd(G_GNUC_UNUSED gpointer musicId, gpointer musicData, gpoin
     for(int i=0; i<numArtists; i++){
         durationAdd(disco, duration, musicArtistsId[i]);
     }
+    free(duration);
 }

@@ -13,7 +13,8 @@ GHashTable* createUserTable(){
 
 // função que adiciona um utilizador á tabela de utilizadores.
 void addUser(GHashTable* table, User* user){
-    g_hash_table_insert(table, getUserUsername(user), user);
+    char* username = getUserUsername(user);
+    g_hash_table_insert(table,username, user);
 }
 
 // função que remove um utilizador da tabela de utilizadores.

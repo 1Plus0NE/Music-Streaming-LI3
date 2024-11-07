@@ -91,7 +91,7 @@ int isUserInRange(User *user, int minAge, int maxAge){
     return userAge >= minAge && userAge <= maxAge;
 }
 
-// Função que dado um genero, retorna a posição do genero no array para contar os likes desse genero
+// Função que dado um genero, retorna a posição do genero no array
 int getGenreIndex(char *genre, char **genre_array, int genre_count){
     for(int i = 0; i < genre_count; i++){
         if(strcmp(genre_array[i], genre) == 0){
@@ -121,7 +121,8 @@ void countUserLikedMusics(User* user, GHashTable* musicTable, char* genres[], lo
                 genre_likes[*genre_count] = 1;
                 (*genre_count)++;
             }
-            else genre_likes[index]++;   
+            else genre_likes[index]++;  
+            free(genre);
         }
     }
     free(likedMusics); // Free do array de liked musics do user 
@@ -184,9 +185,9 @@ void query3(int ageMin, int ageMax, GHashTable* userTable, GHashTable* musicTabl
 
     sortGenresByLikes(genres, genre_likes, genre_count);
     // Escrever no ficheiro o resultado final
-    for(int i = 0; i < genre_count; i++){
+    for(int i = 0; i < MAX_GENRES; i++){
         fprintf(output, "%s;%ld\n", genres[i], genre_likes[i]);  
-        free(genres[i]);
+        if(genres[i])free(genres[i]);
     }
 
 }
