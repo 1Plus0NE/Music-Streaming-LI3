@@ -4,7 +4,7 @@
 #define MAX_QUERYLINE 150
 
 // função para ler e fazer parse de um ficheiro CSV de artistas.
-void parse_artist(char* path, GHashTable* artist_table){
+void parse_artist(char* path, GestorArtist* gestorArtist){
     //variáveis para o parse
     FILE* artists;
     char filename[MAX_FILENAME];
@@ -57,7 +57,7 @@ void parse_artist(char* path, GHashTable* artist_table){
             type = stringToArtistType(type_str);
             id_constituent_converted = convertID(id_constituent, &num_constituent);
             Artist* a = createArtist(id, name, description, recipe_per_stream, id_constituent_converted, num_constituent, country, type);
-            addArtist(artist_table,a);
+            addArtist(gestorArtist,a);
             free(id_constituent_converted);
         }
        
@@ -77,7 +77,7 @@ void parse_artist(char* path, GHashTable* artist_table){
 }
 
 // Função para ler e fazer parse de um ficheiro CSV de músicas.
-void parse_music(char* path, GHashTable* music_table, GHashTable* artist_table){
+void parse_music(char* path, GHashTable* music_table, GestorArtist* gestorArtist){
     // Variaveis para o parse 
     FILE* musics;
     char filename[MAX_FILENAME];
@@ -127,7 +127,7 @@ void parse_music(char* path, GHashTable* music_table, GHashTable* artist_table){
 
         if(isFormatValid(artist_id) && verify_year(year) && verify_duration(duration)){
             artist_id_converted = convertID(artist_id, &num_artists); // daqui temos o array de ids de artistas + o num_artists calculado
-            if(validateArtistIDs(artist_table, artist_id_converted ,num_artists)){
+            if(validateArtistIDs(gestorArtist, artist_id_converted ,num_artists)){
                     Music* m = createMusic(id, title, artist_id_converted, num_artists, duration, genre, year, lyrics);
                     addMusic(music_table, m);
                     free(artist_id_converted);
@@ -233,7 +233,7 @@ void parse_user(char* path, GHashTable* userTable, GHashTable* musicTable){
     fclose(users);
 }
 
-void parse_queries(char* path, GHashTable* userTable, GHashTable* musicTable, GHashTable* artistTable){
+void parse_queries(char* path, GHashTable* userTable, GHashTable* musicTable, GestorArtist* gestorArtist){
     
     char line[MAX_QUERYLINE];
     char* linePtr=NULL;
@@ -261,7 +261,7 @@ void parse_queries(char* path, GHashTable* userTable, GHashTable* musicTable, GH
 
 
     // Discografia antes de resolver a Query2 
-    disco = fillWithArtists(artistTable, disco);
+    disco = fillWithArtists(gestorArtist, disco);
     printf("Preenchimento disco com artistas bem sucedido\n");
 
     disco = updateArtistsDurationFromMusic(musicTable, disco);

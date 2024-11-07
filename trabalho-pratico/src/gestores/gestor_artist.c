@@ -1,54 +1,92 @@
 #include "../../include/gestores/gestor_artist.h"
 
+struct gestor_artist {
+    GHashTable* table;
+};
+
 // função para criar uma tabela de artistas.
-GHashTable* createArtistTable(){
-    GHashTable* table = g_hash_table_new(g_int_hash, g_int_equal);
-    if (table == NULL) {
-        perror("Falha ao criar a tabela de hashing de artistas.\n");
+GestorArtist* createGestorArtist(){
+    GestorArtist* gestorArtist = malloc(sizeof(GestorArtist));
+    if (gestorArtist == NULL) {
+        perror("Falha ao criar a struct GestorArtist.\n");
+        free(gestorArtist);
         return NULL;
     }
-    return table;
+
+    gestorArtist -> table = g_hash_table_new(g_int_hash, g_int_equal);
+    if(gestorArtist -> table == NULL){
+        perror("Falha ao criar a tabela de hashing de artistas.\n");
+        free(gestorArtist);
+        return NULL;
+    }
+    return gestorArtist;
 }
 
 // função que adiciona um artista á tabela de artistas.
-void addArtist(GHashTable* table, Artist* artist){
-    g_hash_table_insert(table, getArtistId(artist), artist);
+void addArtist(GestorArtist* gestorArtist, Artist* artist){
+    if(gestorArtist && gestorArtist -> table){
+        g_hash_table_insert(gestorArtist -> table, getArtistId(artist), artist);
+    }
 }
 
 // função que remove um artista da tabela de artistas.
-void removeArtist(GHashTable* table, long int id){
-    g_hash_table_remove(table, &id);
+void removeArtist(GestorArtist* gestorArtist, long int id){
+    if(gestorArtist && gestorArtist -> table){
+        g_hash_table_remove(gestorArtist -> table, &id);
+    }
 }
 
 // função que encontra um artista pelo id na tabela.
-Artist* searchArtist(GHashTable* table, long int id){
-    return (Artist*) g_hash_table_lookup(table, &id);
+Artist* searchArtist(GestorArtist* gestorArtist, long int id){
+    if(gestorArtist && gestorArtist -> table){
+        return (Artist*) g_hash_table_lookup(gestorArtist -> table, &id);
+    }
+    return NULL;
+}
+
+// função que aplica uma função callback em cada item da tabela de artistas.
+void foreachArtist(GestorArtist* gestorArtist, GFunc func, gpointer user_data) {
+    if (gestorArtist && gestorArtist->table && func) {
+        g_hash_table_foreach(gestorArtist->table, func, user_data);
+    }
 }
 
 // função que libera a memória alocada para a tabela de artistas.
-void freeArtistTable(GHashTable* table){
-    g_hash_table_foreach_remove(table,freeArtistInTable,NULL);
-    g_hash_table_destroy(table);
+void freeGestorArtist(GestorArtist* gestorArtist){
+    if(gestorArtist){
+        if(gestorArtist -> table){
+            g_hash_table_foreach_remove(gestorArtist -> table,freeArtistInTable,NULL);
+            g_hash_table_destroy(gestorArtist -> table);
+        }
+    }
 }
 
 // Função que verifica se a chave existe na tabela de artistas.
-bool containsArtistID(GHashTable* table, long int id){
-    return g_hash_table_contains(table, &id);
+bool containsArtistID(GestorArtist* gestorArtist, long int id){
+    if(gestorArtist && gestorArtist -> table){
+        return g_hash_table_contains(gestorArtist -> table, &id);
+    }
+    return false;
 }
 
 // Função que verifica se todos a lista de ids existe na tabela de artistas.
-bool validateArtistIDs(GHashTable *table, long int *idList, int N){
-    for (int i=0;i<N;i++){
-        if (!containsArtistID(table, idList[i])){
-            return false; 
+bool validateArtistIDs(GestorArtist* gestorArtist, long int *idList, int N){
+    if(gestorArtist && gestorArtist -> table){
+        for(int i = 0; i < N; i++){
+            if(!containsArtistID(gestorArtist, idList[i])){
+                return false;
+            }
         }
+        return true;
     }
-    return true; 
+    return false;
 }
 
 // Função que percorre a Hash Table e insere cada artista na lista Discography
-Discography* fillWithArtists(GHashTable* table, Discography* disco){
-    g_hash_table_foreach(table, artistFromTableToLL, &disco);
+Discography* fillWithArtists(GestorArtist* gestorArtist, Discography* disco){
+    if(gestorArtist && gestorArtist -> table){
+        foreachArtist(gestorArtist, artistFromTableToLL, &disco);
+    }
     return disco;
 }
 
