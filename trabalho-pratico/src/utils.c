@@ -345,15 +345,6 @@ char* secondsToString(int totSeconds){
 // Função que cria a diretoria "dataset-errors" e respetivos ficheiros com cabeçalhos
 void errosDir(){
      FILE *errors;
-    // Criação da diretoria
-    if (mkdir("resultados", 0777) == -1) {
-        if (errno == EEXIST) printf("Diretoria já existente.\n");
-        else {
-            perror("Erro ao criar a diretoria.\n");
-            exit(EXIT_FAILURE);
-        }
-    }
-    else printf("resultados criado com sucesso.\n");
 
     // Ficheiros de erros com respetivos cabeçalhos
     errors = fopen("resultados/users_errors.csv", "w");
