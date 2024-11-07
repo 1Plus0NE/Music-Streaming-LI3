@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "../entidades/music.h"
+#include "../entidades/discography.h"
 #include <glib.h>
 //#include <stdbool.h>
 
@@ -21,5 +22,11 @@ Music* searchMusic(GHashTable* table, long int id);
 
 // função que libera a memória alocada para a tabela de músicas.
 void freeMusicTable(GHashTable* table);
+
+// Função principal para percorrer a hash table e atualizar as durações dos artistas
+Discography* updateArtistsDurationFromMusic(GHashTable* musicTable, Discography* disco);
+
+// Função para processar cada música e atualizar a duração nos artistas correspondentes
+void artistDurationAdd(G_GNUC_UNUSED gpointer musicId, gpointer musicData, gpointer discoPtr);
 
 #endif

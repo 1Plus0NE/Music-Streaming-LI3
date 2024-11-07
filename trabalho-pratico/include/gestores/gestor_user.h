@@ -26,4 +26,5 @@ bool containsMusicID(GHashTable* table, long int id);
 
 //Verificação conjunta de uma lista de ids de musicas
 bool validateMusicId(GHashTable* table, long int* id, int N);
+
 #endif

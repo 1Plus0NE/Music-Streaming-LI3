@@ -45,3 +45,32 @@ bool validateArtistIDs(GHashTable *table, long int *idList, int N){
     }
     return true; 
 }
+
+// Função que percorre a Hash Table e insere cada artista na lista Discography
+Discography* fillWithArtists(GHashTable* table, Discography* disco){
+    g_hash_table_foreach(table, artistFromTableToLL, &disco);
+    return disco;
+}
+
+// Função  para cada item da Hash Table
+void artistFromTableToLL(G_GNUC_UNUSED gpointer artistId, gpointer artistData, gpointer discoPtr){
+    
+    Artist* artist = (Artist*)artistData;
+    Discography** disco = (Discography**)discoPtr;
+    long int* idPtr = getArtistId(artist);
+    long int id;
+    if (idPtr) {
+        id = *idPtr; // Transforma o ponteiro em long int
+    } else {
+        id = 0;  //  Não deve acontecer
+    }
+    //long int id = (idPtr != NULL) ? *idPtr : -1; //Transformar o ponteiro em long int
+    char* name = getArtistName(artist);
+    char* country = getArtistCountry(artist);
+    ArtistType type = getArtistType(artist);
+    
+    //*disco = artistInsert(*disco, id, name, country, type);
+    artistInsert(disco, id, name, country, type);
+    free(name);
+    free(country);
+}

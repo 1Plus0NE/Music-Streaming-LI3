@@ -33,22 +33,4 @@ void sortGenresByLikes(char* genres[], long int genre_likes[], int genre_count);
 // Função para a 3ª query
 void query3(int ageMin, int ageMax, GHashTable* userTable, GHashTable* musicTable,FILE* output);
 
-//--------------- Discografia-------------
-
-void artistInsert(Discography** disco, long int id, const char* name, const char* country, ArtistType type);
-void durationAdd(Discography* disco, const char* duration, long int id);
-
-void freeDiscography(Discography* disco);
-
-Discography* fillWithArtists(GHashTable* table, Discography* disco);
-
-void artistFromTableToLL(gpointer artistId, gpointer artistData, gpointer discoPtr);
-
-Discography* updateArtistsDurationFromMusic(GHashTable* musicTable, Discography* disco);
-
-void artistDurationAdd(gpointer musicId, gpointer musicData, gpointer discoPtr);
-
-void sortByDuration(Discography** head);
-
-char* secondsToString(int totSeconds);
 #endif

@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "../entidades/artist.h"
+#include "../entidades/discography.h"
 #include <glib.h>
 
 // função para criar uma tabela de artistas.
@@ -27,5 +28,11 @@ bool containsArtistID(GHashTable* table, long int id);
 
 // Função que verifica se todos a lista de ids existe na tabela de artistas.
 bool validateArtistIDs(GHashTable *table, long int *idList, int N);
+
+// Função que percorre a Hash Table e insere cada artista na lista Discography
+Discography* fillWithArtists(GHashTable* table, Discography* disco);
+
+// Função  para cada item da Hash Table
+void artistFromTableToLL(G_GNUC_UNUSED gpointer artistId, gpointer artistData, gpointer discoPtr);
 
 #endif
