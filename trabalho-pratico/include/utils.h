@@ -42,4 +42,7 @@ long int* convertID(const char *input, int *count);
 // Função que remove new lines
 void removeEnters(char *input);
 
+// Função para voltar a transformar o total de segundos na discografia no formato "hh:mm:ss"
+char* secondsToString(int totSeconds);
+
 #endif

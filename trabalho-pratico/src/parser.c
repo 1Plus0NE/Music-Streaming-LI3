@@ -392,7 +392,7 @@ void parse_queries(char* path, GHashTable* userTable, GHashTable* musicTable, GH
             fclose(outputQ2);
         }
        
-        else if(line[0] == '3'){
+        /* else if(line[0] == '3'){
             outputQ3 = fopen(outputPath, "w");
             if(!outputQ3){
                 perror("Erro ao criar o ficheiro de output da query 3.\n");
@@ -405,7 +405,7 @@ void parse_queries(char* path, GHashTable* userTable, GHashTable* musicTable, GH
             query3(ageMin, ageMax, userTable, musicTable, outputQ3);
 
             fclose(outputQ3);
-        }
+        } */
         // Ignora Query inválida
         // Criar um ficheiro vazio?
         else continue;

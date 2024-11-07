@@ -18,7 +18,7 @@ ENTIDADES_INCLUDE_DIR = $(INCLUDE_DIR)/entidades
 GESTORES_INCLUDE_DIR = $(INCLUDE_DIR)/gestores
 OTHER_DIR = $(INCLUDE_DIR)
 
-ENTIDADES_SRC = $(ENTIDADES_DIR)/artist.c $(ENTIDADES_DIR)/music.c $(ENTIDADES_DIR)/user.c
+ENTIDADES_SRC = $(ENTIDADES_DIR)/artist.c $(ENTIDADES_DIR)/music.c $(ENTIDADES_DIR)/user.c $(ENTIDADES_DIR)/discography.c
 GESTORES_SRC = $(GESTORES_DIR)/gestor_artist.c $(GESTORES_DIR)/gestor_music.c $(GESTORES_DIR)/gestor_user.c
 PARSER = $(SRC_DIR)/parser.c
 QUERIES = $(SRC_DIR)/queries.c

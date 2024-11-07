@@ -321,3 +321,23 @@ void removeEnters(char *input){
         input[len]='\0';
     }
 }
+
+// Função para voltar a transformar o total de segundos na discografia no formato "hh:mm:ss"
+char* secondsToString(int totSeconds){
+
+    int hours = totSeconds / 3600;
+    int minutes = (totSeconds % 3600) / 60;
+    int seconds = (totSeconds % 3600) % 60;
+
+    // Aloca memória para a string de resultado
+    char* timeString = (char*)malloc(9 * sizeof(char)); // "hh:mm:ss" + '\0' = 9 caracteres
+    if (!timeString) {
+        perror("Erro ao alocar memória para timeString");
+        exit(EXIT_FAILURE);
+    }
+
+    // Formata a string como "hh:mm:ss"
+    snprintf(timeString, 9, "%02d:%02d:%02d", hours, minutes, seconds);
+
+    return timeString;
+}
