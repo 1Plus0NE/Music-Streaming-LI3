@@ -58,6 +58,7 @@ void freeGestorArtist(GestorArtist* gestorArtist){
             g_hash_table_foreach_remove(gestorArtist -> table,freeArtistInTable,NULL);
             g_hash_table_destroy(gestorArtist -> table);
         }
+        free(gestorArtist);
     }
 }
 
