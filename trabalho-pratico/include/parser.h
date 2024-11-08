@@ -26,9 +26,9 @@ void parse_music(char* path, GestorMusic* gestorMusic, GestorArtist* gestorArtis
 int userLineVerify(char *line, GestorMusic* gestorMusic);
 
 // Função para ler e fazer parse de um arquivo CSV de utilizadores.
-void parse_user(char* path, GHashTable* userTable, GestorMusic* gestorMusic);
+void parse_user(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic);
 
 // Função para ler e fazer parse das queries
-void parse_queries(char* path, GHashTable* userTable, GestorMusic* gestorMusic, GestorArtist* gestorArtist);
+void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic, GestorArtist* gestorArtist);
 
 #endif
