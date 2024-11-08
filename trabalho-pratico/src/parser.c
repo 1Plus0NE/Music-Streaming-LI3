@@ -77,7 +77,7 @@ void parse_artist(char* path, GestorArtist* gestorArtist){
 }
 
 // Função para ler e fazer parse de um ficheiro CSV de músicas.
-void parse_music(char* path, GHashTable* music_table, GestorArtist* gestorArtist){
+void parse_music(char* path, GestorMusic* gestorMusic, GestorArtist* gestorArtist){
     // Variaveis para o parse 
     FILE* musics;
     char filename[MAX_FILENAME];
@@ -129,7 +129,7 @@ void parse_music(char* path, GHashTable* music_table, GestorArtist* gestorArtist
             artist_id_converted = convertID(artist_id, &num_artists); // daqui temos o array de ids de artistas + o num_artists calculado
             if(validateArtistIDs(gestorArtist, artist_id_converted ,num_artists)){
                     Music* m = createMusic(id, title, artist_id_converted, num_artists, duration, genre, year, lyrics);
-                    addMusic(music_table, m);
+                    addMusic(gestorMusic, m);
                     free(artist_id_converted);
             }
             else{
@@ -155,8 +155,62 @@ void parse_music(char* path, GHashTable* music_table, GestorArtist* gestorArtist
     fclose(musics);
 }
 
+// Função de verificação da validade de um user
+int userLineVerify(char *line, GestorMusic* gestorMusic){
+    //char *info = strsep(&line, ";");
+    char *info=NULL;
+    long int* musicsIds;
+    int N;
+
+    for(int i = 0; i <= 7; i++){
+        info=strsep(&line, ";");
+        if(info){
+            switch(i){
+                case 1:
+                    info = remove_aspas(info);
+                    if(emailVerify(info)!=0){
+                        free(info);
+                        return 1;
+                    }
+                    free(info);
+                    break;
+                case 4:
+                    info = remove_aspas(info);
+                    if(birthDateVerify(info)!=0){
+                        free(info);
+                        return 1;
+                    }
+                    free(info);
+                    break;
+                case 6:
+                    info = remove_aspas(info);
+                    if(strcmp("premium",info)!=0 && strcmp("normal",info)!=0){
+                        free(info);
+                        return 1;
+                    }
+                    free(info);
+                    break;
+                case 7:
+                    info = remove_aspas(strsep(&info,"\n"));
+                    musicsIds=convertID(info,&N);
+                    if(!validateMusicId(gestorMusic, musicsIds, N)){
+                        free(musicsIds);
+                        free(info);
+                        return 1;
+                    }
+                    free(musicsIds);
+                    free(info);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+    return 0;
+}
+
 // função para ler e fazer parse de um ficheiro CSV de artistas.
-void parse_user(char* path, GHashTable* userTable, GHashTable* musicTable){
+void parse_user(char* path, GHashTable* userTable, GestorMusic* gestorMusic){
     //variáveis para o parse
     FILE* users;
     char filename[MAX_FILENAME];
@@ -195,7 +249,7 @@ void parse_user(char* path, GHashTable* userTable, GHashTable* musicTable){
         tmp_oriLine = original_line;
 
         // Antes da função atribuir valor as variaveis, verifica a sua validação
-        if(userLineVerify(line, musicTable) == 0){
+        if(userLineVerify(line, gestorMusic) == 0){
             // Trocar tmp_oriLine para original_line?
             username = remove_aspas(strsep(&tmp_oriLine, ";"));
             email = remove_aspas(strsep(&tmp_oriLine, ";"));
@@ -233,7 +287,7 @@ void parse_user(char* path, GHashTable* userTable, GHashTable* musicTable){
     fclose(users);
 }
 
-void parse_queries(char* path, GHashTable* userTable, GHashTable* musicTable, GestorArtist* gestorArtist){
+void parse_queries(char* path, GHashTable* userTable, GestorMusic* gestorMusic, GestorArtist* gestorArtist){
     
     char line[MAX_QUERYLINE];
     char* linePtr=NULL;
@@ -264,14 +318,13 @@ void parse_queries(char* path, GHashTable* userTable, GHashTable* musicTable, Ge
     disco = fillWithArtists(gestorArtist, disco);
     printf("Preenchimento disco com artistas bem sucedido\n");
 
-    disco = updateArtistsDurationFromMusic(musicTable, disco);
+    disco = updateArtistsDurationFromMusic(gestorMusic, disco);
     printf("Duração de cada discografia bem sucedida\n");
 
     sortByDuration(&disco);
     printf("Ordenação disco bem sucedida\n");
     printf("Inicio Queries\n");
     // discografia pronta para a 2ª query
-
 
     // Leitura query a query
     while(fgets(line, sizeof(line), queries) != NULL){ 
@@ -327,7 +380,7 @@ void parse_queries(char* path, GHashTable* userTable, GHashTable* musicTable, Ge
             strsep(&linePtr, " ");
             ageMin = atoi(strsep(&linePtr, " "));
             ageMax = atoi(strsep(&linePtr, "\n"));
-            query3(ageMin, ageMax, userTable, musicTable, outputQ3);
+            query3(ageMin, ageMax, userTable, gestorMusic, outputQ3);
 
             fclose(outputQ3);
         } 

@@ -102,7 +102,7 @@ int getGenreIndex(char *genre, char **genre_array, int genre_count){
 }
 
 // Função responsável por popular o array de generos e contar o numero total de likes no array de likes
-void countUserLikedMusics(User* user, GHashTable* musicTable, char* genres[], long int genre_likes[], int* genre_count){
+void countUserLikedMusics(User* user, GestorMusic* gestorMusic, char* genres[], long int genre_likes[], int* genre_count){
     long int* likedMusics = getUserLikedMusics(user);
     int numLikedMusics = getUserNumLikedMusics(user);
     Music* music = NULL;
@@ -110,7 +110,7 @@ void countUserLikedMusics(User* user, GHashTable* musicTable, char* genres[], lo
     int index;
 
     for(int i=0;i<numLikedMusics;i++){
-        music = searchMusic(musicTable, likedMusics[i]);
+        music = searchMusic(gestorMusic, likedMusics[i]);
 
         if(music != NULL){ // em principio nunca falha porque as liked musics do user ja sao verificadas no parsing 
             genre = getMusicGenre(music);
@@ -148,7 +148,7 @@ void sortGenresByLikes(char* genres[], long int genre_likes[], int genre_count){
 }
 
 // Função responsável da query 3
-void query3(int ageMin, int ageMax, GHashTable* userTable, GHashTable* musicTable, FILE* output){
+void query3(int ageMin, int ageMax, GHashTable* userTable, GestorMusic* gestorMusic, FILE* output){
     
     if(ageMin == 100 || ageMax == 0){
         fprintf(output, "\n");
@@ -173,7 +173,7 @@ void query3(int ageMin, int ageMax, GHashTable* userTable, GHashTable* musicTabl
         user = (User *)user_value;
         if(isUserInRange(user, ageMin, ageMax)){
             flag = 1;
-            countUserLikedMusics(user, musicTable, genres, genre_likes, &genre_count);
+            countUserLikedMusics(user, gestorMusic, genres, genre_likes, &genre_count);
         }
     }
 

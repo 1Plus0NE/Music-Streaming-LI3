@@ -13,25 +13,25 @@ int main(int argc, char* argv[]){
     char* queriesFile = argc > 2 ? argv[2] : NULL;
 
     GestorArtist* gestorArtist = createGestorArtist();
-    GHashTable* music_table = createMusicTable();
+    GestorMusic* gestorMusic = createGestorMusic();
     GHashTable* user_table = createUserTable();
 
     errosDir();
     
     parse_artist(dataDir, gestorArtist);
     printf("parse_artist bem sucedido\n");
-    parse_music(dataDir, music_table, gestorArtist);
+    parse_music(dataDir, gestorMusic, gestorArtist);
     printf("parse_music bem sucedido\n");
-    parse_user(dataDir, user_table, music_table);
+    parse_user(dataDir, user_table, gestorMusic);
     printf("parse_user bem sucedido\n");
 
     if(queriesFile){
-        parse_queries(queriesFile, user_table, music_table, gestorArtist);
+        parse_queries(queriesFile, user_table, gestorMusic, gestorArtist);
     }
     printf("Fim Queries\n");
 
     freeGestorArtist(gestorArtist);
-    freeMusicTable(music_table);
+    freeGestorMusic(gestorMusic);
     freeUserTable(user_table);
 
     return 0;

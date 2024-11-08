@@ -20,12 +20,15 @@
 void parse_artist(char* path, GestorArtist* gestorArtist);
 
 // Função para ler e fazer parse de um ficheiro CSV de músicas.
-void parse_music(char* path, GHashTable* music_table, GestorArtist* gestorArtist);
+void parse_music(char* path, GestorMusic* gestorMusic, GestorArtist* gestorArtist);
+
+// Função de verificação da validade de um user
+int userLineVerify(char *line, GestorMusic* gestorMusic);
 
 // Função para ler e fazer parse de um arquivo CSV de utilizadores.
-void parse_user(char* path, GHashTable* userTable, GHashTable* musicTable);
+void parse_user(char* path, GHashTable* userTable, GestorMusic* gestorMusic);
 
 // Função para ler e fazer parse das queries
-void parse_queries(char* path, GHashTable* userTable, GHashTable* musicTable, GestorArtist* gestorArtist);
+void parse_queries(char* path, GHashTable* userTable, GestorMusic* gestorMusic, GestorArtist* gestorArtist);
 
 #endif

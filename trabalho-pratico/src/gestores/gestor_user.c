@@ -32,16 +32,3 @@ void freeUserTable(GHashTable* table){
     g_hash_table_foreach_remove(table,freeUserInTable,NULL);
     g_hash_table_destroy(table);
 }
-
-// Função que verifica a existência de uma musica pelo seu id, na tabela de musicas
-bool containsMusicID(GHashTable* table, long int id){
-    return g_hash_table_contains(table, &id);
-}
-
-// Função que verifica se todos os ids das musicas pertencem à tabela
-bool validateMusicId(GHashTable* table, long int* id, int N){
-    for(int i=0;i<N;i++){
-        if(!containsMusicID(table, id[i])) return false;
-    }
-    return true;
-}

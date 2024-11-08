@@ -136,60 +136,6 @@ gboolean freeUserInTable(gpointer key, gpointer value, gpointer user_data){
     return TRUE;
 }
 
-// Função de verificação da validade de um user
-int userLineVerify(char *line, GHashTable* music_table){
-    //char *info = strsep(&line, ";");
-    char *info=NULL;
-    long int* musicsIds;
-    int N;
-
-    for(int i = 0; i <= 7; i++){
-        info=strsep(&line, ";");
-        if(info){
-            switch(i){
-                case 1:
-                    info = remove_aspas(info);
-                    if(emailVerify(info)!=0){
-                        free(info);
-                        return 1;
-                    }
-                    free(info);
-                    break;
-                case 4:
-                    info = remove_aspas(info);
-                    if(birthDateVerify(info)!=0){
-                        free(info);
-                        return 1;
-                    }
-                    free(info);
-                    break;
-                case 6:
-                    info = remove_aspas(info);
-                    if(strcmp("premium",info)!=0 && strcmp("normal",info)!=0){
-                        free(info);
-                        return 1;
-                    }
-                    free(info);
-                    break;
-                case 7:
-                    info = remove_aspas(strsep(&info,"\n"));
-                    musicsIds=convertID(info,&N);
-                    if(!validateMusicId(music_table, musicsIds, N)){
-                        free(musicsIds);
-                        free(info);
-                        return 1;
-                    }
-                    free(musicsIds);
-                    free(info);
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-    return 0;
-}
-
 //getters de utilizador
 char* getUserUsername(User* u){
     return u -> username ? strdup(u -> username) : NULL;

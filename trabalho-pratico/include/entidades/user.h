@@ -26,11 +26,6 @@ void freeUser(User* user);
 // Função para libertar a memória de uma entidade do tipo utilizador contida numa hash table
 gboolean freeUserInTable(gpointer key, gpointer value, gpointer user_data);
 
-// Função de verificação da validade de um utilizador.
-int userLineVerify(char *line, GHashTable* music_table);
-
-//int verifyLikedMusics(long int* list, MusicTable* musics);
-
 //getters de utilizador
 char* getUserUsername(User* u);
 
