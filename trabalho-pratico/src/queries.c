@@ -12,8 +12,8 @@ struct discography {
 };
 
 // função que responde á query1.
-void query1(char* user_username, GHashTable* user_table, FILE* output_file){
-    User* user = searchUser(user_table, user_username);
+void query1(char* user_username, GestorUser* gestorUser, FILE* output_file){
+    User* user = searchUser(gestorUser, user_username);
 
     if(!user){
         fprintf(output_file, "\n");
@@ -148,7 +148,7 @@ void sortGenresByLikes(char* genres[], long int genre_likes[], int genre_count){
 }
 
 // Função responsável da query 3
-void query3(int ageMin, int ageMax, GHashTable* userTable, GestorMusic* gestorMusic, FILE* output){
+void query3(int ageMin, int ageMax, GestorUser* gestorUser, GestorMusic* gestorMusic, FILE* output){
     
     if(ageMin == 100 || ageMax == 0){
         fprintf(output, "\n");
@@ -156,8 +156,7 @@ void query3(int ageMin, int ageMax, GHashTable* userTable, GestorMusic* gestorMu
     }
 
     // Para iterar os users
-    GHashTableIter user_iter;
-    gpointer user_key, user_value;
+    UserIterator* user_iterator = createUserIterator(gestorUser);
     User* user = NULL;
     // Variaveis para dar store aos valores
     char *genres[MAX_GENRES];
@@ -168,15 +167,14 @@ void query3(int ageMin, int ageMax, GHashTable* userTable, GestorMusic* gestorMu
     int flag = 0;
 
     // Iterar pela table de users
-    g_hash_table_iter_init(&user_iter, userTable);
-    while (g_hash_table_iter_next(&user_iter, &user_key, &user_value)){
-        user = (User *)user_value;
+    while((user = getNextUser(user_iterator)) != NULL){
         if(isUserInRange(user, ageMin, ageMax)){
             flag = 1;
             countUserLikedMusics(user, gestorMusic, genres, genre_likes, &genre_count);
         }
     }
 
+    freeUserIterator(user_iterator); // já não precisamos mais do iterator
     // No caso de nao termos encontrado um user na range de idades
     if(!flag){
         fprintf(output, "\n");

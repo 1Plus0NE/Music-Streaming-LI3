@@ -46,7 +46,7 @@ Music* searchMusic(GestorMusic* gestorMusic, long int id){
 
 // função que aplica uma função callback em cada item da tabela de músicas.
 void foreachMusic(GestorMusic* gestorMusic, GFunc func, gpointer user_data){
-    if (gestorMusic && gestorMusic->table && func) {
+    if (gestorMusic && gestorMusic->table && func){
         g_hash_table_foreach(gestorMusic->table, func, user_data);
     }
 }
@@ -55,7 +55,7 @@ void foreachMusic(GestorMusic* gestorMusic, GFunc func, gpointer user_data){
 void freeGestorMusic(GestorMusic* gestorMusic){
     if(gestorMusic){
         if(gestorMusic -> table){
-            g_hash_table_foreach_remove(gestorMusic -> table,freeMusicInTable,NULL);
+            g_hash_table_foreach_remove(gestorMusic -> table, freeMusicInTable, NULL);
             g_hash_table_destroy(gestorMusic -> table);
         }
         free(gestorMusic);

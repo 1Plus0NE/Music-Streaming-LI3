@@ -210,7 +210,7 @@ int userLineVerify(char *line, GestorMusic* gestorMusic){
 }
 
 // função para ler e fazer parse de um ficheiro CSV de artistas.
-void parse_user(char* path, GHashTable* userTable, GestorMusic* gestorMusic){
+void parse_user(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic){
     //variáveis para o parse
     FILE* users;
     char filename[MAX_FILENAME];
@@ -263,7 +263,7 @@ void parse_user(char* path, GHashTable* userTable, GestorMusic* gestorMusic){
             liked_musics_id = remove_aspas(strsep(&tmp_oriLine,"\n"));
             liked_musics_id_converted = convertID(liked_musics_id,&num_liked_musics);
             User* u = createUser(username, email, first_name, last_name, birth_date, country, subscription, liked_musics_id_converted, num_liked_musics);
-            addUser(userTable, u);
+            addUser(gestorUser, u);
 
             free(liked_musics_id_converted);
             free(liked_musics_id);
@@ -287,7 +287,7 @@ void parse_user(char* path, GHashTable* userTable, GestorMusic* gestorMusic){
     fclose(users);
 }
 
-void parse_queries(char* path, GHashTable* userTable, GestorMusic* gestorMusic, GestorArtist* gestorArtist){
+void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic, GestorArtist* gestorArtist){
     
     char line[MAX_QUERYLINE];
     char* linePtr=NULL;
@@ -345,7 +345,7 @@ void parse_queries(char* path, GHashTable* userTable, GestorMusic* gestorMusic, 
             // Tratamento da linha para a 1ª Query
             strsep(&linePtr, " "); // Ignora o id da Query e o espaço 
             user = strsep(&linePtr, "\n");
-            query1(user, userTable, outputQ1);
+            query1(user, gestorUser, outputQ1);
             // Processo completo, fechar ficheiro
             fclose(outputQ1);
         }
@@ -380,7 +380,7 @@ void parse_queries(char* path, GHashTable* userTable, GestorMusic* gestorMusic, 
             strsep(&linePtr, " ");
             ageMin = atoi(strsep(&linePtr, " "));
             ageMax = atoi(strsep(&linePtr, "\n"));
-            query3(ageMin, ageMax, userTable, gestorMusic, outputQ3);
+            query3(ageMin, ageMax, gestorUser, gestorMusic, outputQ3);
 
             fclose(outputQ3);
         } 

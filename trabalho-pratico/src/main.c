@@ -14,7 +14,7 @@ int main(int argc, char* argv[]){
 
     GestorArtist* gestorArtist = createGestorArtist();
     GestorMusic* gestorMusic = createGestorMusic();
-    GHashTable* user_table = createUserTable();
+    GestorUser* gestorUser = createGestorUser();
 
     errosDir();
     
@@ -22,17 +22,17 @@ int main(int argc, char* argv[]){
     printf("parse_artist bem sucedido\n");
     parse_music(dataDir, gestorMusic, gestorArtist);
     printf("parse_music bem sucedido\n");
-    parse_user(dataDir, user_table, gestorMusic);
+    parse_user(dataDir, gestorUser, gestorMusic);
     printf("parse_user bem sucedido\n");
 
     if(queriesFile){
-        parse_queries(queriesFile, user_table, gestorMusic, gestorArtist);
+        parse_queries(queriesFile, gestorUser, gestorMusic, gestorArtist);
     }
     printf("Fim Queries\n");
 
     freeGestorArtist(gestorArtist);
     freeGestorMusic(gestorMusic);
-    freeUserTable(user_table);
+    freeGestorUser(gestorUser);
 
     return 0;
 }

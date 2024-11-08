@@ -46,7 +46,7 @@ Artist* searchArtist(GestorArtist* gestorArtist, long int id){
 
 // função que aplica uma função callback em cada item da tabela de artistas.
 void foreachArtist(GestorArtist* gestorArtist, GFunc func, gpointer user_data) {
-    if (gestorArtist && gestorArtist->table && func) {
+    if (gestorArtist && gestorArtist->table && func){
         g_hash_table_foreach(gestorArtist->table, func, user_data);
     }
 }
