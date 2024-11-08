@@ -7,10 +7,8 @@
 #include "gestores/gestor_artist.h"
 #include "entidades/artist.h"
 #include "entidades/music.h"
+#include "entidades/discography.h"
 #include <string.h>
-
-// Lista ligada para a Query 2 
-typedef struct discography Discography;
 
 // função que calcula a idade através de uma data de nascimento dada como argumento.
 int calculaIdade(char* birthdate);

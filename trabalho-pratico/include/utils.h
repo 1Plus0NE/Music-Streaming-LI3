@@ -13,6 +13,7 @@
 
 //funções de manipulação de strings
 char* remove_aspas(char* str);
+
 char* remove_espacos(char* input);
 
 //funções de validação
@@ -45,10 +46,10 @@ void removeEnters(char *input);
 // Função para voltar a transformar o total de segundos na discografia no formato "hh:mm:ss"
 char* secondsToString(int totSeconds);
 
-// Função que recebe uma linha e escreve no csv de erros
-void writeErrors(char* line, int csvFile);
-
 // Função que cria a diretoria "dataset-errors" e respetivos ficheiros com cabeçalhos
 void errosDir();
+
+// Função que recebe uma linha e escreve no csv de erros
+void writeErrors(char* line, int csvFile);
 
 #endif

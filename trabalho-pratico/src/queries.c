@@ -1,16 +1,6 @@
 #include "../include/queries.h"
 #define MAX_GENRES 10
 
-// Lista ligada para a Query 2
-struct discography {
-    long int id; // Id do artista/banda
-    char* name;
-    char* country;
-    int duration; // Duracao em segundos
-    ArtistType type;
-    struct discography* next;
-};
-
 // função que responde á query1.
 void query1(char* user_username, GestorUser* gestorUser, FILE* output_file){
     User* user = searchUser(gestorUser, user_username);
@@ -41,15 +31,21 @@ void query2(int nArtists, Discography* disco, FILE* output){
 
     if(nArtists == 0) fprintf(output, "\n"); // Caso de ficheiro "vazio"
     for(int i=0; i<nArtists && head!=NULL; i++){
-        char* time = secondsToString(head->duration); // Transformação em formato char*
-        char* typeInChar = typeToString(head->type); // Transformação em formato char*
-        
-        fprintf(output, "%s;%s;%s;%s\n", head->name, typeInChar, time, head->country);  
+        int duration = getDiscographyDuration(head);
+        ArtistType type = getDiscographyType(head);
+        char* name = getDiscographyName(head);
+        char* country = getDiscographyCountry(head);
+        char* time = secondsToString(duration); // Transformação em formato char*
+        char* typeInChar = typeToString(type); // Transformação em formato char*
+
+        fprintf(output, "%s;%s;%s;%s\n", name, typeInChar, time, country);  
         
         free(time);
         free(typeInChar);
+        free(name);
+        free(country);
 
-        head = head->next;
+        head = getDiscographyNext(head);
     }
 }
 
@@ -59,29 +55,34 @@ void query2b(int nArtists, char* country, Discography* disco, FILE* output){
 
     if(nArtists == 0) fprintf(output, "\n"); // Caso de ficheiro "vazio"
     for(int i=0; i<nArtists && head!=NULL; i++){
-        if(strcmp(head->country, country) == 0){ // Verificação do país do artista
-            char* time = secondsToString(head->duration); // Transformação em formato char*
-            char* typeInChar = typeToString(head->type); // Transformação em formato char*
+        char* countryD = getDiscographyCountry(head);
+        ArtistType type = getDiscographyType(head);
+        if(strcmp(countryD, country) == 0){ // Verificação do país do artista
+            int duration = getDiscographyDuration(head);
+            char* time = secondsToString(duration); // Transformação em formato char*
+            char* typeInChar = typeToString(type); // Transformação em formato char*
+            char* name = getDiscographyName(head);
         
-            fprintf(output, "%s;%s;%s;%s\n", head->name, typeInChar, time, head->country);  
+            fprintf(output, "%s;%s;%s;%s\n", name, typeInChar, time, countryD);  
         
             free(time);
             free(typeInChar);
+            free(name);
 
-            head = head->next; 
+            head = getDiscographyNext(head); 
         }
-        else if(head->next == NULL && i==0){ // Caso de ficheiro "vazio"
+        else if(getDiscographyNext(head) == NULL && i==0){ // Caso de ficheiro "vazio"
             fprintf(output, "\n");
-            head = head->next;
+            head = getDiscographyNext(head);
             i--; // Mantém o contador para processar o próximo artista
         }
         else{
-            head = head->next;
+            head = getDiscographyNext(head);
             i--; // Mantém o contador para processar o próximo artista
         }
+        free(countryD);
     }
 }
-
 
 // Função que Dado um user, verifica se está compreendido entre os intervalos de idades
 int isUserInRange(User *user, int minAge, int maxAge){

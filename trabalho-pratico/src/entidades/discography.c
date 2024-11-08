@@ -112,3 +112,69 @@ void artistInsert(Discography** disco, long int id, const char* name, const char
     
     *disco = newDisco; // Atualização da lista
 }
+
+//getters e setters de discografia.
+
+long int* getDiscographyId(Discography* d){
+    return d ? &(d -> id) : NULL;
+}
+
+char* getDiscographyName(Discography* d){
+    return d -> name ? strdup(d -> name) : NULL;
+}
+
+char* getDiscographyCountry(Discography* d){
+    return d -> country ? strdup(d -> country) : NULL;
+}
+
+int getDiscographyDuration(Discography* d){
+    return d ? d -> duration : 0;
+}
+
+ArtistType getDiscographyType(Discography* d){
+    return d ? d -> type : (ArtistType)0;
+}
+
+Discography* getDiscographyNext(Discography* d){
+    return d ? d -> next : NULL;
+}
+
+void setDiscographyId(Discography* d, long int id){
+    if (d) d -> id = id;
+}
+
+void setDiscographyName(Discography* d, char* name){
+    if(d){
+        if(d -> name){
+            free(d -> name);
+        }
+        d -> name = strdup(name);
+    }
+}
+
+void setDiscographyCountry(Discography* d, char* country){
+    if(d){
+        if(d -> country){
+            free(d -> country);
+        }
+        d -> country = strdup(country);
+    }
+}
+
+void setDiscographyDuration(Discography* d, int duration){
+    if(d){
+        d -> duration = duration;
+    }
+}
+
+void setDiscographyType(Discography* d, ArtistType type){
+    if(d){
+        d -> type = type;
+    }
+}
+
+void setDiscographyNext(Discography* d, Discography* next){
+    if(d){
+        d -> next = next;
+    }
+}

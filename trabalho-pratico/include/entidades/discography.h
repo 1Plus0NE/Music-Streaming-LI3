@@ -22,4 +22,29 @@ void freeDiscography(Discography* disco);
 // Função que adiciona artista por artista numa lista ligada, ignorando a ordem 
 void artistInsert(Discography** disco, long int id, const char* name, const char* country, ArtistType type);
 
+//getters e setters da discografia.
+long int* getDiscographyId(Discography* d);
+
+char* getDiscographyName(Discography* d);
+
+char* getDiscographyCountry(Discography* d);
+
+int getDiscographyDuration(Discography* d);
+
+ArtistType getDiscographyType(Discography* d);
+
+Discography* getDiscographyNext(Discography* d);
+
+void setDiscographyId(Discography* d, long int id);
+
+void setDiscographyName(Discography* d, char* name);
+
+void setDiscographyCountry(Discography* d, char* country);
+
+void setDiscographyDuration(Discography* d, int duration);
+
+void setDiscographyType(Discography* d, ArtistType type);
+
+void setDiscographyNext(Discography* d, Discography* next);
+
 #endif
