@@ -356,7 +356,8 @@ int getGenreIndex(char *genre, char **genre_array, int genre_count){
 void sortGenresByLikes(char* genres[], long int genre_likes[], int genre_count){
     for(int i=0;i<genre_count - 1;i++){
         for(int j = i+1;j<genre_count;j++){
-            if(genre_likes[i] < genre_likes[j]){
+            if (genre_likes[i] < genre_likes[j] || 
+               (genre_likes[i] == genre_likes[j] && strcmp(genres[i], genres[j]) > 0)){ // Se tiver o mesmo num de likes prevalecer a ordem alfabética
                 // Swap generos
                 char* temp_genre = genres[i];
                 genres[i] = genres[j];
