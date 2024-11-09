@@ -9,6 +9,7 @@
 #include "../utils.h"
 #include "glib.h"
 
+//estrutura da discografia
 typedef struct discography Discography;
 
 // Função para ordenar a discografia por durações
@@ -17,6 +18,7 @@ void sortByDuration(Discography** head);
 // Função para incrementar em segundos, a duração da discografia de um artista
 void durationAdd(Discography* disco, const char* duration, long int id);
 
+//função para libertar a memória da estrutura discografia.
 void freeDiscography(Discography* disco);
 
 // Função que adiciona artista por artista numa lista ligada, ignorando a ordem 

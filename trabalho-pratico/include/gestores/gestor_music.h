@@ -9,7 +9,9 @@
 #include <stdbool.h>
 #define MAX_GENRES 10
 
+//estrutura do gestor de músicas.
 typedef struct gestor_music GestorMusic;
+
 typedef void (*GHFunc)(void *key, void *value, void *user_data);
 
 // função para criar uma tabela de músicas.

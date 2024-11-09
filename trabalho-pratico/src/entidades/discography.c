@@ -82,6 +82,7 @@ void durationAdd(Discography* disco, const char* duration, long int id){
     if(newDisco == NULL) printf("Artista com ID %ld não encontrado.\n", id);
 }
 
+//função para libertar a memória da estrutura discografia.
 void freeDiscography(Discography* disco){
     Discography* currentDisco = disco;
     Discography* nextDisco;
@@ -114,7 +115,6 @@ void artistInsert(Discography** disco, long int id, const char* name, const char
 }
 
 //getters e setters de discografia.
-
 long int* getDiscographyId(Discography* d){
     return d ? &(d -> id) : NULL;
 }

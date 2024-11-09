@@ -1,5 +1,6 @@
 #include "../../include/gestores/gestor_music.h"
 
+//estrutura do gestor de músicas.
 struct gestor_music {
     GHashTable* table;
 };

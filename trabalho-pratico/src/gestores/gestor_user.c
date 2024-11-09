@@ -1,9 +1,11 @@
 #include "../../include/gestores/gestor_user.h"
 
+//estrutura de gestor de utilizadores.
 struct gestor_user{
     GHashTable* table;
 };
 
+//estrutura do iterador de utilizadores.
 struct user_iterator{
     GHashTableIter iter;
     gpointer key;

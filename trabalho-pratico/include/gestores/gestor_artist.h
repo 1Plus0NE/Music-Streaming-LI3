@@ -8,7 +8,9 @@
 #include "../entidades/discography.h"
 #include <glib.h>
 
+//estrutura do gestor de artistas.
 typedef struct gestor_artist GestorArtist;
+
 typedef void (*GHFunc)(void *key, void *value, void *user_data);
 
 // função para criar uma tabela de artistas.

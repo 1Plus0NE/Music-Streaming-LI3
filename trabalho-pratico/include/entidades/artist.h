@@ -9,9 +9,10 @@
 #include "../utils.h"
 #include "glib.h"
 
-// Forma de enunciar a entidade artista.
+//forma de enunciar a entidade artista.
 typedef struct artist Artist;
 
+//enum que representa o atributo tipo de artista.
 typedef enum {
     INDIVIDUAL,
     GRUPO
@@ -20,14 +21,14 @@ typedef enum {
 // Função para criar uma estrutura da entidade artista parametrizada.
 Artist* createArtist(long int id, char* name, char* description, float recipe_per_stream, long int* id_constituent, int num_constituent, char* country, ArtistType type);
 
+//função que passa uma string do tipo do artista para o enum type
+ArtistType stringToArtistType(char* type_str);
+
 // Função para libertar a memória de uma entidade do tipo artista.
 void freeArtist(Artist* artist);
 
 // Função para libertar a memória de uma entidade do tipo artista contida numa hash table
 gboolean freeArtistInTable(gpointer key, gpointer value, gpointer user_data);
-
-//função que passa uma string do tipo do artista para o enum type
-ArtistType stringToArtistType(char* type_str);
 
 // getters e setters
 long int* getArtistId(Artist* a);

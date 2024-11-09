@@ -6,7 +6,7 @@
 
 int main(int argc, char* argv[]){
     if(argc < 2){
-        fprintf(stderr, "%s apenas contem o nome do programa e nao as diretorias.\n", argv[0]);
+        fprintf(stderr, "%s apenas contém o nome do programa e não as diretorias.\n", argv[0]);
         return EXIT_FAILURE;
     }
     char* dataDir = argv[1];

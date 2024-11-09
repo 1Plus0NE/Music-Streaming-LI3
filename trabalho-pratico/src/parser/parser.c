@@ -5,13 +5,13 @@
 
 // Função principal de parse que chama os módulos de parse individualmente
 void parse_all(char* path, GestorArtist* gestorArtist, GestorMusic* gestorMusic, GestorUser* gestorUser){
-    // Parse de artistas
+    //parse de artistas
     parse_artist(path, gestorArtist);
 
-    // Parse de músicas
+    //parse de músicas
     parse_music(path, gestorMusic, gestorArtist);
 
-    // Parse de usuários
+    //parse de usuários
     parse_user(path, gestorUser, gestorMusic);
 }
 
@@ -111,8 +111,6 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
 
             fclose(outputQ3);
         } 
-        // Ignora Query inválida
-        // Criar um ficheiro vazio?
         else continue;
      
     }

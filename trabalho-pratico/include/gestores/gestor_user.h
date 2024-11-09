@@ -7,8 +7,12 @@
 #include <glib.h>
 #include <stdbool.h>
 
+//estrutura de gestor de utilizadores.
 typedef struct gestor_user GestorUser;
+
+//estrutura do iterador de utilizadores.
 typedef struct user_iterator UserIterator;
+
 typedef void (*GHFunc)(void *key, void *value, void *user_data);
 
 // função para criar uma tabela de utilizadores.

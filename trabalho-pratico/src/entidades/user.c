@@ -1,6 +1,7 @@
 #include "../../include/entidades/user.h"
 #include "../../include/gestores/gestor_user.h"
 
+// Forma de enunciar a entidade utilizador.
 struct user {
     char* username;
     char* email;
@@ -236,6 +237,7 @@ void setUserNumLikedMusics(User* u, int num_liked_musics){
     u->num_liked_musics = num_liked_musics;
 }
 
+// função que passa o tipo de subscrição em string para o tipo de enum.
 SubscriptionType stringToSubscriptionType(char* subType){
     if(strcmp(subType, "normal") == 0){
         return NORMAL;

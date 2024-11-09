@@ -1,5 +1,6 @@
 #include "../../include/entidades/music.h"
 
+// Forma de enunciar a entidade música.
 struct music {
     long int id;
     char* title;

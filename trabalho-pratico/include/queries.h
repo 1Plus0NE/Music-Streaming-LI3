@@ -10,9 +10,6 @@
 #include "entidades/discography.h"
 #include <string.h>
 
-// função que calcula a idade através de uma data de nascimento dada como argumento.
-int calculaIdade(char* birthdate);
-
 // função que responde á query1.
 void query1(char* user_username, GestorUser* gestorUser, FILE* output_file);
 

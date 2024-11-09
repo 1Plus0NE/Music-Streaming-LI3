@@ -1,7 +1,6 @@
 #ifndef USER_H
 #define USER_H
 #ifndef _DEFAULT_SOURCE
-#define _DEFAULT_SOURCE
 #endif
 #include <stdio.h>
 #include <string.h>
@@ -12,6 +11,7 @@
 // Forma de enunciar a entidade utilizador.
 typedef struct user User;
 
+//enum que define as formas do tipo de subscrição de utilizador.
 typedef enum {
     PREMIUM,
     NORMAL
@@ -64,6 +64,7 @@ void setUserLikedMusics(User* u, long int* liked_musics_id, int num_liked_musics
 
 void setUserNumLikedMusics(User* u, int num_liked_musics);
 
+// função que passa o tipo de subscrição em string para o tipo de enum.
 SubscriptionType stringToSubscriptionType(char* subType);
 
 #endif

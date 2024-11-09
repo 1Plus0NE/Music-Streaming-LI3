@@ -1,5 +1,6 @@
 #include "../../include/gestores/gestor_artist.h"
 
+//estrutura do gestor de artistas.
 struct gestor_artist {
     GHashTable* table;
 };
