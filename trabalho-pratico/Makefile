@@ -26,24 +26,31 @@ PARSER = $(PARSER_DIR)/parser_artist.c $(PARSER_DIR)/parser_music.c $(PARSER_DIR
 QUERIES = $(SRC_DIR)/queries.c
 UTILS = $(SRC_DIR)/utils.c
 MAIN = $(SRC_DIR)/main.c
+TESTES_SRC = $(SRC_DIR)/programa-testes.c
 
 SRC_PRINCIPAL = $(ENTIDADES_SRC) $(GESTORES_SRC) $(PARSER) $(QUERIES) $(UTILS) $(MAIN)
+SRC_TESTES = $(ENTIDADES_SRC) $(GESTORES_SRC) $(PARSER) $(QUERIES) $(UTILS) $(TESTES_SRC)
 
 OBJ_PRINCIPAL = $(SRC_PRINCIPAL:.c=.o)
+OBJ_TESTES = $(SRC_TESTES:.c=.o)
 
 INCLUDE_DIR = $(SRC_DIR)
 
 # Compilar todos os execs
-all: $(PRINCIPAL)
+all: $(PRINCIPAL) $(TESTES)
 
 # Criação do exec principal
 $(PRINCIPAL): $(OBJ_PRINCIPAL)
 	$(CC) $(CFLAGS) -I$(INCLUDE_DIR) -I$(ENTIDADES_INCLUDE_DIR) -I$(GESTORES_INCLUDE_DIR) -o $(PRINCIPAL) $(OBJ_PRINCIPAL) `pkg-config --libs glib-2.0`
+
+# Criação do exec de testes
+$(TESTES): $(OBJ_TESTES)
+	$(CC) $(CFLAGS) -I$(INCLUDE_DIR) -I$(ENTIDADES_INCLUDE_DIR) -I$(GESTORES_INCLUDE_DIR) -o $(TESTES) $(OBJ_TESTES) `pkg-config --libs glib-2.0`
 
 %.o: %.c
 	$(CC) $(CFLAGS) -I$(INCLUDE_DIR) -I$(ENTIDADES_INCLUDE_DIR) -I$(GESTORES_INCLUDE_DIR) -c $< -o $@
 
 # Limpar os objetos e os execs
 clean:
-	rm -f $(OBJ_PRINCIPAL) $(PRINCIPAL)
+	rm -f $(OBJ_PRINCIPAL) $(OBJ_TESTES) $(PRINCIPAL) $(TESTES)
 	rm -f resultados/*
