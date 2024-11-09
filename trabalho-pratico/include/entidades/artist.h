@@ -20,9 +20,6 @@ typedef enum {
 // Função para criar uma estrutura da entidade artista parametrizada.
 Artist* createArtist(long int id, char* name, char* description, float recipe_per_stream, long int* id_constituent, int num_constituent, char* country, ArtistType type);
 
-// Função que faz a validação de um artista.
-int verify_artist(Artist* artist);
-
 // Função para libertar a memória de uma entidade do tipo artista.
 void freeArtist(Artist* artist);
 

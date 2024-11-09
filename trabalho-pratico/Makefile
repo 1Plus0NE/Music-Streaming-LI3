@@ -11,16 +11,18 @@ CFLAGS = -Wall -Wextra -std=gnu11 -g `pkg-config --cflags glib-2.0`
 SRC_DIR = src
 ENTIDADES_DIR = $(SRC_DIR)/entidades
 GESTORES_DIR = $(SRC_DIR)/gestores
+PARSER_DIR = $(SRC_DIR)/parser
 OTHER_DIR = $(SRC_DIR)
 
 # Diretorias dos headers
 ENTIDADES_INCLUDE_DIR = $(INCLUDE_DIR)/entidades
 GESTORES_INCLUDE_DIR = $(INCLUDE_DIR)/gestores
+PARSER_INCLUDE_DIR = $(INCLUDE_DIR)/parser
 OTHER_DIR = $(INCLUDE_DIR)
 
 ENTIDADES_SRC = $(ENTIDADES_DIR)/artist.c $(ENTIDADES_DIR)/music.c $(ENTIDADES_DIR)/user.c $(ENTIDADES_DIR)/discography.c
 GESTORES_SRC = $(GESTORES_DIR)/gestor_artist.c $(GESTORES_DIR)/gestor_music.c $(GESTORES_DIR)/gestor_user.c
-PARSER = $(SRC_DIR)/parser.c
+PARSER = $(PARSER_DIR)/parser_artist.c $(PARSER_DIR)/parser_music.c $(PARSER_DIR)/parser_user.c $(PARSER_DIR)/parser.c
 QUERIES = $(SRC_DIR)/queries.c
 UTILS = $(SRC_DIR)/utils.c
 MAIN = $(SRC_DIR)/main.c

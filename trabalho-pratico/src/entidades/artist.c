@@ -70,66 +70,6 @@ Artist* createArtist(long int id, char* name, char* description, float recipe_pe
     return artist;
 }
 
-// Função que faz a validação de um artista.
-int verifyLineArtist(char* line){
-    char* info;
-    char* token = line;
-    char* id_constituent_check = NULL;
-    char* type_str;
-
-    for(int i = 0; i < 7; i++){
-        info = strsep(&token, ";");
-
-        if(info){
-            switch(i){
-                case 0:
-                    if(!remove_aspas(info) || atoi(remove_aspas(info)) <= 0){
-                        return 1;
-                    }
-                    break;
-                case 1:
-                    if(!remove_aspas(info) || strlen(remove_aspas(info)) == 0){
-                        return 1;
-                    }
-                    break;
-                case 2:
-                    if(!remove_aspas(info) || strlen(remove_aspas(info)) == 0){
-                        return 1;
-                    }
-                    break;
-                case 3:
-                    if(atof(remove_aspas(info)) < 0){
-                        return 1;
-                    }
-                    break;
-                case 4:
-                    if(remove_aspas(info) && strlen(remove_aspas(info)) > 0){
-                        id_constituent_check = "GRUPO";
-                    }else{
-                        id_constituent_check = "INDIVIDUAL";
-                    }
-                    break;
-                case 5:
-                    if(!remove_aspas(info) || strlen(remove_aspas(info)) == 0){
-                        return 1;
-                    }
-                    break;
-                case 6:
-                    type_str = remove_aspas(info);
-                    if((strcmp(type_str, "INDIVIDUAL") != 0 && strcmp(type_str, "GRUPO") != 0) || strcmp(type_str, id_constituent_check) != 0){
-                        return 1;
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }else{
-            return 1;
-        }
-    }
-    return 0;
-}
-
 //função que passa uma string do tipo do artista para o enum type
 ArtistType stringToArtistType(char* type_str){
     if(strcmp(type_str, "individual") == 0){

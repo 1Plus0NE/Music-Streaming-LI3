@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "../include/parser.h"
+#include "../include/parser/parser.h"
 #include "../include/queries.h"
 #define OUTPUT_DIR "../resultados"
 
@@ -18,12 +18,8 @@ int main(int argc, char* argv[]){
 
     errosDir();
     
-    parse_artist(dataDir, gestorArtist);
-    printf("parse_artist bem sucedido\n");
-    parse_music(dataDir, gestorMusic, gestorArtist);
-    printf("parse_music bem sucedido\n");
-    parse_user(dataDir, gestorUser, gestorMusic);
-    printf("parse_user bem sucedido\n");
+    parse_all(dataDir, gestorArtist, gestorMusic, gestorUser);
+    printf("parse bem sucedido\n");
 
     if(queriesFile){
         parse_queries(queriesFile, gestorUser, gestorMusic, gestorArtist);
