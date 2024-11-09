@@ -9,9 +9,9 @@ struct discography {
     struct discography* next;
 };
 
-// Função para ordenar a discografia por durações
+// Função para ordenar a discografia por durações, e por ordem crescente de id, se necessário
 void sortByDuration(Discography** head){
-    if(*head == NULL || (*head)->next == NULL){
+    if (*head == NULL || (*head)->next == NULL) {
         // Lista vazia ou com um único elemento não precisa de ordenação
         return;
     }
@@ -20,14 +20,16 @@ void sortByDuration(Discography** head){
     Discography *ptr1;
     Discography *lptr = NULL;
 
-    do {
+    // While dentro de um do-while para simplificar verificação a 1 função
+    do{
         swapped = 0;
         ptr1 = *head;
 
-        while (ptr1->next != lptr) {
-            // Mudança na condição de comparação para ordem decrescente
-            if (ptr1->duration < ptr1->next->duration) {
-                // Trocar os dados dos artistas
+        while (ptr1->next != lptr){
+            // Duraçõess decrescentes || em caso de durações iguais, ordena por ordem crescente de id
+            if (ptr1->duration < ptr1->next->duration || (ptr1->duration == ptr1->next->duration && ptr1->id > ptr1->next->id)){
+
+                // Troca os dados dos artistas
                 long int tempId = ptr1->id;
                 char* tempName = ptr1->name;
                 char* tempCountry = ptr1->country;
@@ -54,6 +56,7 @@ void sortByDuration(Discography** head){
         lptr = ptr1; // O último elemento já está ordenado
     } while (swapped);
 }
+
 
 // Função para incrementar em segundos, a duração da discografia de um artista
 void durationAdd(Discography* disco, const char* duration, long int id){
