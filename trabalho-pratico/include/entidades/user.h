@@ -66,7 +66,4 @@ void setUserNumLikedMusics(User* u, int num_liked_musics);
 
 SubscriptionType stringToSubscriptionType(char* subType);
 
-// Função que dado um user, verifica se está compreendido entre os intervalos de idades
-int isUserInRange(User *user, int minAge, int maxAge);
-
 #endif

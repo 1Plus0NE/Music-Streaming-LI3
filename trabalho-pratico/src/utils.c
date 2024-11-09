@@ -374,7 +374,7 @@ void sortGenresByLikes(char* genres[], long int genre_likes[], int genre_count){
 // Função que verifica se uma dada idade está compreendida entre os intervalos de idades
 int isAgeInRange(char* age_str, int minAge, int maxAge){
     int age = calculaIdade(age_str);
-    free(age_str);
+    free(age_str); // assumimos que recebemos um strdup de age_str por isso vamos fazer free nesta função
     return age >= minAge && age <= maxAge;
 }
 

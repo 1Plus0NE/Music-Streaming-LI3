@@ -246,11 +246,3 @@ SubscriptionType stringToSubscriptionType(char* subType){
         exit(EXIT_FAILURE);
     }
 }
-
-// Função que dado um user, verifica se está compreendido entre os intervalos de idades
-int isUserInRange(User *user, int minAge, int maxAge){
-    char* tmp_userAge = getUserBirthDate(user);
-    int userAge = calculaIdade(tmp_userAge);
-    free(tmp_userAge);
-    return userAge >= minAge && userAge <= maxAge;
-}
