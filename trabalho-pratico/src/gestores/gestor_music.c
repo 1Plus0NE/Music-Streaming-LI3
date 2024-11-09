@@ -45,7 +45,7 @@ Music* searchMusic(GestorMusic* gestorMusic, long int id){
 }
 
 // função que aplica uma função callback em cada item da tabela de músicas.
-void foreachMusic(GestorMusic* gestorMusic, GFunc func, gpointer user_data){
+void foreachMusic(GestorMusic* gestorMusic, GHFunc func, gpointer user_data){
     if (gestorMusic && gestorMusic->table && func){
         g_hash_table_foreach(gestorMusic->table, func, user_data);
     }
@@ -82,6 +82,31 @@ void artistDurationAdd(G_GNUC_UNUSED gpointer musicId, gpointer musicData, gpoin
         durationAdd(disco, duration, musicArtistsId[i]);
     }
     free(duration);
+}
+
+// Função responsável por popular o array de generos e contar o numero total de likes no array de likes
+void countUserLikedMusics(GestorMusic* gestorMusic, char* genres[], long int genre_likes[], int* genre_count, long int* likedMusics, int numLikedMusics){
+    Music* music = NULL;
+    char* genre;
+    int index;
+
+    for(int i=0;i<numLikedMusics;i++){
+        music = searchMusic(gestorMusic, likedMusics[i]);
+
+        if(music != NULL){ // em principio nunca falha porque as liked musics do user ja sao verificadas no parsing 
+            genre = getMusicGenre(music);
+            index = getGenreIndex(genre, genres, *genre_count);
+
+            if(index == -1 && *genre_count < MAX_GENRES){
+                genres[*genre_count] = strdup(genre);
+                genre_likes[*genre_count] = 1;
+                (*genre_count)++;
+            }
+            else genre_likes[index]++;  
+            free(genre);
+        }
+    }
+    free(likedMusics); // Free do array de liked musics
 }
 
 // Função que verifica se todos os ids das musicas pertencem à tabela

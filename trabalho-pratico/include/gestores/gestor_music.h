@@ -7,8 +7,10 @@
 #include "../entidades/discography.h"
 #include <glib.h>
 #include <stdbool.h>
+#define MAX_GENRES 10
 
 typedef struct gestor_music GestorMusic;
+typedef void (*GHFunc)(void *key, void *value, void *user_data);
 
 // função para criar uma tabela de músicas.
 GestorMusic* createGestorMusic();
@@ -23,7 +25,7 @@ void removeMusic(GestorMusic* gestorMusic, long int id);
 Music* searchMusic(GestorMusic* gestorMusic, long int id);
 
 // função que aplica uma função callback em cada item da tabela de músicas.
-void foreachMusic(GestorMusic* gestorMusic, GFunc func, gpointer user_data);
+void foreachMusic(GestorMusic* gestorMusic, GHFunc func, gpointer user_data);
 
 // Função para liberar a memória da tabela de músicas.
 void freeGestorMusic(GestorMusic* gestorMusic);
@@ -33,6 +35,9 @@ Discography* updateArtistsDurationFromMusic(GestorMusic* gestorMusic, Discograph
 
 // Função para processar cada música e atualizar a duração nos artistas correspondentes
 void artistDurationAdd(G_GNUC_UNUSED gpointer musicId, gpointer musicData, gpointer discoPtr);
+
+// Função responsável por popular o array de generos e contar o numero total de likes no array de likes
+void countUserLikedMusics(GestorMusic* gestorMusic, char* genres[], long int genre_likes[], int* genre_count, long int* likedMusics, int numLikedMusics);
 
 // Função que verifica se todos os ids das musicas pertencem à tabela
 bool validateMusicId(GestorMusic* gestorMusic, long int* id, int N);

@@ -342,6 +342,42 @@ char* secondsToString(int totSeconds){
     return timeString;
 }
 
+// Função que dado um genero, retorna a posição do genero no array
+int getGenreIndex(char *genre, char **genre_array, int genre_count){
+    for(int i = 0; i < genre_count; i++){
+        if(strcmp(genre_array[i], genre) == 0){
+            return i;
+        }
+    }
+    return -1;
+}
+
+// Função que faz sorting do array de generos e o array de likes em função do maior numero de likes
+void sortGenresByLikes(char* genres[], long int genre_likes[], int genre_count){
+    for(int i=0;i<genre_count - 1;i++){
+        for(int j = i+1;j<genre_count;j++){
+            if(genre_likes[i] < genre_likes[j]){
+                // Swap generos
+                char* temp_genre = genres[i];
+                genres[i] = genres[j];
+                genres[j] = temp_genre;
+
+                // Swap likes
+                long int temp_likes = genre_likes[i];
+                genre_likes[i] = genre_likes[j];
+                genre_likes[j] = temp_likes;
+            }
+        }
+    }
+}
+
+// Função que verifica se uma dada idade está compreendida entre os intervalos de idades
+int isAgeInRange(char* age_str, int minAge, int maxAge){
+    int age = calculaIdade(age_str);
+    free(age_str);
+    return age >= minAge && age <= maxAge;
+}
+
 // Função que cria a diretoria "dataset-errors" e respetivos ficheiros com cabeçalhos
 void errosDir(){
      FILE *errors;

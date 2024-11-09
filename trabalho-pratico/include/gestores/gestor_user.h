@@ -8,8 +8,8 @@
 #include <stdbool.h>
 
 typedef struct gestor_user GestorUser;
-
 typedef struct user_iterator UserIterator;
+typedef void (*GHFunc)(void *key, void *value, void *user_data);
 
 // função para criar uma tabela de utilizadores.
 GestorUser* createGestorUser();
@@ -24,7 +24,7 @@ void removeUser(GestorUser* gestorUser, char* username);
 User* searchUser(GestorUser* gestorUser, char* username);
 
 // função que itera sobre todos os utilizadores na tabela de utilizadores
-void foreachUser(GestorUser* gestorUser, GFunc func, gpointer user_data);
+void foreachUser(GestorUser* gestorUser, GHFunc func, gpointer user_data);
 
 // Função que cria um iterator para percorrer os elementos da tabela de utilizadores
 UserIterator* createUserIterator(GestorUser* gestorUser);

@@ -9,6 +9,7 @@
 #include <glib.h>
 
 typedef struct gestor_artist GestorArtist;
+typedef void (*GHFunc)(void *key, void *value, void *user_data);
 
 // função para criar uma tabela de artistas.
 GestorArtist* createGestorArtist();
@@ -23,7 +24,7 @@ void removeArtist(GestorArtist* gestorArtist, long int id);
 Artist* searchArtist(GestorArtist* gestorArtist, long int id);
 
 // função que aplica uma função callback em cada item da tabela de artistas.
-void foreachArtist(GestorArtist* gestorArtist, GFunc func, gpointer user_data);
+void foreachArtist(GestorArtist* gestorArtist, GHFunc func, gpointer user_data);
 
 // função que libera a memória alocada para a tabela de artistas.
 void freeGestorArtist(GestorArtist* gestorArtist);

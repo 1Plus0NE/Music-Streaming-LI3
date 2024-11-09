@@ -53,7 +53,7 @@ User* searchUser(GestorUser* gestorUser, char* username){
 }
 
 // função que itera sobre todos os utilizadores na tabela de utilizadores
-void foreachUser(GestorUser* gestorUser, GFunc func, gpointer user_data){
+void foreachUser(GestorUser* gestorUser, GHFunc func, gpointer user_data){
     if(gestorUser && gestorUser->table){
         g_hash_table_foreach(gestorUser->table, func, user_data);
     }

@@ -84,70 +84,6 @@ void query2b(int nArtists, char* country, Discography* disco, FILE* output){
     }
 }
 
-// Função que Dado um user, verifica se está compreendido entre os intervalos de idades
-int isUserInRange(User *user, int minAge, int maxAge){
-    char* tmp_userAge = getUserBirthDate(user);
-    int userAge = calculaIdade(tmp_userAge);
-    free(tmp_userAge);
-    return userAge >= minAge && userAge <= maxAge;
-}
-
-// Função que dado um genero, retorna a posição do genero no array
-int getGenreIndex(char *genre, char **genre_array, int genre_count){
-    for(int i = 0; i < genre_count; i++){
-        if(strcmp(genre_array[i], genre) == 0){
-            return i;
-        }
-    }
-    return -1;
-}
-
-// Função responsável por popular o array de generos e contar o numero total de likes no array de likes
-void countUserLikedMusics(User* user, GestorMusic* gestorMusic, char* genres[], long int genre_likes[], int* genre_count){
-    long int* likedMusics = getUserLikedMusics(user);
-    int numLikedMusics = getUserNumLikedMusics(user);
-    Music* music = NULL;
-    char* genre;
-    int index;
-
-    for(int i=0;i<numLikedMusics;i++){
-        music = searchMusic(gestorMusic, likedMusics[i]);
-
-        if(music != NULL){ // em principio nunca falha porque as liked musics do user ja sao verificadas no parsing 
-            genre = getMusicGenre(music);
-            index = getGenreIndex(genre, genres, *genre_count);
-
-            if(index == -1 && *genre_count < MAX_GENRES){
-                genres[*genre_count] = strdup(genre);
-                genre_likes[*genre_count] = 1;
-                (*genre_count)++;
-            }
-            else genre_likes[index]++;  
-            free(genre);
-        }
-    }
-    free(likedMusics); // Free do array de liked musics do user 
-}
-
-// Função que faz sorting do array de generos e o array de likes em função do maior numero de likes
-void sortGenresByLikes(char* genres[], long int genre_likes[], int genre_count){
-    for(int i=0;i<genre_count - 1;i++){
-        for(int j = i+1;j<genre_count;j++){
-            if(genre_likes[i] < genre_likes[j]){
-                // Swap generos
-                char* temp_genre = genres[i];
-                genres[i] = genres[j];
-                genres[j] = temp_genre;
-
-                // Swap likes
-                long int temp_likes = genre_likes[i];
-                genre_likes[i] = genre_likes[j];
-                genre_likes[j] = temp_likes;
-            }
-        }
-    }
-}
-
 // Função responsável da query 3
 void query3(int ageMin, int ageMax, GestorUser* gestorUser, GestorMusic* gestorMusic, FILE* output){
     
@@ -163,15 +99,20 @@ void query3(int ageMin, int ageMax, GestorUser* gestorUser, GestorMusic* gestorM
     char *genres[MAX_GENRES];
     long int genre_likes[MAX_GENRES] = {0};
     int genre_count = 0;
-
+    long int* likedMusics;
+    int numLikedMusics = 0;
+    char* age_str;
     // Flag para caso os intervalos de idades sejam validos mas não haja users compreendidos nessas idades
     int flag = 0;
 
     // Iterar pela table de users
     while((user = getNextUser(user_iterator)) != NULL){
-        if(isUserInRange(user, ageMin, ageMax)){
+        age_str = getUserBirthDate(user);
+        if(isAgeInRange(age_str, ageMin, ageMax)){
             flag = 1;
-            countUserLikedMusics(user, gestorMusic, genres, genre_likes, &genre_count);
+            likedMusics = getUserLikedMusics(user);
+            numLikedMusics = getUserNumLikedMusics(user);
+            countUserLikedMusics(gestorMusic, genres, genre_likes, &genre_count, likedMusics, numLikedMusics);
         }
     }
 

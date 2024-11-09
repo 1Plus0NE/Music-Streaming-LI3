@@ -46,6 +46,15 @@ void removeEnters(char *input);
 // Função para voltar a transformar o total de segundos na discografia no formato "hh:mm:ss"
 char* secondsToString(int totSeconds);
 
+// Função que dado um genero, retorna a posição do genero no array
+int getGenreIndex(char *genre, char **genre_array, int genre_count);
+
+// Função que faz sorting do array de generos e o array de likes em função do maior numero de likes
+void sortGenresByLikes(char* genres[], long int genre_likes[], int genre_count);
+
+// Função que verifica se uma dada idade está compreendida entre os intervalos de idades
+int isAgeInRange(char* age_str, int minAge, int maxAge);
+
 // Função que cria a diretoria "dataset-errors" e respetivos ficheiros com cabeçalhos
 void errosDir();
 
