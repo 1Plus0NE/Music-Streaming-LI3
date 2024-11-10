@@ -15,7 +15,7 @@ void parse_all(char* path, GestorArtist* gestorArtist, GestorMusic* gestorMusic,
     parse_user(path, gestorUser, gestorMusic);
 }
 
-void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic, GestorArtist* gestorArtist){
+void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic, GestorArtist* gestorArtist, int measure_flag){
     char line[MAX_QUERYLINE];
     char* linePtr=NULL;
     FILE* queries;
@@ -33,6 +33,12 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
     int ageMin = 0; // Idade mínima para a query 3
     int ageMax = 0; // Idade máxima para a query 3
     
+    struct timespec query_start, query_end;
+    double total_time_query1 = 0;
+    double total_time_query2 = 0;
+    double total_time_query3 = 0;
+    double query_elapsed;
+
     // Abertura ficheiro de input das queries
     queries = fopen(path, "r");
     if(!queries){
@@ -72,7 +78,15 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
             // Tratamento da linha para a 1ª Query
             strsep(&linePtr, " "); // Ignora o id da Query e o espaço 
             user = strsep(&linePtr, "\n");
+
+            if(measure_flag) clock_gettime(CLOCK_REALTIME, &query_start);
             query1(user, gestorUser, outputQ1);
+            if(measure_flag){
+                clock_gettime(CLOCK_REALTIME, &query_end);
+                query_elapsed = (query_end.tv_sec - query_start.tv_sec) +
+                                (query_end.tv_nsec - query_start.tv_nsec) / 1e9;
+                total_time_query1 += query_elapsed;
+            }
             // Processo completo, fechar ficheiro
             fclose(outputQ1);
         }
@@ -86,9 +100,16 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
             strsep(&linePtr, " ");
             nArtists = atoi(strsep(&linePtr, " ")); // Numero de artistas
             country = remove_aspas(strsep(&linePtr, "\n")); // País sem aspas
-            // Substiruir os NULLs
-            if(country==NULL) query2(nArtists, disco, outputQ2); // query 2 sem especificação de país
+            
+            if(measure_flag) clock_gettime(CLOCK_REALTIME, &query_start);
+            if(country == NULL) query2(nArtists, disco, outputQ2); // query 2 sem especificação de país
             else query2b(nArtists, country, disco, outputQ2); // query 2 com país especificado
+            if(measure_flag){
+                clock_gettime(CLOCK_REALTIME, &query_end);
+                query_elapsed = (query_end.tv_sec - query_start.tv_sec) +
+                                (query_end.tv_nsec - query_start.tv_nsec) / 1e9;
+                total_time_query2 += query_elapsed;
+            }
             
             if(country != NULL){
                 free(country);
@@ -107,7 +128,15 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
             strsep(&linePtr, " ");
             ageMin = atoi(strsep(&linePtr, " "));
             ageMax = atoi(strsep(&linePtr, "\n"));
+
+            if(measure_flag) clock_gettime(CLOCK_REALTIME, &query_start);
             query3(ageMin, ageMax, gestorUser, gestorMusic, outputQ3);
+            if(measure_flag){
+                clock_gettime(CLOCK_REALTIME, &query_end);
+                query_elapsed = (query_end.tv_sec - query_start.tv_sec) +
+                                (query_end.tv_nsec - query_start.tv_nsec) / 1e9;
+                total_time_query3 += query_elapsed;
+            }
 
             fclose(outputQ3);
         } 
@@ -116,4 +145,14 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
     }
     freeDiscography(disco);
     fclose(queries);
+
+    // Para o modo de testes
+    if(measure_flag){
+        printf("Tempo de execucao da Query 1: %.6f segundos\n", total_time_query1);
+        printf("Tempo de execucao da Query 2: %.6f segundos\n", total_time_query2);
+        printf("Tempo de execucao da Query 3: %.6f segundos\n", total_time_query3);
+        double total_time = (total_time_query1 + total_time_query2 + total_time_query3)/3;
+        printf("Tempo medio de execucao: %.6f segundos\n", total_time);
+    }
+
 }

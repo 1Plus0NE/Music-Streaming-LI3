@@ -22,7 +22,7 @@ int main(int argc, char* argv[]){
     printf("parse bem sucedido\n");
 
     if(queriesFile){
-        parse_queries(queriesFile, gestorUser, gestorMusic, gestorArtist);
+        parse_queries(queriesFile, gestorUser, gestorMusic, gestorArtist, 0);
     }
     printf("Fim Queries\n");
 

@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
     clock_gettime(CLOCK_REALTIME, &start_time);
 
     // Execução das queries e comparação dos resultados com os esperados
-    parse_queries(queriesFile, gestorUser, gestorMusic, gestorArtist);
+    parse_queries(queriesFile, gestorUser, gestorMusic, gestorArtist, 1);
 
     // Caminho do arquivo de saída para comparar
     FILE *query_file = fopen(queriesFile, "r");
@@ -38,7 +38,6 @@ int main(int argc, char *argv[]) {
 
     // Variáveis de contagem e análise de resultados
     int correct_count = 0;
-    int total_queries = 0;
     char query_line[MAX_LINE_LENGTH];
     int query_number = 1;
 
@@ -72,7 +71,6 @@ int main(int argc, char *argv[]) {
         }
 
         query_number++;
-        total_queries++;
     }
     fclose(query_file);
 
@@ -81,13 +79,12 @@ int main(int argc, char *argv[]) {
     double program_time = (end_time.tv_sec - start_time.tv_sec) + (end_time.tv_nsec - start_time.tv_nsec) / 1e9;
 
     // Relatório final
-    printf("\nTempo médio por query: %.4f segundos\n", program_time / total_queries);
     printf("Tempo total do programa: %.4f segundos\n", program_time);
 
     // Uso de memória
     struct rusage r_usage;
     getrusage(RUSAGE_SELF, &r_usage);
-    printf("Memória utilizada: %ld KB\n", r_usage.ru_maxrss);
+    printf("Memória utilizada: %ld MB\n", (r_usage.ru_maxrss/1024));
 
     // Libera memória dos gestores
     freeGestorArtist(gestorArtist);
