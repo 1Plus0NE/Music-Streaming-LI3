@@ -49,14 +49,9 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
 
     // Discografia antes de resolver a Query2 
     disco = fillWithArtists(gestorArtist, disco);
-    printf("Preenchimento disco com artistas bem sucedido\n");
-
     disco = updateArtistsDurationFromMusic(gestorMusic, disco);
-    printf("Duração de cada discografia bem sucedida\n");
-
+ 
     sortByDuration(&disco);
-    printf("Ordenação disco bem sucedida\n");
-    printf("Inicio Queries\n");
     // discografia pronta para a 2ª query
 
     // Leitura query a query

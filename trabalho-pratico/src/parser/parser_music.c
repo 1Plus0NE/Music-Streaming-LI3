@@ -23,8 +23,6 @@ void parse_music(char* path, GestorMusic* gestorMusic, GestorArtist* gestorArtis
     char* year_str;
     int year;
     char* lyrics;
-    
-    int erros = 0;
 
     snprintf(filename,MAX_FILENAME,"%s/musics.csv",path); //abrir ficheiro de musicas
 
@@ -65,7 +63,6 @@ void parse_music(char* path, GestorMusic* gestorMusic, GestorArtist* gestorArtis
         }
        
         else{
-            erros++;
             writeErrors(original_line, 2);
         }   
 
@@ -77,6 +74,5 @@ void parse_music(char* path, GestorMusic* gestorMusic, GestorArtist* gestorArtis
         free(lyrics);
 
     }
-    printf("Foram encontrados %d erros\n",erros);
     fclose(musics);
 }

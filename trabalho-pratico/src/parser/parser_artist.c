@@ -10,7 +10,6 @@ void parse_artist(char* path, GestorArtist* gestorArtist){
     char line[MAX_LINE];
     char original_line[MAX_LINE];
     char *tmp_line=NULL;
-    int erros = 0;
 
     //argumentos para a struct de artistas
     char *id_str;
@@ -61,7 +60,6 @@ void parse_artist(char* path, GestorArtist* gestorArtist){
         }
        
         else{
-            erros++;
             writeErrors(original_line, 1);
         }   
         free(id_str);
@@ -71,6 +69,5 @@ void parse_artist(char* path, GestorArtist* gestorArtist){
         free(country);
         free(type_str);
     }
-    printf("Foram encontrados %d erros.\n", erros);
     fclose(artists);
 }
