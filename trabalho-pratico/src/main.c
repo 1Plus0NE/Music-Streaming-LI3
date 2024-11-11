@@ -19,12 +19,10 @@ int main(int argc, char* argv[]){
     errosDir();
     
     parse_all(dataDir, gestorArtist, gestorMusic, gestorUser);
-    printf("parse bem sucedido\n");
 
     if(queriesFile){
         parse_queries(queriesFile, gestorUser, gestorMusic, gestorArtist, 0);
     }
-    printf("Fim Queries\n");
 
     freeGestorArtist(gestorArtist);
     freeGestorMusic(gestorMusic);

@@ -77,9 +77,6 @@ void parse_user(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic){
     long int* liked_musics_id_converted;
     int num_liked_musics=0;
 
-    int parsed = 0;
-    int erros = 0;
-
     snprintf(filename,MAX_FILENAME,"%s/users.csv", path);
 
     users = fopen(filename, "r");
@@ -121,15 +118,11 @@ void parse_user(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic){
             free(birth_date);
             free(country);
             free(tmpSub);
-            parsed++;
         }
         else{
-            erros++;
             writeErrors(original_line, 3);
         } 
 
     }
-    printf("Foram lidos %d dados e foram encontrados %d erros.\n", parsed, erros);
-
     fclose(users);
 }
