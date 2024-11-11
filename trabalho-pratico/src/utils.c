@@ -60,19 +60,19 @@ int strDigit(char *str){
 
 // função para verificar se o nome é inteiramente carateres.
 int nameVerify(char *name){
-    
+    int len = 0;
     // Caso vazio
     if(!name){
-        return 1;
+        return 0;
     }
 
     while(*name){
-        if(!isalpha(*name)){
-            return 1;
+        if(isalpha(*name)){
+            len++;
         }
         name++;
     }
-    return 0;
+    return len;
 }
 
 // função que valida um endereço de email, dividindo por tokens e verificando se e qual o conteudo desses tokens.
@@ -111,12 +111,17 @@ int emailVerify(char *email){
         }
     }
 
-    if(nameVerify(lDomain) != 0 || strlen(lDomain)<1){
+    int lDomain_verified = nameVerify(lDomain);
+    if(lDomain_verified<1){
         free(original_cpy);
         return 1;
     }
 
-    if(nameVerify(rDomain) != 0 || strlen(rDomain)<2 || strlen(rDomain)>3){
+    // demasiadas iteracoes 
+    //if(nameVerify(rDomain) != 0 || strlen(rDomain)<2 || strlen(rDomain)>3){
+
+    int rDomain_verified = nameVerify(rDomain);
+    if(!nameVerify(rDomain)|| rDomain_verified!= 3){
         free(original_cpy);
         return 1;
     }
@@ -297,9 +302,10 @@ long int* convertID(const char *input, int *count){
     while ((token = strsep(&input_copy, ",")) != NULL){
         remove_espacos(token);
         // Remover as plicas
-        if (token[0] == '\'' && token[strlen(token) - 1] == '\'' ){
+        int token_len = strlen(token);
+        if (token[0] == '\'' && token[token_len - 1] == '\'' ){
             token++;
-            token[strlen(token) - 1] = '\0'; 
+            token[token_len - 1] = '\0'; 
         }
 
         // Convertemos o ID para um long int e damos store no array

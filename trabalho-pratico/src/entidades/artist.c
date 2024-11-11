@@ -194,7 +194,7 @@ char* typeToString(ArtistType type){
             char* typeStr = (char*)malloc(11 * sizeof(char));
             strcpy(typeStr, "individual");
             return typeStr;
-            }  
+            }
         case GRUPO:{
             char* typeStr = (char*)malloc(6 * sizeof(char));
             strcpy(typeStr, "group");
