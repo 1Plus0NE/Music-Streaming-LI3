@@ -5,7 +5,7 @@
 //função responsável por remover as aspas.
 char* remove_aspas(char* str) {
     if (!str) return NULL;  // Verifica se a string é nula
-    
+
     char* result = strdup(str);
     if(!result){
         return NULL;
@@ -24,7 +24,7 @@ char* remove_aspas(char* str) {
     if(result[len - 1] == '"'){
         result[len - 1] = '\0';
     }
-    
+
     return result;  // Retorna a string sem alterações se não houver aspas
 }
 
@@ -45,7 +45,7 @@ char* remove_espacos(char* input){
 
 // função que verifica se toda a string é composta por dígitos
 int strDigit(char *str){
-    
+
     if(!str){
         return 1;
     }
@@ -60,19 +60,19 @@ int strDigit(char *str){
 
 // função para verificar se o nome é inteiramente carateres.
 int nameVerify(char *name){
-    int len = 0;
+    
     // Caso vazio
     if(!name){
-        return 0;
+        return 1;
     }
 
     while(*name){
-        if(isalpha(*name)){
-            len++;
+        if(!isalpha(*name)){
+            return 1;
         }
         name++;
     }
-    return len;
+    return 0;
 }
 
 // função que valida um endereço de email, dividindo por tokens e verificando se e qual o conteudo desses tokens.
@@ -111,17 +111,12 @@ int emailVerify(char *email){
         }
     }
 
-    int lDomain_verified = nameVerify(lDomain);
-    if(lDomain_verified<1){
+    if(nameVerify(lDomain) != 0 || strlen(lDomain)<1){
         free(original_cpy);
         return 1;
     }
 
-    // demasiadas iteracoes 
-    //if(nameVerify(rDomain) != 0 || strlen(rDomain)<2 || strlen(rDomain)>3){
-
-    int rDomain_verified = nameVerify(rDomain);
-    if(!nameVerify(rDomain)|| rDomain_verified!= 3){
+    if(nameVerify(rDomain) != 0 || strlen(rDomain)<2 || strlen(rDomain)>3){
         free(original_cpy);
         return 1;
     }
@@ -181,7 +176,7 @@ int birthDateVerify(char* birth_date){
         free(original_cpy);
         return 1;
     }
-    
+
     free(original_cpy);
     return 0;
 }
@@ -302,10 +297,9 @@ long int* convertID(const char *input, int *count){
     while ((token = strsep(&input_copy, ",")) != NULL){
         remove_espacos(token);
         // Remover as plicas
-        int token_len = strlen(token);
-        if (token[0] == '\'' && token[token_len - 1] == '\'' ){
+        if (token[0] == '\'' && token[strlen(token) - 1] == '\'' ){
             token++;
-            token[token_len - 1] = '\0'; 
+            token[strlen(token) - 1] = '\0'; 
         }
 
         // Convertemos o ID para um long int e damos store no array
@@ -314,7 +308,7 @@ long int* convertID(const char *input, int *count){
     }
 
     free(input_copy_index);  // Libertamos a memoria do pointer original
-    
+
     return convertedIDs;
 }
 

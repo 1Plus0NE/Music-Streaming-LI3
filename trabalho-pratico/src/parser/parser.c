@@ -147,7 +147,7 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
         printf("Tempo de execucao da Query 2: %.6f segundos\n", total_time_query2);
         printf("Tempo de execucao da Query 3: %.6f segundos\n", total_time_query3);
         double total_time = (total_time_query1 + total_time_query2 + total_time_query3)/3;
-        printf("Tempo medio de execucao: %.6f segundos\n", total_time);
+        printf("Tempo medio de execucao de cada query: %.6f segundos\n", total_time);
     }
 
 }
