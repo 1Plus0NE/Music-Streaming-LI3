@@ -6,6 +6,7 @@ struct music {
     char* title;
     long int* artist_id;
     int num_artists;
+    long int album_id;
     char* duration;
     char* genre;
     int year;
@@ -13,7 +14,7 @@ struct music {
 };
 
 // Função para criar uma estrutura da entidade música parametrizada.
-Music* createMusic(long int id, char* title, long int* artist_id, int num_artists, char* duration, char* genre, int year, char* lyrics){
+Music* createMusic(long int id, char* title, long int* artist_id, int num_artists, long int album_id, char* duration, char* genre, int year, char* lyrics){
     Music* music = (Music*)malloc(sizeof(Music));
     if(!music){
         perror("erro ao alocar memória para a música.\n");
@@ -42,6 +43,8 @@ Music* createMusic(long int id, char* title, long int* artist_id, int num_artist
         music -> artist_id[i] = artist_id[i];
     }
     music -> num_artists = num_artists;
+
+    music -> album_id = album_id;
 
     music -> duration = malloc(strlen(duration) + 1);
     if(!music -> duration){
@@ -103,6 +106,11 @@ int getMusicNumArtists(Music* m){
     return m->num_artists;
 }
 
+//Função que retorna o ID do album ao qual a música pertence
+long int* getMusicAlbumId(Music* m){
+    return m->album_id ? &(m->album_id) : NULL;
+}
+
 // Função que retorna a duração da música
 char* getMusicDuration(Music* m){
     return m->duration ? strdup(m->duration) : NULL;
@@ -126,7 +134,7 @@ char* getMusicLyrics(Music* m){
 // SETTERS
 
 // Função que altera o ID da música
-void setMusicID(Music* m, int newID){
+void setMusicID(Music* m, long int newID){
     m->id = newID;
 }
 
@@ -151,6 +159,11 @@ void setMusicArtistIDs(Music* m, long int* newArtistID, int newNumArtists){
     }
     memcpy(m->artist_id, newArtistID, newNumArtists * sizeof(long int));
     m->num_artists = newNumArtists;
+}
+
+// Função que altera o ID do album ao qual a música pertence.
+void setMusicAlbumId(Music* m, long int newAlbumId){
+    m->album_id = newAlbumId;
 }
 
 // Função que altera a duração da música
@@ -201,6 +214,7 @@ void setMusicLyrics(Music* m, char* newLyrics){
 void freeMusic(Music* music){
     free(music -> title);
     free(music -> artist_id);
+    free(music -> album_id);
     free(music -> duration);
     free(music -> genre);
     free(music -> lyrics);
@@ -214,6 +228,7 @@ gboolean freeMusicInTable(gpointer key, gpointer value, gpointer user_data){
     Music* music = (Music*)value;
     free(music -> title);
     free(music -> artist_id);
+    free(music -> album_id);
     free(music -> duration);
     free(music -> genre);
     free(music -> lyrics);
