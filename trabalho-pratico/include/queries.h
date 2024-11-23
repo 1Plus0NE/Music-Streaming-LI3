@@ -20,6 +20,6 @@ void query2(int nArtists, Discography* disco, FILE* output);
 void query2b(int nArtists, char* country, Discography* disco, FILE* output);
 
 // Função para a 3ª query
-void query3(int ageMin, int ageMax, GestorUser* gestorUser, GestorMusic* gestorMusic,FILE* output);
+void query3(int ageMin, int ageMax, GestorUser* gestorUser, FILE* output);
 
 #endif

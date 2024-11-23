@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "../entidades/user.h"
+#include "../estatisticas/user_likes.h"
 #include <glib.h>
 #include <stdbool.h>
 
@@ -38,6 +39,18 @@ User* getNextUser(UserIterator* iterator);
 
 // Função que liberta a memória do iterator 
 void freeUserIterator(UserIterator* iterator);
+
+// Função que retorna uma entidade userLikes na tabela através da idade
+UserLikes* searchUserLikes(GestorUser* gestorUser, int age);
+
+// Função que adiciona uma estrutura userLike na hashtable
+void addUserLikes(GestorUser* gestorUser, char** genres, long int* likes, int size, int age);
+
+// Função que retorna o array que contem todos os elementos da estrutura userLikes
+GPtrArray* getUserLikesArray(GestorUser* gestorUser);
+
+// Função que retorna um elemento do array que armazena a estrutura de userLikes
+UserLikes* getUserLikeFromArray(GestorUser* gestorUser, int index);
 
 // função que libera a memória alocada para a tabela de utilizadores.
 void freeGestorUser(GestorUser* gestorUser);

@@ -39,7 +39,7 @@ Discography* updateArtistsDurationFromMusic(GestorMusic* gestorMusic, Discograph
 void artistDurationAdd(G_GNUC_UNUSED gpointer musicId, gpointer musicData, gpointer discoPtr);
 
 // Função responsável por popular o array de generos e contar o numero total de likes no array de likes
-void countUserLikedMusics(GestorMusic* gestorMusic, char* genres[], long int genre_likes[], int* genre_count, long int* likedMusics, int numLikedMusics);
+void countUserLikedMusics(GestorMusic* gestorMusic, char*** genres, long int** genre_likes, int* genre_count, long int* likedMusics, int numLikedMusics);
 
 // Função que verifica se todos os ids das musicas pertencem à tabela
 bool validateMusicId(GestorMusic* gestorMusic, long int* id, int N);

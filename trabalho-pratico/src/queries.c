@@ -85,49 +85,48 @@ void query2b(int nArtists, char* country, Discography* disco, FILE* output){
 }
 
 // Função responsável da query 3
-void query3(int ageMin, int ageMax, GestorUser* gestorUser, GestorMusic* gestorMusic, FILE* output){
+void query3(int ageMin, int ageMax, GestorUser* gestorUser, FILE* output){
     
     if(ageMin == 100 || ageMax == 0){
         fprintf(output, "\n");
         return;
     }
 
-    // Para iterar os users
-    UserIterator* user_iterator = createUserIterator(gestorUser);
-    User* user = NULL;
     // Variaveis para dar store aos valores
-    char *genres[MAX_GENRES];
-    long int genre_likes[MAX_GENRES] = {0};
-    int genre_count = 0;
-    long int* likedMusics;
-    int numLikedMusics = 0;
-    char* age_str;
+    char** genres = NULL;
+    long int* likes = NULL;
+    int size = 0;
     // Flag para caso os intervalos de idades sejam validos mas não haja users compreendidos nessas idades
     int flag = 0;
 
-    // Iterar pela table de users
-    while((user = getNextUser(user_iterator)) != NULL){
-        age_str = getUserBirthDate(user);
-        if(isAgeInRange(age_str, ageMin, ageMax)){
+    GPtrArray* userLikesArr = getUserLikesArray(gestorUser);
+    for(guint i = 0; i < userLikesArr->len; i++){
+        UserLikes* userLikes = getUserLikeFromArray(gestorUser, i);
+        int age = getUserLikesAgeInt(userLikes);
+        if(isAgeInRange(age, ageMin, ageMax)){
             flag = 1;
-            likedMusics = getUserLikedMusics(user);
-            numLikedMusics = getUserNumLikedMusics(user);
-            countUserLikedMusics(gestorMusic, genres, genre_likes, &genre_count, likedMusics, numLikedMusics);
+            char** genresUL = getUserLikesArrayGenres(userLikes);
+            long int* likesUL = getUserLikesArrayLikes(userLikes);
+            int sizeUL = getUserLikesSizeArray(userLikes);
+            updateGenresAndLikes(&genres, &likes, &size, genresUL, likesUL, sizeUL);
+            for(int i = 0; i < sizeUL; i++) free(genresUL[i]); 
+            free(genresUL);
+            free(likesUL);
         }
     }
 
-    freeUserIterator(user_iterator); // já não precisamos mais do iterator
     // No caso de nao termos encontrado um user na range de idades
     if(!flag){
         fprintf(output, "\n");
         return;
     }
 
-    sortGenresByLikes(genres, genre_likes, genre_count);
+    sortGenresByLikes(genres, likes, size);
     // Escrever no ficheiro o resultado final
-    for(int i = 0; i < MAX_GENRES; i++){
-        fprintf(output, "%s;%ld\n", genres[i], genre_likes[i]);  
+    for(int i = 0; i < size; i++){
+        fprintf(output, "%s;%ld\n", genres[i], likes[i]);  
         if(genres[i])free(genres[i]);
     }
-
+    free(genres);
+    free(likes);
 }

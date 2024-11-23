@@ -86,7 +86,7 @@ void artistDurationAdd(G_GNUC_UNUSED gpointer musicId, gpointer musicData, gpoin
 }
 
 // Função responsável por popular o array de generos e contar o numero total de likes no array de likes
-void countUserLikedMusics(GestorMusic* gestorMusic, char* genres[], long int genre_likes[], int* genre_count, long int* likedMusics, int numLikedMusics){
+void countUserLikedMusics(GestorMusic* gestorMusic, char*** genres, long int** genre_likes, int* genre_count, long int* likedMusics, int numLikedMusics){
     Music* music = NULL;
     char* genre;
     int index;
@@ -96,18 +96,20 @@ void countUserLikedMusics(GestorMusic* gestorMusic, char* genres[], long int gen
 
         if(music != NULL){ // em principio nunca falha porque as liked musics do user ja sao verificadas no parsing 
             genre = getMusicGenre(music);
-            index = getGenreIndex(genre, genres, *genre_count);
+            index = getGenreIndex(genre, *genres, *genre_count);
 
-            if(index == -1 && *genre_count < MAX_GENRES){
-                genres[*genre_count] = strdup(genre);
-                genre_likes[*genre_count] = 1;
+            if(index == -1){
+                *genres = realloc(*genres, (*genre_count + 1) * sizeof(char*));
+                *genre_likes = realloc(*genre_likes, (*genre_count + 1) * sizeof(long int));
+
+                (*genres)[*genre_count] = strdup(genre);
+                (*genre_likes)[*genre_count] = 1;
                 (*genre_count)++;
             }
-            else genre_likes[index]++;  
+            else (*genre_likes)[index]++;  
             free(genre);
         }
     }
-    free(likedMusics); // Free do array de liked musics
 }
 
 // Função que verifica se todos os ids das musicas pertencem à tabela

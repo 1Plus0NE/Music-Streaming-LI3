@@ -53,7 +53,10 @@ int getGenreIndex(char *genre, char **genre_array, int genre_count);
 void sortGenresByLikes(char* genres[], long int genre_likes[], int genre_count);
 
 // Função que verifica se uma dada idade está compreendida entre os intervalos de idades
-int isAgeInRange(char* age_str, int minAge, int maxAge);
+int isAgeInRange(int age, int minAge, int maxAge);
+
+// Função que dados novos arrays de generos e likes, atualiza o conteúdo dos arrays originais de generos e likes
+void updateGenresAndLikes(char*** genres, long int** likes, int* size, char** newGenres, long int* newLikes, int newSize);
 
 // Função que cria a diretoria "dataset-errors" e respetivos ficheiros com cabeçalhos
 void errosDir();

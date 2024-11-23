@@ -109,6 +109,18 @@ void parse_user(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic){
             User* u = createUser(username, email, first_name, last_name, birth_date, country, subscription, liked_musics_id_converted, num_liked_musics);
             addUser(gestorUser, u);
 
+            char** genres = NULL;
+            long int* genre_likes = NULL;
+            int genre_count = 0;
+            int age = calculaIdade(birth_date);
+
+            countUserLikedMusics(gestorMusic, &genres, &genre_likes, &genre_count, liked_musics_id_converted, num_liked_musics);
+            addUserLikes(gestorUser, genres, genre_likes, genre_count, age);
+            
+            // free de cada genero no array auxiliar
+            for(int i = 0; i < genre_count; i++) free(genres[i]); 
+            free(genres);
+            free(genre_likes);
             free(liked_musics_id_converted);
             free(liked_musics_id);
             free(username);
@@ -118,11 +130,34 @@ void parse_user(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic){
             free(birth_date);
             free(country);
             free(tmpSub);
+
         }
         else{
             writeErrors(original_line, 3);
         } 
 
     }
+    /*
+    int ageToSearch = 53;
+    UserLikes* uL = searchUserLikes(gestorUser, ageToSearch);
+    if(uL){
+        char** genreTest = getUserLikesArrayGenres(uL);
+        long int* likesTest = getUserLikesArrayLikes(uL);
+        int* ageTest = getUserLikesAge(uL);
+        int sizeTest = getUserLikesSizeArray(uL);
+
+        printf("Idade da estrutura encontrada: %d\n", *ageTest);
+        printf("Tamanho dos arrays: %d\n\n", sizeTest);
+        for(int i = 0; i < sizeTest; i++){
+            printf("Genero: %s | Likes: %ld\n", genreTest[i], likesTest[i]);
+        }
+        free(genreTest);
+        free(likesTest);
+    }
+    else{
+        printf("Nao encontrei nada\n");
+    } 
+    */
+
     fclose(users);
 }

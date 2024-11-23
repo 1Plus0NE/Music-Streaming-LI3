@@ -16,14 +16,16 @@ int main(int argc, char* argv[]){
     GestorMusic* gestorMusic = createGestorMusic();
     GestorUser* gestorUser = createGestorUser();
 
+    printf("Gestores criados com sucesso\n");
+
     errosDir();
     
     parse_all(dataDir, gestorArtist, gestorMusic, gestorUser);
-
+    
     if(queriesFile){
         parse_queries(queriesFile, gestorUser, gestorMusic, gestorArtist, 0);
     }
-
+    
     freeGestorArtist(gestorArtist);
     freeGestorMusic(gestorMusic);
     freeGestorUser(gestorUser);

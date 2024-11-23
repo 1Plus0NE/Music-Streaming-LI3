@@ -33,6 +33,7 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
     int ageMin = 0; // Idade mínima para a query 3
     int ageMax = 0; // Idade máxima para a query 3
     
+    // Variaveis utilizadas no calculo do tempo de execução de cada query
     struct timespec query_start, query_end;
     double total_time_query1 = 0;
     double total_time_query2 = 0;
@@ -45,7 +46,6 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
         perror("Erro ao abrir o ficheiro input das queries.\n");
         exit(EXIT_FAILURE);
     }
-
 
     // Discografia antes de resolver a Query2 
     disco = fillWithArtists(gestorArtist, disco);
@@ -112,7 +112,6 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
             
             fclose(outputQ2);
         }
-       
          else if(line[0] == '3'){
             outputQ3 = fopen(outputPath, "w");
             if(!outputQ3){
@@ -125,7 +124,7 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
             ageMax = atoi(strsep(&linePtr, "\n"));
 
             if(measure_flag) clock_gettime(CLOCK_REALTIME, &query_start);
-            query3(ageMin, ageMax, gestorUser, gestorMusic, outputQ3);
+            query3(ageMin, ageMax, gestorUser, outputQ3);
             if(measure_flag){
                 clock_gettime(CLOCK_REALTIME, &query_end);
                 query_elapsed = (query_end.tv_sec - query_start.tv_sec) +
@@ -134,9 +133,8 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
             }
 
             fclose(outputQ3);
-        } 
+        }  
         else continue;
-     
     }
     freeDiscography(disco);
     fclose(queries);

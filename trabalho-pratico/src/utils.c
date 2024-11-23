@@ -373,15 +373,47 @@ void sortGenresByLikes(char* genres[], long int genre_likes[], int genre_count){
 }
 
 // Função que verifica se uma dada idade está compreendida entre os intervalos de idades
-int isAgeInRange(char* age_str, int minAge, int maxAge){
-    int age = calculaIdade(age_str);
-    free(age_str); // assumimos que recebemos um strdup de age_str por isso vamos fazer free nesta função
+int isAgeInRange(int age, int minAge, int maxAge){
     return age >= minAge && age <= maxAge;
+}
+
+// Função que dados novos arrays de generos e likes, atualiza o conteúdo dos arrays originais de generos e likes
+void updateGenresAndLikes(
+    char*** genres,       // Apontador do array de generos
+    long int** likes,     // Apontador do array de likes
+    int* size,            // Apontador para o tamanho dos arrays
+    char** newGenres,     // Novo array de generos
+    long int* newLikes,   // Novo array de likes
+    int newSize           // Novo tamanho dos arrays
+){
+    for(int i = 0; i < newSize; i++){
+        int found = 0;
+        for(int j = 0; j < *size; j++){
+            if(strcmp((*genres)[j], newGenres[i]) == 0){
+                // Se o genero existir, atualizamos os likes
+                (*likes)[j] += newLikes[i];
+                found = 1;
+                break;
+            }
+        }
+        if(!found){
+            // Neste caso o genero não existe, então adicionamos ao array de generos
+            (*size)++;
+            *genres = realloc(*genres, *size * sizeof(char*));
+            *likes = realloc(*likes, *size * sizeof(long int));
+            if(!*genres || !*likes){
+                fprintf(stderr, "Memory allocation failed for genres or likes\n");
+                return;
+            }
+            (*genres)[*size - 1] = strdup(newGenres[i]);
+            (*likes)[*size - 1] = newLikes[i];
+        }
+    }
 }
 
 // Função que cria a diretoria "dataset-errors" e respetivos ficheiros com cabeçalhos
 void errosDir(){
-     FILE *errors;
+    FILE *errors;
 
     // Ficheiros de erros com respetivos cabeçalhos
     errors = fopen("resultados/users_errors.csv", "w");
