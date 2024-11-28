@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-// função para ler e fazer parse de um ficheiro CSV de artistas.
-void parse_artist(char* path, GestorArtist* gestorArtist);
+// Função que processa uma linha do ficheiro de artistas.
+void process_artist_line(char* line, void* gestor, void* aux_data);
 
 #endif

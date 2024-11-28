@@ -13,7 +13,7 @@
 // Função de verificação da validade de um user
 int userLineVerify(char *line, GestorMusic* gestorMusic);
 
-// função para ler e fazer parse de um ficheiro CSV de artistas.
-void parse_user(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic);
+// função que processa a linha de um utilizador.
+void process_user_line(char* line, void* gestor, void* aux_data);
 
 #endif

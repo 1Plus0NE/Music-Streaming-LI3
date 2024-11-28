@@ -16,9 +16,22 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <errno.h>
+typedef void (*EntityProcessor)(char* line, void* gestor, void* aux_data);
 
 // Função principal de parse que chama os módulos de parse individualmente
 void parse_all(char* path, GestorArtist* gestorArtist, GestorMusic* gestorMusic, GestorUser* gestorUser);
+
+// função que faz parse de um csv.
+void parse_csv(const char* path, const char* filename, void* gestor, void* aux_data, EntityProcessor process_line, int error_code);
+
+// Função que dá parse ao ficheiro de artistas.
+void parse_artist(char* path, GestorArtist* gestorArtist);
+
+// Função que dá parse ao ficheiro de músicas.
+void parse_music(char* path, GestorMusic* gestorMusic, GestorArtist* gestorArtist);
+
+// Função que dá parse ao ficheiro de utilizadores.
+void parse_user(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic);
 
 // Função para ler e fazer parse das queries
 void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic, GestorArtist* gestorArtist, int measure_flag);

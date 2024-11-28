@@ -10,7 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-// Função para ler e fazer parse de um ficheiro CSV de músicas.
-void parse_music(char* path, GestorMusic* gestorMusic, GestorArtist* gestorArtist);
+// Função que processa uma linha do ficheiro de músicas.
+void process_music_line(char* line, void* gestor, void* aux_data);
 
 #endif

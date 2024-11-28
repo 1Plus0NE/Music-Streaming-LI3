@@ -56,108 +56,60 @@ int userLineVerify(char *line, GestorMusic* gestorMusic){
     return 0;
 }
 
-// função para ler e fazer parse de um ficheiro CSV de artistas.
-void parse_user(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic){
-    //variáveis para o parse
-    FILE* users;
-    char filename[MAX_FILENAME];
-    char line[MAX_LINE];
-    char original_line[MAX_LINE];
-    char *tmp_oriLine=NULL;
+// função para processar uma linha de utilizador.
+void process_user_line(char* line, void* gestor, void* aux_data){
+    GestorUser* gestorUser = (GestorUser*)gestor;
+    GestorMusic* gestorMusic = (GestorMusic*)aux_data;
 
-    //argumentos para a struct de artistas
-    char* username;
-    char* email;
-    char* first_name;
-    char* last_name;
-    char* birth_date;
-    char* country;
+    char* tmp_line = strdup(line);
+    char* original_line = tmp_line;
+    char *username, *email, *first_name, *last_name, *birth_date, *country, *liked_musics_id;
+    char* tmp_sub;
     SubscriptionType subscription;
-    char* liked_musics_id; // Para depois converter para long int
-    long int* liked_musics_id_converted;
-    int num_liked_musics=0;
+    long int* liked_musics_id_converted = NULL;
+    int num_liked_musics = 0;
 
-    snprintf(filename,MAX_FILENAME,"%s/users.csv", path);
-
-    users = fopen(filename, "r");
-    if(!users){
-        perror("Erro ao abrir o ficheiro csv dos utilizadores.\n");
-        exit(EXIT_FAILURE);
+    // validações.
+    if(userLineVerify(line, gestorMusic) != 0){
+        writeErrors(line, 3);
+        free(tmp_line);
+        return;
     }
 
-    fgets(line, sizeof(line), users);
+    username = remove_aspas(strsep(&tmp_line, ";"));
+    email = remove_aspas(strsep(&tmp_line, ";"));
+    first_name = remove_aspas(strsep(&tmp_line, ";"));
+    last_name = remove_aspas(strsep(&tmp_line, ";"));
+    birth_date = remove_aspas(strsep(&tmp_line, ";"));
+    country = remove_aspas(strsep(&tmp_line, ";"));
+    tmp_sub = remove_aspas(strsep(&tmp_line, ";"));
+    subscription = stringToSubscriptionType(tmp_sub);
+    liked_musics_id = remove_aspas(strsep(&tmp_line, "\n"));
+    liked_musics_id_converted = convertID(liked_musics_id, &num_liked_musics);
 
-    while((fgets(line, sizeof(line), users) != NULL)){
-        strcpy(original_line, line);
-        //Apontadores para o strsep
-        tmp_oriLine = original_line;
+    User* u = createUser(username, email, first_name, last_name, birth_date, country, subscription, liked_musics_id_converted, num_liked_musics);
+    addUser(gestorUser, u);
 
-        // Antes da função atribuir valor as variaveis, verifica a sua validação
-        if(userLineVerify(line, gestorMusic) == 0){
-            // Trocar tmp_oriLine para original_line?
-            username = remove_aspas(strsep(&tmp_oriLine, ";"));
-            email = remove_aspas(strsep(&tmp_oriLine, ";"));
-            first_name = remove_aspas(strsep(&tmp_oriLine,";"));
-            last_name = remove_aspas(strsep(&tmp_oriLine,";"));
-            birth_date = remove_aspas(strsep(&tmp_oriLine,";"));
-            country = remove_aspas(strsep(&tmp_oriLine,";"));
-            char* tmpSub = remove_aspas(strsep(&tmp_oriLine,";"));
-            subscription = stringToSubscriptionType(tmpSub);
-            //liked_musics_id_converted = convertID(remove_aspas(strsep(&tmp_oriLine,"\n")), &num_liked_musics);
-            liked_musics_id = remove_aspas(strsep(&tmp_oriLine,"\n"));
-            liked_musics_id_converted = convertID(liked_musics_id,&num_liked_musics);
-            User* u = createUser(username, email, first_name, last_name, birth_date, country, subscription, liked_musics_id_converted, num_liked_musics);
-            addUser(gestorUser, u);
+    // verificar os likes do utilizador.
+    char** genres = NULL;
+    long int* genre_likes = NULL;
+    int genre_count = 0;
+    int age = calculaIdade(birth_date);
 
-            char** genres = NULL;
-            long int* genre_likes = NULL;
-            int genre_count = 0;
-            int age = calculaIdade(birth_date);
+    countUserLikedMusics(gestorMusic, &genres, &genre_likes, &genre_count, liked_musics_id_converted, num_liked_musics);
+    addUserLikes(gestorUser, genres, genre_likes, genre_count, age);
 
-            countUserLikedMusics(gestorMusic, &genres, &genre_likes, &genre_count, liked_musics_id_converted, num_liked_musics);
-            addUserLikes(gestorUser, genres, genre_likes, genre_count, age);
-            
-            // free de cada genero no array auxiliar
-            for(int i = 0; i < genre_count; i++) free(genres[i]); 
-            free(genres);
-            free(genre_likes);
-            free(liked_musics_id_converted);
-            free(liked_musics_id);
-            free(username);
-            free(email);
-            free(first_name);
-            free(last_name);
-            free(birth_date);
-            free(country);
-            free(tmpSub);
-
-        }
-        else{
-            writeErrors(original_line, 3);
-        } 
-
-    }
-    /*
-    int ageToSearch = 53;
-    UserLikes* uL = searchUserLikes(gestorUser, ageToSearch);
-    if(uL){
-        char** genreTest = getUserLikesArrayGenres(uL);
-        long int* likesTest = getUserLikesArrayLikes(uL);
-        int* ageTest = getUserLikesAge(uL);
-        int sizeTest = getUserLikesSizeArray(uL);
-
-        printf("Idade da estrutura encontrada: %d\n", *ageTest);
-        printf("Tamanho dos arrays: %d\n\n", sizeTest);
-        for(int i = 0; i < sizeTest; i++){
-            printf("Genero: %s | Likes: %ld\n", genreTest[i], likesTest[i]);
-        }
-        free(genreTest);
-        free(likesTest);
-    }
-    else{
-        printf("Nao encontrei nada\n");
-    } 
-    */
-
-    fclose(users);
+    for (int i = 0; i < genre_count; i++) free(genres[i]);
+    free(genres);
+    free(genre_likes);
+    free(liked_musics_id_converted);
+    free(username);
+    free(email);
+    free(first_name);
+    free(last_name);
+    free(birth_date);
+    free(country);
+    free(tmp_sub);
+    free(liked_musics_id);
+    free(original_line);
 }
