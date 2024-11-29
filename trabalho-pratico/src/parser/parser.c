@@ -46,21 +46,6 @@ void parse_csv(const char* path, const char* filename, void* gestor, void* aux_d
     fclose(file);
 }
 
-// Função que dá parse ao ficheiro de artistas.
-void parse_artist(char* path, GestorArtist* gestorArtist){
-    parse_csv(path, "artists.csv", gestorArtist, NULL, process_artist_line, 1);
-}
-
-// Função que dá parse ao ficheiro de músicas.
-void parse_music(char* path, GestorMusic* gestorMusic, GestorArtist* gestorArtist){
-    parse_csv(path, "musics.csv", gestorMusic, gestorArtist, process_music_line, 2);
-}
-
-// Função que dá parse ao ficheiro de utilizadores.
-void parse_user(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic){
-    parse_csv(path, "users.csv", gestorUser, gestorMusic, process_user_line, 3);
-}
-
 // Função dá parse as queries.
 void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic, GestorArtist* gestorArtist, int measure_flag){
     char line[MAX_QUERYLINE];

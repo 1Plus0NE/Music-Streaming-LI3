@@ -2,6 +2,11 @@
 #define MAX_FILENAME 1024
 #define MAX_LINE 2048
 
+// Função que dá parse ao ficheiro de músicas.
+void parse_music(char* path, GestorMusic* gestorMusic, GestorArtist* gestorArtist){
+    parse_csv(path, "musics.csv", gestorMusic, gestorArtist, process_music_line, 2);
+}
+
 // Função para processar uma linha de música.
 void process_music_line(char* line, void* gestor, void* aux_data) {
     GestorMusic* gestorMusic = (GestorMusic*)gestor;

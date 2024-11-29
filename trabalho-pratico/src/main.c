@@ -16,8 +16,6 @@ int main(int argc, char* argv[]){
     GestorMusic* gestorMusic = createGestorMusic();
     GestorUser* gestorUser = createGestorUser();
 
-    printf("Gestores criados com sucesso\n");
-
     errosDir();
     
     parse_all(dataDir, gestorArtist, gestorMusic, gestorUser);

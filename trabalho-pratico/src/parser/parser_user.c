@@ -56,6 +56,11 @@ int userLineVerify(char *line, GestorMusic* gestorMusic){
     return 0;
 }
 
+// Função que dá parse ao ficheiro de utilizadores.
+void parse_user(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic){
+    parse_csv(path, "users.csv", gestorUser, gestorMusic, process_user_line, 3);
+}
+
 // função para processar uma linha de utilizador.
 void process_user_line(char* line, void* gestor, void* aux_data){
     GestorUser* gestorUser = (GestorUser*)gestor;

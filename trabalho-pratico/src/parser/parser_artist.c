@@ -2,6 +2,11 @@
 #define MAX_FILENAME 1024
 #define MAX_LINE 2048
 
+// Função que dá parse ao ficheiro de artistas.
+void parse_artist(char* path, GestorArtist* gestorArtist){
+    parse_csv(path, "artists.csv", gestorArtist, NULL, process_artist_line, 1);
+}
+
 // função que processa uma linha de artista.
 void process_artist_line(char* line, void* gestor, void* aux_data) {
     GestorArtist* gestorArtist = (GestorArtist*)gestor;
