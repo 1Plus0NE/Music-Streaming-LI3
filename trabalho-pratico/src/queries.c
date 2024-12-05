@@ -24,6 +24,46 @@ void query1(char* user_username, GestorUser* gestorUser, FILE* output_file){
     free(country);
 }
 
+/* void query1_new(char* user_username, GestorUser* gestorUser, FILE* output_file){
+    User* user = searchUser(gestorUser, user_username);
+
+    if(user){
+        char* email = getUserEmail(user);
+        char* first_name = getUserFirstName(user);
+        char* last_name = getUserLastName(user);
+        char* birth_date = getUserBirthDate(user);
+        int age = calculaIdade(birth_date);
+        char* country = getUserCountry(user);
+
+        fprintf(output_file, "%s;%s;%s;%d;%s\n", email, first_name, last_name, age, country);
+
+        free(email);
+        free(first_name);
+        free(last_name);
+        free(birth_date);
+        free(country);
+    }
+
+    Artist* artist = searchArtist(gestorUser, user_username);
+    if(artist){
+        char* name = getArtistName(artist);
+        ArtistType type = getArtistType(artist);
+        char* type_str = typeToString(type);
+        char* country = getArtistCountry(artist);
+        double recipe_per_stream = getArtistRecipePerStream(artist);
+
+
+        fprintf(output_file, "%s;%s;%s;%s;%s\n", name, country, start_date, end_date, typeInChar);
+
+        free(name);
+        free(country);
+        free(start_date);
+        free(end_date);
+        free(typeInChar);
+    }
+    fprintf(output_file, "\n");
+} */
+
 // Results é necessário para escrever pela ordem pedida
 // Função para a query 2
 void query2(int nArtists, Discography* disco, FILE* output){
