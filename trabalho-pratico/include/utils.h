@@ -40,6 +40,12 @@ int isFormatValid(const char *input);
 // Função que dado um array de IDs converte de char para long int
 long int* convertID(const char *input, int *count);
 
+//função auxiliar para libertar a memória de um array de strings.
+void freeStringArray(char** array, int num_elements);
+
+//função que divide uma string em substrings com base num delimitador.
+char** splitString(const char* str, const char* delimiter, int* num_elements);
+
 // Função que remove new lines
 void removeEnters(char *input);
 

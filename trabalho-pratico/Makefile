@@ -24,8 +24,8 @@ OTHER_DIR = $(INCLUDE_DIR)
 
 ESTATISTICAS_SRC = $(ESTATISTICAS_DIR)/user_likes.c
 ENTIDADES_SRC = $(ENTIDADES_DIR)/artist.c $(ENTIDADES_DIR)/music.c $(ENTIDADES_DIR)/user.c $(ENTIDADES_DIR)/discography.c $(ENTIDADES_DIR)/history.c $(ENTIDADES_DIR)/album.c
-GESTORES_SRC = $(GESTORES_DIR)/gestor_artist.c $(GESTORES_DIR)/gestor_music.c $(GESTORES_DIR)/gestor_user.c
-PARSER = $(PARSER_DIR)/parser_artist.c $(PARSER_DIR)/parser_music.c $(PARSER_DIR)/parser_user.c $(PARSER_DIR)/parser.c
+GESTORES_SRC = $(GESTORES_DIR)/gestor_artist.c $(GESTORES_DIR)/gestor_music.c $(GESTORES_DIR)/gestor_user.c $(GESTORES_DIR)/gestor_album.c $(GESTORES_DIR)/gestor_history.c
+PARSER = $(PARSER_DIR)/parser_artist.c $(PARSER_DIR)/parser_music.c $(PARSER_DIR)/parser_user.c $(PARSER_DIR)/parser_album.c $(PARSER_DIR)/parser_history.c $(PARSER_DIR)/parser.c
 QUERIES = $(SRC_DIR)/queries.c
 UTILS = $(SRC_DIR)/utils.c
 MAIN = $(SRC_DIR)/main.c

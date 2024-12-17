@@ -11,7 +11,7 @@ struct album{
 };
 
 // função para criar uma estrutura da entidade álbum parametrizada.
-Album* createAlbum(long int id, char* title, int year, char** producers, int num_producers, long int* artist_ids, int num_artists){
+Album* createAlbum(long int id, char* title, long int* artist_ids, int num_artists,  int year, char** producers, int num_producers){
     Album* album = (Album*)malloc(sizeof(Album));
     if (!album) {
         perror("Erro ao alocar memória para o álbum.\n");

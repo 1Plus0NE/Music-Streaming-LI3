@@ -99,7 +99,7 @@ int getHistoryDuration(History* h){
 }
 
 Platform getHistoryPlatform(History* h){
-    return h ? h -> platform : -1;
+    return h ? h -> platform : (Platform)-1;
 }
 
 void setHistoryId(History* h, long int id){

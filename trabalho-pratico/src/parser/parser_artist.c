@@ -9,6 +9,7 @@ void parse_artist(char* path, GestorArtist* gestorArtist){
 
 // função que processa uma linha de artista.
 void process_artist_line(char* line, void* gestor, void* aux_data) {
+    (void)aux_data;
     GestorArtist* gestorArtist = (GestorArtist*)gestor;
 
     char* tmp_line = line;
