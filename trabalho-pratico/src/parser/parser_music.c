@@ -2,21 +2,21 @@
 #define MAX_FILENAME 1024
 #define MAX_LINE 2048
 
-// Função para ler e fazer parse de um ficheiro CSV de músicas.
+// Função que dá parse ao ficheiro de músicas.
 void parse_music(char* path, GestorMusic* gestorMusic, GestorArtist* gestorArtist){
-    // Variaveis para o parse 
-    FILE* musics;
-    char filename[MAX_FILENAME];
-    char line[MAX_LINE];
-    char original_line[MAX_LINE];
-    char *tmp_line=NULL;
+    parse_csv(path, "musics.csv", gestorMusic, gestorArtist, process_music_line, 2);
+}
 
-    // Argumentos para a struct de musicas
-    char *id_str; // para depois passar para long int
+// Função para processar uma linha de música.
+void process_music_line(char* line, void* gestor, void* aux_data) {
+    GestorMusic* gestorMusic = (GestorMusic*)gestor;
+    GestorArtist* gestorArtist = (GestorArtist*)aux_data;
+
+    char* tmp_line = line;
+    char *id_str, *title, *artist_id, *duration, *genre, *year_str, *lyrics;
     long int id;
-    char* title;
-    char* artist_id; // para depois converter para um array de long ints
     long int* artist_id_converted;
+<<<<<<< HEAD
     int num_artists;
     //char *album_id_str;
     //long int album_id;
@@ -25,15 +25,26 @@ void parse_music(char* path, GestorMusic* gestorMusic, GestorArtist* gestorArtis
     char* year_str;
     int year;
     char* lyrics;
+=======
+    int num_artists, year;
+>>>>>>> refs/remotes/origin/main
 
-    snprintf(filename,MAX_FILENAME,"%s/musics.csv",path); //abrir ficheiro de musicas
-
-    musics = fopen(filename, "r");
-    if(!musics){
-        perror("Erro ao abrir o ficheiro csv das musicas.\n");
-        exit(EXIT_FAILURE);
+    id_str = remove_aspas(strsep(&tmp_line, ";"));
+    if (!id_str || strlen(id_str) == 0) {
+        writeErrors(line, 2);
+        return;
     }
+    id = strtol(id_str + 1, NULL, 10);
+    title = remove_aspas(strsep(&tmp_line, ";"));
+    artist_id = remove_aspas(strsep(&tmp_line, ";"));
+    duration = remove_aspas(strsep(&tmp_line, ";"));
+    genre = remove_aspas(strsep(&tmp_line, ";"));
+    year_str = remove_aspas(strsep(&tmp_line, ";"));
+    year = atoi(year_str);
+    free(year_str);
+    lyrics = remove_aspas(strsep(&tmp_line, "\n"));
 
+<<<<<<< HEAD
     fgets(line, sizeof(line), musics); //skip da primeira linha por ser o header
 
     while((fgets(line, sizeof(line), musics) != NULL)){
@@ -74,10 +85,39 @@ void parse_music(char* path, GestorMusic* gestorMusic, GestorArtist* gestorArtis
         free(title);
         free(artist_id);
         //free(album_id_str);
+=======
+    // validações.
+    if(!isFormatValid(artist_id) || !verify_year(year) || !verify_duration(duration)){
+        writeErrors(line, 2);
+        free(title);
+        free(artist_id);
+>>>>>>> refs/remotes/origin/main
         free(duration);
         free(genre);
         free(lyrics);
-
+        return;
     }
-    fclose(musics);
+
+    artist_id_converted = convertID(artist_id, &num_artists);
+    if(!validateArtistIDs(gestorArtist, artist_id_converted, num_artists)){
+        free(artist_id_converted);
+        writeErrors(line, 2);
+        free(title);
+        free(artist_id);
+        free(duration);
+        free(genre);
+        free(lyrics);
+        return;
+    }
+
+    Music* m = createMusic(id, title, artist_id_converted, num_artists, 0, duration, genre, year, lyrics);
+    addMusic(gestorMusic, m);
+
+    free(id_str);
+    free(artist_id_converted);
+    free(title);
+    free(artist_id);
+    free(duration);
+    free(genre);
+    free(lyrics);
 }

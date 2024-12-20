@@ -2,8 +2,9 @@
 #define MAX_FILENAME 1024
 #define MAX_LINE 2048
 #define MAX_QUERYLINE 150
+typedef void (*EntityProcessor)(char* line, void* gestor, void* aux_data);
 
-// Função principal de parse que chama os módulos de parse individualmente
+// Função principal de parse que chama os módulos de parse individualmente.
 void parse_all(char* path, GestorArtist* gestorArtist, GestorMusic* gestorMusic, GestorUser* gestorUser){
     //parse de artistas
     parse_artist(path, gestorArtist);
@@ -15,6 +16,37 @@ void parse_all(char* path, GestorArtist* gestorArtist, GestorMusic* gestorMusic,
     parse_user(path, gestorUser, gestorMusic);
 }
 
+// função que faz parse de um csv.
+void parse_csv(const char* path, const char* filename, void* gestor, void* aux_data, EntityProcessor process_line, int error_code) {
+    FILE* file;
+    char full_path[MAX_FILENAME];
+    char line[MAX_LINE];
+    char original_line[MAX_LINE];
+
+    snprintf(full_path, MAX_FILENAME, "%s/%s", path, filename);
+
+    file = fopen(full_path, "r");
+    if(!file){
+        perror("Erro ao abrir o ficheiro csv.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    // ignorar a primeira linha(cabeçalho).
+    fgets(line, sizeof(line), file);
+
+    while (fgets(line, sizeof(line), file) != NULL){
+        strcpy(original_line, line);
+        if(process_line){
+            process_line(original_line, gestor, aux_data);
+        }else{
+            writeErrors(original_line, error_code);
+        }
+    }
+
+    fclose(file);
+}
+
+// Função dá parse as queries.
 void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic, GestorArtist* gestorArtist, int measure_flag){
     char line[MAX_QUERYLINE];
     char* linePtr=NULL;
@@ -148,5 +180,4 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
         double total_time = (total_time_query1 + total_time_query2 + total_time_query3)/3;
         printf("Tempo medio de execucao de cada query: %.6f segundos\n", total_time);
     }
-
 }

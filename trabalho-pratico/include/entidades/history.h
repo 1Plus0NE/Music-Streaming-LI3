@@ -14,8 +14,48 @@ typedef struct history History;
 
 //enum que representa o atributo plataforma do histórico.
 typedef enum {
-    COMPUTADOR,
-    DISPOSITIVO_MOVEL
+    DESKTOP,
+    MOBILE,
 } Platform;
+
+//função para criar uma estrutura da entidade histórico parametrizada.
+History* createHistory(long int id, long int user_id, long int music_id, char* timestamp, int duration, Platform platform);
+
+//função para libertar a memória de uma entidade do tipo histórico.
+void freeHistory(History* history);
+
+//função para libertar a memória de uma entidade do tipo histórico contida numa hash table.
+gboolean freeHistoryInTable(gpointer key, gpointer value, gpointer user_data);
+
+//função para converter uma string de plataforma para a forma de enum.
+Platform stringToPlatform(char* platform_str);
+
+//função para converter uma forma de enum de plataforma para uma string.
+char* platformToString(Platform platform);
+
+//getters e setters de histórico.
+long int getHistoryId(History* history);
+
+long int getHistoryUserId(History* history);
+
+long int getHistoryMusicId(History* history);
+
+char* getHistoryTimestamp(History* history);
+
+int getHistoryDuration(History* history);
+
+Platform getHistoryPlatform(History* history);
+
+void setHistoryId(History* history, long int id);
+
+void setHistoryUserId(History* history, long int user_id);
+
+void setHistoryMusicId(History* history, long int music_id);
+
+void setHistoryTimestamp(History* history, char* timestamp);
+
+void setHistoryDuration(History* history, int duration);
+
+void setHistoryPlatform(History* history, Platform platform);
 
 #endif

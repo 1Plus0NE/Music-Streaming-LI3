@@ -312,6 +312,62 @@ long int* convertID(const char *input, int *count){
     return convertedIDs;
 }
 
+//função que divide uma string em substrings com base num delimitador.
+char** splitString(const char* str, const char* delimiter, int* num_elements){
+    if (!str || !delimiter || !num_elements) return NULL;
+
+    char* str_copy = strdup(str);
+    if(!str_copy){
+        perror("Erro ao alocar memória para a cópia da string.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    int count = 0;
+    char* temp = str_copy;
+    while((temp = strstr(temp, delimiter))){
+        count++;
+        temp += strlen(delimiter);
+    }
+    count++;
+
+    char** result = malloc(count * sizeof(char*));
+    if(!result){
+        perror("Erro ao alocar memória para o array de strings.\n");
+        free(str_copy);
+        exit(EXIT_FAILURE);
+    }
+
+    int i = 0;
+    char* token = strsep(&str_copy, delimiter);
+    while(token){
+        result[i] = strdup(token);
+        if(!result[i]){
+            perror("Erro ao alocar memória para uma substring.\n");
+            for (int j = 0; j < i; j++) free(result[j]);
+            free(result);
+            free(str_copy);
+            exit(EXIT_FAILURE);
+        }
+        i++;
+    }
+
+    result[i] = NULL;
+    *num_elements = count;
+
+    free(str_copy);
+    return result;
+}
+
+//função auxiliar para libertar a memória de um array de strings.
+void freeStringArray(char** array, int num_elements){
+    if(!array) return;
+
+    for(int i = 0; i < num_elements; i++){
+        if(array[i]) free(array[i]);
+    }
+    free(array);
+}
+
 // Função que remove new lines
 void removeEnters(char *input){
     int len = strlen(input);
