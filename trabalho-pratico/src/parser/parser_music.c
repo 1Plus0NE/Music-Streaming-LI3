@@ -18,8 +18,8 @@ void parse_music(char* path, GestorMusic* gestorMusic, GestorArtist* gestorArtis
     char* artist_id; // para depois converter para um array de long ints
     long int* artist_id_converted;
     int num_artists;
-    char *album_id_str;
-    long int album_id;
+    //char *album_id_str;
+    //long int album_id;
     char* duration;
     char* genre;
     char* year_str;
@@ -56,7 +56,7 @@ void parse_music(char* path, GestorMusic* gestorMusic, GestorArtist* gestorArtis
         if(isFormatValid(artist_id) && verify_year(year) && verify_duration(duration)){
             artist_id_converted = convertID(artist_id, &num_artists); // daqui temos o array de ids de artistas + o num_artists calculado
             if(validateArtistIDs(gestorArtist, artist_id_converted ,num_artists)){
-                    Music* m = createMusic(id, title, artist_id_converted, num_artists, album_id, duration, genre, year, lyrics);
+                    Music* m = createMusic(id, title, artist_id_converted, num_artists, duration, genre, year, lyrics); // tirei o album_id 
                     addMusic(gestorMusic, m);
                     free(artist_id_converted);
             }
@@ -73,7 +73,7 @@ void parse_music(char* path, GestorMusic* gestorMusic, GestorArtist* gestorArtis
         free(id_str);
         free(title);
         free(artist_id);
-        free(album_id);
+        //free(album_id_str);
         free(duration);
         free(genre);
         free(lyrics);

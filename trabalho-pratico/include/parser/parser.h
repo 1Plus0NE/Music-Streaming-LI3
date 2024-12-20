@@ -8,6 +8,7 @@
 #include "parser_user.h"
 #include "../utils.h"
 #include "../queries.h"
+#include "../writer.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

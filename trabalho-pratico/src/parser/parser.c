@@ -61,7 +61,8 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
         // Atualização do path para o ficheiro de output da query 
         command++;
         snprintf(outputPath, MAX_FILENAME, "resultados/command%d_output.txt", command);
-        
+
+        char delimiter = getDelimiter(line); // obter o delimitador que irá ser utilizado no writing
         // Identificação da Query
         if(line[0] == '1'){
             // Criação do ficheiro de output da query para argumento do função query1
@@ -75,7 +76,7 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
             user = strsep(&linePtr, "\n");
 
             if(measure_flag) clock_gettime(CLOCK_REALTIME, &query_start);
-            query1(user, gestorUser, outputQ1);
+            query1(user, gestorUser, delimiter, outputQ1);
             if(measure_flag){
                 clock_gettime(CLOCK_REALTIME, &query_end);
                 query_elapsed = (query_end.tv_sec - query_start.tv_sec) +
@@ -97,8 +98,8 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
             country = remove_aspas(strsep(&linePtr, "\n")); // País sem aspas
             
             if(measure_flag) clock_gettime(CLOCK_REALTIME, &query_start);
-            if(country == NULL) query2(nArtists, disco, outputQ2); // query 2 sem especificação de país
-            else query2b(nArtists, country, disco, outputQ2); // query 2 com país especificado
+            if(country == NULL) query2(nArtists, disco, delimiter ,outputQ2); // query 2 sem especificação de país
+            else query2b(nArtists, country, disco, delimiter, outputQ2); // query 2 com país especificado
             if(measure_flag){
                 clock_gettime(CLOCK_REALTIME, &query_end);
                 query_elapsed = (query_end.tv_sec - query_start.tv_sec) +
@@ -124,7 +125,7 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
             ageMax = atoi(strsep(&linePtr, "\n"));
 
             if(measure_flag) clock_gettime(CLOCK_REALTIME, &query_start);
-            query3(ageMin, ageMax, gestorUser, outputQ3);
+            query3(ageMin, ageMax, gestorUser, delimiter, outputQ3);
             if(measure_flag){
                 clock_gettime(CLOCK_REALTIME, &query_end);
                 query_elapsed = (query_end.tv_sec - query_start.tv_sec) +

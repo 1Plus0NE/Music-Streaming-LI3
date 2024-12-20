@@ -2,7 +2,7 @@
 #define MAX_GENRES 10
 
 // função que responde á query1.
-void query1(char* user_username, GestorUser* gestorUser, FILE* output_file){
+void query1(char* user_username, GestorUser* gestorUser, char delimiter, FILE* output_file){
     User* user = searchUser(gestorUser, user_username);
 
     if(!user){
@@ -16,17 +16,20 @@ void query1(char* user_username, GestorUser* gestorUser, FILE* output_file){
     int age = calculaIdade(age_str);
     char* country = getUserCountry(user);
 
-    fprintf(output_file, "%s;%s;%s;%d;%s\n", email, first_name, last_name, age, country);
+    char* age_buffer = intToString(age);
+
+    genericOutputWriter(output_file, delimiter, email, first_name, last_name, age_buffer, country, NULL);
     free(email);
     free(first_name);
     free(last_name);
     free(age_str);
     free(country);
+    free(age_buffer);
 }
 
 // Results é necessário para escrever pela ordem pedida
 // Função para a query 2
-void query2(int nArtists, Discography* disco, FILE* output){
+void query2(int nArtists, Discography* disco, char delimiter, FILE* output){
     Discography* head = disco;
 
     if(nArtists == 0) fprintf(output, "\n"); // Caso de ficheiro "vazio"
@@ -38,8 +41,9 @@ void query2(int nArtists, Discography* disco, FILE* output){
         char* time = secondsToString(duration); // Transformação em formato char*
         char* typeInChar = typeToString(type); // Transformação em formato char*
 
-        fprintf(output, "%s;%s;%s;%s\n", name, typeInChar, time, country);  
-        
+        //fprintf(output, "%s;%s;%s;%s\n", name, typeInChar, time, country);  
+        genericOutputWriter(output, delimiter, name, country, time, typeInChar, NULL);
+
         free(time);
         free(typeInChar);
         free(name);
@@ -50,7 +54,7 @@ void query2(int nArtists, Discography* disco, FILE* output){
 }
 
 // Função para a query 2 com especificação do pais
-void query2b(int nArtists, char* country, Discography* disco, FILE* output){
+void query2b(int nArtists, char* country, Discography* disco, char delimiter, FILE* output){
     Discography* head = disco;
 
     if(nArtists == 0) fprintf(output, "\n"); // Caso de ficheiro "vazio"
@@ -63,7 +67,8 @@ void query2b(int nArtists, char* country, Discography* disco, FILE* output){
             char* typeInChar = typeToString(type); // Transformação em formato char*
             char* name = getDiscographyName(head);
         
-            fprintf(output, "%s;%s;%s;%s\n", name, typeInChar, time, countryD);  
+            genericOutputWriter(output, delimiter, name, typeInChar, time, countryD, NULL);
+            //fprintf(output, "%s;%s;%s;%s\n", name, typeInChar, time, countryD);  
         
             free(time);
             free(typeInChar);
@@ -85,7 +90,7 @@ void query2b(int nArtists, char* country, Discography* disco, FILE* output){
 }
 
 // Função responsável da query 3
-void query3(int ageMin, int ageMax, GestorUser* gestorUser, FILE* output){
+void query3(int ageMin, int ageMax, GestorUser* gestorUser, char delimiter, FILE* output){
     
     if(ageMin == 100 || ageMax == 0){
         fprintf(output, "\n");
@@ -122,11 +127,14 @@ void query3(int ageMin, int ageMax, GestorUser* gestorUser, FILE* output){
     }
 
     sortGenresByLikes(genres, likes, size);
+    char** like_strings = longArrayToStringArray(likes, size);
+
     // Escrever no ficheiro o resultado final
     for(int i = 0; i < size; i++){
-        fprintf(output, "%s;%ld\n", genres[i], likes[i]);  
-        if(genres[i])free(genres[i]);
+        genericOutputWriter(output, delimiter, genres[i], like_strings[i], NULL);
     }
     free(genres);
     free(likes);
+    freeStringArray(like_strings, size);
+    freeStringArray(genres, size);
 }

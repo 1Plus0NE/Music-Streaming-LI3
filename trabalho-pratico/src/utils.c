@@ -411,6 +411,48 @@ void updateGenresAndLikes(
     }
 }
 
+// Função que converte um inteiro para uma string
+char* intToString(int value){
+    // Calcula o tamanho necessário para armazenar a string
+    int num_chars = snprintf(NULL, 0, "%d", value); // Calcula quantos caracteres são necessários
+    char* buffer = (char*)malloc(num_chars + 1);
+    
+    if (buffer == NULL){
+        fprintf(stderr, "Erro: Falha na alocação de memória para intToString\n");
+        return NULL; 
+    }
+
+    // Converte o valor inteiro para uma string
+    snprintf(buffer, num_chars + 1, "%d", value); // Escreve o valor no buffer
+    return buffer;
+}
+
+// Converte um long int para uma string
+char* longToString(long value){
+    int num_chars = snprintf(NULL, 0, "%ld", value);
+    char* buffer = (char*)malloc(num_chars + 1);
+    if(buffer != NULL) snprintf(buffer, num_chars + 1, "%ld", value);
+    
+    return buffer; 
+}
+
+// Converte um array de long ints para um array de strings
+char** longArrayToStringArray(const long* array, int size){
+    char** string_array = (char**)malloc(size * sizeof(char*));
+    for(int i = 0; i < size; i++){
+        string_array[i] = longToString(array[i]);
+    }
+    return string_array;
+}
+
+// Função que dado um array de strings, liberta a memória de cada string do array
+void freeStringArray(char** string_array, int size){
+    for(int i = 0; i < size; i++){
+        free(string_array[i]);
+    }
+    free(string_array);
+}
+
 // Função que cria a diretoria "dataset-errors" e respetivos ficheiros com cabeçalhos
 void errosDir(){
     FILE *errors;

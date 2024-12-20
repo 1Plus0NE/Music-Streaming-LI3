@@ -15,7 +15,7 @@
 typedef struct music Music;
 
 // Função para criar uma estrutura da entidade música parametrizada.
-Music* createMusic(long int id, char* title, long int* artist_id, int num_artists, long int album_id, char* duration, char* genre, int year, char* lyrics);
+Music* createMusic(long int id, char* title, long int* artist_id, int num_artists, char* duration, char* genre, int year, char* lyrics);
 
 // GETTERS
 long int* getMusicID(Music* m);
@@ -26,7 +26,7 @@ long int* getMusicArtistIDs(Music* m);
 
 int getMusicNumArtists(Music* m);
 
-long int* getMusicAlbumId(Music* m);
+//long int* getMusicAlbumId(Music* m);
 
 char* getMusicDuration(Music* m);
 
@@ -43,7 +43,7 @@ void setMusicTitle(Music* m, char* newTitle);
 
 void setMusicArtistIDs(Music* m, long int* newArtistID, int newNumArtists);
 
-void setMusicAlbumId(Music* m, long int newAlbumId);
+//void setMusicAlbumId(Music* m, long int newAlbumId);
 
 void setMusicDuration(Music* m, char* newDuration);
 

@@ -58,6 +58,18 @@ int isAgeInRange(int age, int minAge, int maxAge);
 // Função que dados novos arrays de generos e likes, atualiza o conteúdo dos arrays originais de generos e likes
 void updateGenresAndLikes(char*** genres, long int** likes, int* size, char** newGenres, long int* newLikes, int newSize);
 
+// Função que converte um inteiro para uma string
+char* intToString(int value);
+
+// Converte um long int para uma string
+char* longToString(long value);
+
+// Converte um array de long ints para um array de strings
+char** longArrayToStringArray(const long* array, int size);
+
+// Função que dado um array de strings, liberta a memória de cada string do array
+void freeStringArray(char** string_array, int size);
+
 // Função que cria a diretoria "dataset-errors" e respetivos ficheiros com cabeçalhos
 void errosDir();
 
