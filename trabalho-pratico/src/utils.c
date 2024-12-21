@@ -358,16 +358,6 @@ char** splitString(const char* str, const char* delimiter, int* num_elements){
     return result;
 }
 
-//função auxiliar para libertar a memória de um array de strings.
-void freeStringArray(char** array, int num_elements){
-    if(!array) return;
-
-    for(int i = 0; i < num_elements; i++){
-        if(array[i]) free(array[i]);
-    }
-    free(array);
-}
-
 // Função que remove new lines
 void removeEnters(char *input){
     int len = strlen(input);
@@ -502,11 +492,23 @@ char** longArrayToStringArray(const long* array, int size){
 }
 
 // Função que dado um array de strings, liberta a memória de cada string do array
-void freeStringArray(char** string_array, int size){
-    for(int i = 0; i < size; i++){
-        free(string_array[i]);
+void freeStringArray(char** string_array, int size) {
+    if (!string_array) {
+        fprintf(stderr, "Erro: string_array é NULL.\n");
+        return;
     }
+
+    for (int i = 0; i < size; i++) {
+        if (string_array[i]) {
+            free(string_array[i]);
+            string_array[i] = NULL; // Prevenir uso posterior do ponteiro
+        } else {
+            fprintf(stderr, "Aviso: string_array[%d] já é NULL.\n", i);
+        }
+    }
+
     free(string_array);
+    string_array = NULL; // Prevenir uso posterior do ponteiro
 }
 
 // Função que cria a diretoria "dataset-errors" e respetivos ficheiros com cabeçalhos

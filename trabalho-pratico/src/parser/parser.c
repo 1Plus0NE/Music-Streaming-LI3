@@ -89,7 +89,7 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
     // Leitura query a query
     while(fgets(line, sizeof(line), queries) != NULL){ 
 
-        linePtr = line;  
+        linePtr = line;
         // Atualização do path para o ficheiro de output da query 
         command++;
         snprintf(outputPath, MAX_FILENAME, "resultados/command%d_output.txt", command);
@@ -130,22 +130,25 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
             country = remove_aspas(strsep(&linePtr, "\n")); // País sem aspas
             
             if(measure_flag) clock_gettime(CLOCK_REALTIME, &query_start);
-            if(country == NULL) query2(nArtists, disco, delimiter ,outputQ2); // query 2 sem especificação de país
-            else query2b(nArtists, country, disco, delimiter, outputQ2); // query 2 com país especificado
+            if(country == NULL){
+                query2(nArtists, disco, delimiter ,outputQ2);
+            }
+             // query 2 sem especificação de país
+            else{
+                query2b(nArtists, country, disco, delimiter, outputQ2);
+            }
             if(measure_flag){
                 clock_gettime(CLOCK_REALTIME, &query_end);
                 query_elapsed = (query_end.tv_sec - query_start.tv_sec) +
                                 (query_end.tv_nsec - query_start.tv_nsec) / 1e9;
                 total_time_query2 += query_elapsed;
             }
-            
             if(country != NULL){
                 free(country);
             }
-            
             fclose(outputQ2);
         }
-         else if(line[0] == '3'){
+        else if(line[0] == '3'){
             outputQ3 = fopen(outputPath, "w");
             if(!outputQ3){
                 perror("Erro ao criar o ficheiro de output da query 3.\n");

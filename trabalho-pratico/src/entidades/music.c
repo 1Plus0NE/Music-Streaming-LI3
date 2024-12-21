@@ -214,10 +214,7 @@ void setMusicLyrics(Music* m, char* newLyrics){
 void freeMusic(Music* music){
     free(music -> title);
     free(music -> artist_id);
-<<<<<<< HEAD
     //free(music -> album_id);
-=======
->>>>>>> refs/remotes/origin/main
     free(music -> duration);
     free(music -> genre);
     free(music -> lyrics);
@@ -231,10 +228,7 @@ gboolean freeMusicInTable(gpointer key, gpointer value, gpointer user_data){
     Music* music = (Music*)value;
     free(music -> title);
     free(music -> artist_id);
-<<<<<<< HEAD
     //free(music -> album_id);
-=======
->>>>>>> refs/remotes/origin/main
     free(music -> duration);
     free(music -> genre);
     free(music -> lyrics);

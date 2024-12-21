@@ -82,7 +82,7 @@ void query2(int nArtists, Discography* disco, char delimiter, FILE* output){
         char* typeInChar = typeToString(type); // Transformação em formato char*
 
         //fprintf(output, "%s;%s;%s;%s\n", name, typeInChar, time, country);  
-        genericOutputWriter(output, delimiter, name, country, time, typeInChar, NULL);
+        genericOutputWriter(output, delimiter, name, typeInChar, time, country, NULL);
 
         free(time);
         free(typeInChar);
@@ -143,7 +143,6 @@ void query3(int ageMin, int ageMax, GestorUser* gestorUser, char delimiter, FILE
     int size = 0;
     // Flag para caso os intervalos de idades sejam validos mas não haja users compreendidos nessas idades
     int flag = 0;
-
     GPtrArray* userLikesArr = getUserLikesArray(gestorUser);
     for(guint i = 0; i < userLikesArr->len; i++){
         UserLikes* userLikes = getUserLikeFromArray(gestorUser, i);
@@ -159,21 +158,17 @@ void query3(int ageMin, int ageMax, GestorUser* gestorUser, char delimiter, FILE
             free(likesUL);
         }
     }
-
     // No caso de nao termos encontrado um user na range de idades
     if(!flag){
         fprintf(output, "\n");
         return;
     }
-
     sortGenresByLikes(genres, likes, size);
     char** like_strings = longArrayToStringArray(likes, size);
-
     // Escrever no ficheiro o resultado final
     for(int i = 0; i < size; i++){
         genericOutputWriter(output, delimiter, genres[i], like_strings[i], NULL);
     }
-    free(genres);
     free(likes);
     freeStringArray(like_strings, size);
     freeStringArray(genres, size);
