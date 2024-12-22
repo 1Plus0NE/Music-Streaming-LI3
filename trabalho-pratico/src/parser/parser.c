@@ -5,15 +5,21 @@
 typedef void (*EntityProcessor)(char* line, void* gestor, void* aux_data);
 
 // Função principal de parse que chama os módulos de parse individualmente.
-void parse_all(char* path, GestorArtist* gestorArtist, GestorMusic* gestorMusic, GestorUser* gestorUser){
+void parse_all(char* path, GestorArtist* gestorArtist, GestorMusic* gestorMusic, GestorUser* gestorUser, GestorAlbum* gestorAlbum, GestorHistory* gestorHistory){
     //parse de artistas
     parse_artist(path, gestorArtist);
 
     //parse de músicas
     parse_music(path, gestorMusic, gestorArtist);
 
-    //parse de usuários
+    //parse de utilizadores
     parse_user(path, gestorUser, gestorMusic);
+
+    //parse de albúns
+    parse_album(path, gestorMusic);
+    
+    //parse de históricos
+    parse_history(path, gestorUser);
 }
 
 // função que faz parse de um csv.

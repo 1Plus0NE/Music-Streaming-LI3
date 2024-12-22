@@ -4,7 +4,7 @@
 
 //função que dá parse ao ficheiro de histórico.
 void parse_history(char* path, GestorHistory* gestorHistory) {
-    parse_csv(path, "historys.csv", gestorHistory, NULL, process_history_line, 1);
+    parse_csv(path, "history.csv", gestorHistory, NULL, process_history_line, 1);
 }
 
 //função que processa uma linha do hsitórico.

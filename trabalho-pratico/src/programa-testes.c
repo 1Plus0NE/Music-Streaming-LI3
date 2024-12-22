@@ -17,9 +17,11 @@ int main(int argc, char *argv[]) {
     GestorArtist* gestorArtist = createGestorArtist();
     GestorMusic* gestorMusic = createGestorMusic();
     GestorUser* gestorUser = createGestorUser();
+    GestorAlbum* gestorAlbum = createGestorAlbum();
+    GestorHistory* gestorHistory = createGestorHistory();
 
     // Carregar dados iniciais com parse_all
-    parse_all(dataDir, gestorArtist, gestorMusic, gestorUser);
+    parse_all(dataDir, gestorArtist, gestorMusic, gestorUser, gestorAlbum, gestorHistory);
     printf("Parsing inicial completo.\n");
 
     // Medir tempo inicial do programa completo
@@ -90,6 +92,8 @@ int main(int argc, char *argv[]) {
     freeGestorArtist(gestorArtist);
     freeGestorMusic(gestorMusic);
     freeGestorUser(gestorUser);
+    freeGestorAlbum(gestorAlbum);
+    freeGestorHistory(gestorHistory);
 
     return 0;
 }

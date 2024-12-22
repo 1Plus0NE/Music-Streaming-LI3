@@ -322,6 +322,8 @@ char** splitString(const char* str, const char* delimiter, int* num_elements){
         exit(EXIT_FAILURE);
     }
 
+    char* str_copy_original = str_copy;
+
     int count = 0;
     char* temp = str_copy;
     while((temp = strstr(temp, delimiter))){
@@ -330,10 +332,10 @@ char** splitString(const char* str, const char* delimiter, int* num_elements){
     }
     count++;
 
-    char** result = malloc(count * sizeof(char*));
+    char** result = malloc((count + 1) * sizeof(char*));
     if(!result){
         perror("Erro ao alocar memória para o array de strings.\n");
-        free(str_copy);
+        free(str_copy_original);
         exit(EXIT_FAILURE);
     }
 
@@ -349,12 +351,13 @@ char** splitString(const char* str, const char* delimiter, int* num_elements){
             exit(EXIT_FAILURE);
         }
         i++;
+        token = strsep(&str_copy, delimiter);
     }
 
     result[i] = NULL;
     *num_elements = count;
 
-    free(str_copy);
+    free(str_copy_original);
     return result;
 }
 

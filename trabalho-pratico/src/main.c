@@ -15,11 +15,13 @@ int main(int argc, char* argv[]){
     GestorArtist* gestorArtist = createGestorArtist();
     GestorMusic* gestorMusic = createGestorMusic();
     GestorUser* gestorUser = createGestorUser();
+    GestorAlbum* gestorAlbum = createGestorAlbum();
+    GestorHistory* gestorHistory = createGestorHistory();
 
     errosDir();
     
-    parse_all(dataDir, gestorArtist, gestorMusic, gestorUser);
-    
+    parse_all(dataDir, gestorArtist, gestorMusic, gestorUser, gestorAlbum, gestorHistory);
+
     if(queriesFile){
         parse_queries(queriesFile, gestorUser, gestorMusic, gestorArtist, 0);
     }
@@ -27,6 +29,8 @@ int main(int argc, char* argv[]){
     freeGestorArtist(gestorArtist);
     freeGestorMusic(gestorMusic);
     freeGestorUser(gestorUser);
+    freeGestorAlbum(gestorAlbum);
+    freeGestorHistory(gestorHistory);
 
     return 0;
 }
