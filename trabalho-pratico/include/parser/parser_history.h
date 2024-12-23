@@ -13,6 +13,6 @@
 void parse_history(char* path, GestorHistory* gestorHistory);
 
 // Função que processa uma linha de histórico.
-void process_history_line(char* line, void* gestor, void* aux_data);
+void process_history_line(char* line, void* gestor, void* aux_dataX, void* aux_dataY);
 
 #endif

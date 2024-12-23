@@ -13,6 +13,6 @@
 void parse_album(char* path, GestorAlbum* gestorAlbum);
 
 // Função que processa uma linha de álbum.
-void process_album_line(char* line, void* gestor, void* aux_data);
+void process_album_line(char* line, void* gestor, void* aux_dataX, void* aux_dataY);
 
 #endif

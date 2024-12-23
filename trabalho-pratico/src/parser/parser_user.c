@@ -58,13 +58,14 @@ int userLineVerify(char *line, GestorMusic* gestorMusic){
 
 // Função que dá parse ao ficheiro de utilizadores.
 void parse_user(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic){
-    parse_csv(path, "users.csv", gestorUser, gestorMusic, process_user_line, 3);
+    parse_csv(path, "users.csv", gestorUser, gestorMusic, NULL, process_user_line, 3);
 }
 
 // função para processar uma linha de utilizador.
-void process_user_line(char* line, void* gestor, void* aux_data){
+void process_user_line(char* line, void* gestor, void* aux_dataX, void* aux_dataY){
+    (void)aux_dataY;
     GestorUser* gestorUser = (GestorUser*)gestor;
-    GestorMusic* gestorMusic = (GestorMusic*)aux_data;
+    GestorMusic* gestorMusic = (GestorMusic*)aux_dataX;
 
     char* tmp_line = strdup(line);
     char* original_line = tmp_line;
@@ -76,7 +77,7 @@ void process_user_line(char* line, void* gestor, void* aux_data){
 
     // validações.
     if(userLineVerify(line, gestorMusic) != 0){
-        writeErrors(line, 3);
+        writeErrors(original_line, 3);
         free(tmp_line);
         return;
     }

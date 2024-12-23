@@ -8,10 +8,10 @@ void parse_music(char* path, GestorMusic* gestorMusic, GestorArtist* gestorArtis
 }
 
 // Função para processar uma linha de música.
-void process_music_line(char* line, void* gestor, void* aux_data, void* aux_data2){
+void process_music_line(char* line, void* gestor, void* aux_dataX, void* aux_dataY){
     GestorMusic* gestorMusic = (GestorMusic*)gestor;
-    GestorArtist* gestorArtist = (GestorArtist*)aux_data;
-    GestorAlbum* gestorAlbum = (GestorAlbum*)aux_data2;
+    GestorArtist* gestorArtist = (GestorArtist*)aux_dataX;
+    GestorAlbum* gestorAlbum = (GestorAlbum*)aux_dataY;
 
     char original_line[MAX_LINE];
     strcpy(original_line, line);
@@ -25,7 +25,7 @@ void process_music_line(char* line, void* gestor, void* aux_data, void* aux_data
 
     id_str = remove_aspas(strsep(&tmp_line, ";"));
     if(!id_str || strlen(id_str) == 0){
-        writeErrors(line, 2);
+        writeErrors(original_line, 2);
         return;
     }
 

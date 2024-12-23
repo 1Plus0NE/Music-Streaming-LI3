@@ -13,6 +13,6 @@
 void parse_artist(char* path, GestorArtist* gestorArtist);
 
 // Função que processa uma linha do ficheiro de artistas.
-void process_artist_line(char* line, void* gestor, void* aux_data);
+void process_artist_line(char* line, void* gestor, void* aux_dataX, void* aux_dataY);
 
 #endif

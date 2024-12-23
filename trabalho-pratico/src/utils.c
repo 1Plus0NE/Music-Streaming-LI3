@@ -541,6 +541,7 @@ void errosDir(){
         exit(EXIT_FAILURE);
     }
     fprintf(errors, "\"id\";\"title\";\"artist_id\";\"duration\";\"genre\";\"year\";\"lyrics\"\n");
+    fclose(errors);
 
     errors = fopen("resultados/history_errors.csv", "w");
     if(!errors){

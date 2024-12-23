@@ -63,7 +63,7 @@ void durationAdd(Discography* disco, const char* duration, long int id){
     
     // Converter a string de duração em segundos sem atoi
     int h=0, m=0, s=0;
-    printf("%s\n", duration);
+    //printf("%s\n", duration);
     if (sscanf(duration, "%d:%d:%d", &h, &m, &s) != 3){
         // Em principio nunca acontece
         printf("Formato de duração inválido.\n");

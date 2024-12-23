@@ -18,6 +18,6 @@ int userLineVerify(char *line, GestorMusic* gestorMusic);
 void parse_user(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic);
 
 // função que processa a linha de um utilizador.
-void process_user_line(char* line, void* gestor, void* aux_data);
+void process_user_line(char* line, void* gestor, void* aux_dataX, void* aux_dataY);
 
 #endif

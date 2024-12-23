@@ -4,12 +4,13 @@
 
 // Função que dá parse ao ficheiro de artistas.
 void parse_artist(char* path, GestorArtist* gestorArtist){
-    parse_csv(path, "artists.csv", gestorArtist, NULL, process_artist_line, 1);
+    parse_csv(path, "artists.csv", gestorArtist, NULL, NULL, process_artist_line, 1);
 }
 
 // função que processa uma linha de artista.
-void process_artist_line(char* line, void* gestor, void* aux_data) {
-    (void)aux_data;
+void process_artist_line(char* line, void* gestor, void* aux_dataX, void* aux_dataY){
+    (void)aux_dataX;
+    (void)aux_dataY;
     GestorArtist* gestorArtist = (GestorArtist*)gestor;
 
     char original_line[MAX_LINE];

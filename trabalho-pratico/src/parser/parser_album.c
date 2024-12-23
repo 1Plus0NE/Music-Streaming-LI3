@@ -4,14 +4,19 @@
 
 // Função que dá parse ao ficheiro de álbuns.
 void parse_album(char* path, GestorAlbum* gestorAlbum){
-    parse_csv(path, "albums.csv", gestorAlbum, NULL, process_album_line, 1);
+    parse_csv(path, "albums.csv", gestorAlbum, NULL, NULL, process_album_line, 4);
 }
 
 // Função que processa uma linha de álbum.
-void process_album_line(char* line, void* gestor, void* aux_data){
-    (void)aux_data;
+void process_album_line(char* line, void* gestor, void* aux_dataX, void* aux_dataY){
+    (void)aux_dataX;
+    (void)aux_dataY;
     GestorAlbum* gestorAlbum = (GestorAlbum*)gestor;
+
+    char original_line[MAX_LINE];
+    strcpy(original_line, line);
     char* tmp_line = line;
+    
     char *id_str, *title, *artist_ids_str, *year_str, *producers_str;
     long int id;
     long int* artist_ids_converted;
@@ -24,7 +29,7 @@ void process_album_line(char* line, void* gestor, void* aux_data){
         writeErrors(line, 1);
         return;
     }
-    id = strtol(id_str + 1, NULL, 10);
+    id = strtol(id_str + 2, NULL, 10);
 
     title = remove_aspas(strsep(&tmp_line, ";"));
     artist_ids_str = remove_aspas(strsep(&tmp_line, ";"));
@@ -33,7 +38,7 @@ void process_album_line(char* line, void* gestor, void* aux_data){
 
     //validações.
     if (!isFormatValid(artist_ids_str) || !isFormatValid(producers_str)) {
-        writeErrors(line, 1);
+        writeErrors(original_line, 4);
         free(id_str);
         free(title);
         free(artist_ids_str);

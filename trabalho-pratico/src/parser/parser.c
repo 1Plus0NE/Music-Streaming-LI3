@@ -2,7 +2,7 @@
 #define MAX_FILENAME 1024
 #define MAX_LINE 2048
 #define MAX_QUERYLINE 150
-typedef void (*EntityProcessor)(char* line, void* gestor, void* aux_data);
+typedef void (*EntityProcessor)(char* line, void* gestor, void* aux_dataX, void* aux_dataY);
 
 // Função principal de parse que chama os módulos de parse individualmente.
 void parse_all(char* path, GestorArtist* gestorArtist, GestorMusic* gestorMusic, GestorUser* gestorUser, GestorAlbum* gestorAlbum, GestorHistory* gestorHistory){
@@ -29,7 +29,7 @@ void parse_all(char* path, GestorArtist* gestorArtist, GestorMusic* gestorMusic,
 }
 
 // função que faz parse de um csv.
-void parse_csv(const char* path, const char* filename, void* gestor, void* aux_data, EntityProcessor process_line, int error_code) {
+void parse_csv(const char* path, const char* filename, void* gestor, void* aux_dataX, void* aux_dataY, EntityProcessor process_line, int error_code) {
     FILE* file;
     char full_path[MAX_FILENAME];
     char line[MAX_LINE];
@@ -49,7 +49,7 @@ void parse_csv(const char* path, const char* filename, void* gestor, void* aux_d
     while (fgets(line, sizeof(line), file) != NULL){
         strcpy(original_line, line);
         if(process_line){
-            process_line(original_line, gestor, aux_data);
+            process_line(original_line, gestor, aux_dataX, aux_dataY);
         }else{
             writeErrors(original_line, error_code);
         }
