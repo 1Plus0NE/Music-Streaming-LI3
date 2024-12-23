@@ -61,6 +61,10 @@ void setArtistCountry(Artist* a, char* country);
 
 void setArtistType(Artist* a, ArtistType type);
 
+// Função que passa um tipo de artista para string
 char* typeToString(ArtistType type);
+
+// Função que verifica se o tipo de artista é válido
+int isValidArtistType(char* type_str);
 
 #endif

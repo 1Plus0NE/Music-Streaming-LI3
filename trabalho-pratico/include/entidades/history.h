@@ -33,6 +33,9 @@ Platform stringToPlatform(char* platform_str);
 //função para converter uma forma de enum de plataforma para uma string.
 char* platformToString(Platform platform);
 
+//função para verificar se uma string é uma plataforma válida.
+int isValidPlatform(char* platform_str);
+
 //getters e setters de histórico.
 long int getHistoryId(History* history);
 

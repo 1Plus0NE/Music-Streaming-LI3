@@ -36,7 +36,7 @@ void process_artist_line(char* line, void* gestor, void* aux_data) {
     type_str = remove_aspas(strsep(&tmp_line, "\n"));
 
     // validações.
-    if(!isFormatValid(id_constituent) || !verifyConstituent(type_str, id_constituent)){
+    if(!isFormatValid(id_constituent) || !verifyConstituent(type_str, id_constituent) || isValidArtistType(type_str) == 0){
         writeErrors(line, 1);
         free(id_str);
         free(name);

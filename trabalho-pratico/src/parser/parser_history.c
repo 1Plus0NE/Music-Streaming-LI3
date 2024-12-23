@@ -31,7 +31,7 @@ void process_history_line(char* line, void* gestor, void* aux_data) {
     platform_str = remove_aspas(strsep(&tmp_line, "\n"));
 
     //validações.
-    if (!user_id_str || !music_id_str || !timestamp || !duration_str || !platform_str) {
+    if(!user_id_str || !music_id_str || !timestamp || !duration_str || !platform_str || isValidPlatform(platform_str) == 0){
         writeErrors(line, 1);
         free(id_str);
         free(user_id_str);

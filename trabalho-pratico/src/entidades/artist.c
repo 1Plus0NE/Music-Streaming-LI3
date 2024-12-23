@@ -72,14 +72,52 @@ Artist* createArtist(long int id, char* name, char* description, float recipe_pe
 
 //função que passa uma string do tipo do artista para o enum type
 ArtistType stringToArtistType(char* type_str){
-    if(strcmp(type_str, "individual") == 0){
-        return INDIVIDUAL;
-    }else if(strcmp(type_str, "group") == 0){
-        return GRUPO;
-    }else{
-        fprintf(stderr, "tipo de artista inexistente %s.\n", type_str);
+    if(!type_str){
+        fprintf(stderr, "Tipo de artista inválido: NULL string.\n");
         exit(EXIT_FAILURE);
     }
+
+    char* normalized_str = strdup(type_str);
+    if(!normalized_str){
+        perror("Erro ao alocar memória para normalização do tipo de artista.\n");
+        exit(EXIT_FAILURE);
+    }
+    for(char* p = normalized_str; *p; p++){
+        *p = tolower(*p);
+    }
+
+    ArtistType type;
+    if (strcmp(normalized_str, "individual") == 0){
+        type = INDIVIDUAL;
+    }else if (strcmp(normalized_str, "group") == 0){
+        type = GRUPO;
+    }else{
+        fprintf(stderr, "Tipo de artista inexistente: %s.\n", type_str);
+        free(normalized_str);
+        exit(EXIT_FAILURE);
+    }
+
+    free(normalized_str); // Liberar memória da string normalizada
+    return type;
+}
+
+// Função para verificar se o tipo de artista é válido.
+int isValidArtistType(char* type_str){
+    if(!type_str) return 0;
+
+    char* normalized_str = strdup(type_str);
+    if(!normalized_str){
+        perror("Erro ao alocar memória para normalização do tipo de artista.\n");
+        exit(EXIT_FAILURE);
+    }
+    for(char* p = normalized_str; *p; p++){
+        *p = tolower(*p);
+    }
+
+    int is_valid = (strcmp(normalized_str, "individual") == 0 || strcmp(normalized_str, "group") == 0);
+
+    free(normalized_str);
+    return is_valid;
 }
 
 // Função para libertar a memória de uma entidade do tipo artista.

@@ -53,15 +53,36 @@ gboolean freeHistoryInTable(gpointer key, gpointer value, gpointer user_data){
 }
 
 //função para converter uma string de plataforma para a forma de enum.
-Platform stringToPlatform(char* platform_str){
-    if(strcmp(platform_str, "desktop") == 0){
-        return DESKTOP;
-    }else if(strcmp(platform_str, "mobile") == 0){
-        return MOBILE;
-    }else{
-        fprintf(stderr, "Plataforma desconhecida: %s.\n", platform_str);
+Platform stringToPlatform(char* platform_str) {
+    if (!platform_str) {
+        fprintf(stderr, "Plataforma inválida: NULL string.\n");
         exit(EXIT_FAILURE);
     }
+
+    // Criar uma cópia da string e convertê-la para minúsculas
+    char* normalized_str = strdup(platform_str);
+    if (!normalized_str) {
+        perror("Erro ao alocar memória para normalização da plataforma.\n");
+        exit(EXIT_FAILURE);
+    }
+    for (char* p = normalized_str; *p; p++) {
+        *p = tolower(*p);
+    }
+
+    // Comparar com os valores esperados
+    Platform platform;
+    if (strcmp(normalized_str, "desktop") == 0) {
+        platform = DESKTOP;
+    } else if (strcmp(normalized_str, "mobile") == 0) {
+        platform = MOBILE;
+    } else {
+        fprintf(stderr, "Plataforma desconhecida: %s.\n", platform_str);
+        free(normalized_str);
+        exit(EXIT_FAILURE);
+    }
+
+    free(normalized_str); // Liberar memória da string normalizada
+    return platform;
 }
 
 //função para converter uma forma de enum de plataforma para uma string.
@@ -75,6 +96,25 @@ char* platformToString(Platform platform){
             fprintf(stderr, "Plataforma desconhecida.\n");
             exit(EXIT_FAILURE);
     }
+}
+
+//função para verificar se uma string é uma plataforma válida.
+int isValidPlatform(char* platform_str){
+    if(!platform_str) return 0;
+
+    char* normalized_str = strdup(platform_str);
+    if(!normalized_str){
+        perror("Erro ao alocar memória para normalização da plataforma.\n");
+        exit(EXIT_FAILURE);
+    }
+    for(char* p = normalized_str; *p; p++){
+        *p = tolower(*p);
+    }
+
+    int is_valid = (strcmp(normalized_str, "desktop") == 0 || strcmp(normalized_str, "mobile") == 0);
+
+    free(normalized_str);
+    return is_valid;
 }
 
 //getters e setters de histórico.
