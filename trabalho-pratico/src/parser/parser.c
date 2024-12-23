@@ -8,18 +8,24 @@ typedef void (*EntityProcessor)(char* line, void* gestor, void* aux_data);
 void parse_all(char* path, GestorArtist* gestorArtist, GestorMusic* gestorMusic, GestorUser* gestorUser, GestorAlbum* gestorAlbum, GestorHistory* gestorHistory){
     //parse de artistas
     parse_artist(path, gestorArtist);
+    printf("Fiz o parse de artistas\n");
+    
+    //parse de albúns
+    parse_album(path, gestorAlbum);
+    printf("Fiz o parse de albuns\n");
 
     //parse de músicas
-    parse_music(path, gestorMusic, gestorArtist);
+    parse_music(path, gestorMusic, gestorArtist, gestorAlbum);
+    printf("Fiz o parse de musicas\n");
 
     //parse de utilizadores
     parse_user(path, gestorUser, gestorMusic);
+    printf("Fiz o parse de users\n");
 
-    //parse de albúns
-    parse_album(path, gestorMusic);
-    
     //parse de históricos
-    parse_history(path, gestorUser);
+    parse_history(path, gestorHistory);
+    printf("Fiz o parse de historicos\n");
+
 }
 
 // função que faz parse de um csv.

@@ -12,7 +12,10 @@ void process_artist_line(char* line, void* gestor, void* aux_data) {
     (void)aux_data;
     GestorArtist* gestorArtist = (GestorArtist*)gestor;
 
+    char original_line[MAX_LINE];
+    strcpy(original_line, line);
     char* tmp_line = line;
+
     char *id_str, *name, *description, *rps_str, *id_constituent, *country, *type_str;
     long int id;
     float recipe_per_stream;
@@ -22,7 +25,7 @@ void process_artist_line(char* line, void* gestor, void* aux_data) {
 
     id_str = remove_aspas(strsep(&tmp_line, ";"));
     if(!id_str || strlen(id_str) == 0){
-        writeErrors(line, 1);
+        writeErrors(original_line, 1);
         return;
     }
     id = strtol(id_str + 1, NULL, 10);
@@ -37,7 +40,7 @@ void process_artist_line(char* line, void* gestor, void* aux_data) {
 
     // validações.
     if(!isFormatValid(id_constituent) || !verifyConstituent(type_str, id_constituent) || isValidArtistType(type_str) == 0){
-        writeErrors(line, 1);
+        writeErrors(original_line, 1);
         free(id_str);
         free(name);
         free(description);

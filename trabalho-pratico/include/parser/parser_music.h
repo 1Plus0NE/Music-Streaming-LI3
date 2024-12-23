@@ -12,9 +12,9 @@
 #include <string.h>
 
 // Função que dá parse ao ficheiro de músicas.
-void parse_music(char* path, GestorMusic* gestorMusic, GestorArtist* gestorArtist);
+void parse_music(char* path, GestorMusic* gestorMusic, GestorArtist* gestorArtist, GestorAlbum* gestorAlbum);
 
 // Função que processa uma linha do ficheiro de músicas.
-void process_music_line(char* line, void* gestor, void* aux_data);
+void process_music_line(char* line, void* gestor, void* aux_data, void* aux_data2);
 
 #endif

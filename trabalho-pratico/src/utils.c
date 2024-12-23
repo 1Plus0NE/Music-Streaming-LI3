@@ -541,6 +541,14 @@ void errosDir(){
         exit(EXIT_FAILURE);
     }
     fprintf(errors, "\"id\";\"title\";\"artist_id\";\"duration\";\"genre\";\"year\";\"lyrics\"\n");
+
+    errors = fopen("resultados/history_errors.csv", "w");
+    if(!errors){
+        perror("Erro ao criar o ficheiro de erros de historico.\n");
+        exit(EXIT_FAILURE);
+    }
+    fprintf(errors, "\"id\";\"user_id\";\"music_id\";\"timestamp\";\"duration\";\"platform\"\n");
+
     fclose(errors);
 }
 
@@ -570,6 +578,15 @@ void writeErrors(char* line, int csvFile){
             errors = fopen("resultados/users_errors.csv", "a");
             if(!errors){
                 perror("Erro ao escrever no ficheiro de erros de users.\n");
+                exit(EXIT_FAILURE);
+            }
+            fprintf(errors, "%s", line);
+            fclose(errors);
+            break;
+        case 4:
+            errors = fopen("resultados/history_errors.csv", "a");
+            if(!errors){
+                perror("Erro ao escrever no ficheiro de erros de historico.\n");
                 exit(EXIT_FAILURE);
             }
             fprintf(errors, "%s", line);
