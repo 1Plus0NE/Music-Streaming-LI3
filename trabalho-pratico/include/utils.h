@@ -67,6 +67,9 @@ void updateGenresAndLikes(char*** genres, long int** likes, int* size, char** ne
 // Função que converte um inteiro para uma string
 char* intToString(int value);
 
+// Função que converte um float para uma string
+char* floatToString(float value, int decimal_places);
+
 // Converte um long int para uma string
 char* longToString(long value);
 

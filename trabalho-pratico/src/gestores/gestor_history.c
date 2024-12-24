@@ -89,3 +89,24 @@ bool validateHistoryIDs(GestorHistory* gestorHistory, long int* idList, int N){
     }
     return false;
 }
+
+// Função auxiliar para liberar a memória de um histórico na tabela.
+int getTotalReproducoes(long int artist_id, GestorHistory* gestorHistory, IsMusicByArtistFunc isMusicByArtist){
+    int total_reproductions = 0;
+    GHashTableIter iter;
+    gpointer key, value;
+    g_hash_table_iter_init(&iter, gestorHistory -> table);
+    printf("Iterando sobre a tabela de histórico...\n");
+
+    while (g_hash_table_iter_next(&iter, &key, &value)) {
+        History* history = (History*)value;
+        printf("ID do histórico: %ld\n", getHistoryId(history));
+
+        // Supondo que existe uma função para mapear músicas ao artista
+        if (isMusicByArtist(getHistoryId(history), artist_id)) {
+            total_reproductions += 1; // Cada histórico representa uma reprodução
+        }
+    }
+    printf("Total de reproduções: %d\n", total_reproductions);
+    return total_reproductions;
+}

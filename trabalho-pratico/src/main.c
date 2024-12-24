@@ -23,9 +23,9 @@ int main(int argc, char* argv[]){
     parse_all(dataDir, gestorArtist, gestorMusic, gestorUser, gestorAlbum, gestorHistory);
 
     if(queriesFile){
-        parse_queries(queriesFile, gestorUser, gestorMusic, gestorArtist, 0);
+        parse_queries(queriesFile, gestorUser, gestorMusic, gestorArtist, gestorAlbum, gestorHistory, 0);
     }
-    
+
     freeGestorArtist(gestorArtist);
     freeGestorMusic(gestorMusic);
     freeGestorUser(gestorUser);

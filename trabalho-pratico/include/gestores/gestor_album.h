@@ -36,4 +36,13 @@ bool containsAlbumID(GestorAlbum* gestorAlbum, long int id);
 // Função que verifica se todos a lista de ids existe na tabela de álbuns.
 bool validateAlbumIDs(GestorAlbum* gestorAlbum, long int *idList, int N);
 
+// Função que retorna o número de álbuns individuais de um artista.
+int getNumAlbumsIndividual(GestorAlbum* gestorAlbum, long int artist_id);
+
+// Função que retorna o número de álbuns de um artista.
+Album* findAlbumByMusicId(GestorAlbum* gestorAlbum, int music_id);
+
+// Função que determina se uma música pertence a um artista.
+bool isMusicByArtist(long int music_id, long int artist_id, GestorAlbum* gestorAlbum);
+
 #endif

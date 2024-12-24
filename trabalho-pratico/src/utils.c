@@ -476,6 +476,21 @@ char* intToString(int value){
     return buffer;
 }
 
+// Função que converte um float para uma string
+char* floatToString(float value, int decimal_places){
+    int buffer_size = 32;
+    char* buffer = malloc(buffer_size);
+
+    if(!buffer){
+        fprintf(stderr, "Erro ao alocar memória para o buffer de string do float.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    snprintf(buffer, buffer_size, "%.*f", decimal_places, value);
+
+    return buffer;
+}
+
 // Converte um long int para uma string
 char* longToString(long value){
     int num_chars = snprintf(NULL, 0, "%ld", value);
