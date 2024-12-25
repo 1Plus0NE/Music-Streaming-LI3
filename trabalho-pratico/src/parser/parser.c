@@ -59,7 +59,7 @@ void parse_csv(const char* path, const char* filename, void* gestor, void* aux_d
 }
 
 // Função dá parse as queries.
-void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic, GestorArtist* gestorArtist, int measure_flag){
+void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic, GestorArtist* gestorArtist, GestorAlbum* gestorAlbum, GestorHistory* gestorHistory, int measure_flag){
     char line[MAX_QUERYLINE];
     char* linePtr=NULL;
     FILE* queries;
@@ -120,7 +120,7 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
             user = strsep(&linePtr, "\n");
 
             if(measure_flag) clock_gettime(CLOCK_REALTIME, &query_start);
-            query1(user, gestorUser, delimiter, outputQ1);
+            query1(user, gestorUser, gestorArtist, gestorAlbum, gestorHistory,  delimiter, outputQ1);
             if(measure_flag){
                 clock_gettime(CLOCK_REALTIME, &query_end);
                 query_elapsed = (query_end.tv_sec - query_start.tv_sec) +

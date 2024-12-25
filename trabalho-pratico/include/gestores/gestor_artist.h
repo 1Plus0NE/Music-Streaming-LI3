@@ -43,4 +43,10 @@ Discography* fillWithArtists(GestorArtist* gestorArtist, Discography* disco);
 // Função  para cada item da Hash Table
 void artistFromTableToLL(G_GNUC_UNUSED gpointer artistId, gpointer artistData, gpointer discoPtr);
 
+// Função que retorna um GPtrArray com os coletivos de um artista
+GPtrArray* getArtistCollectives(GestorArtist* gestorArtist, long int artist_id);
+
+// Função que retorna o número de constituintes de um coletivo
+int getNumConstituents(GestorArtist* gestorArtist, long int artist_id);
+
 #endif

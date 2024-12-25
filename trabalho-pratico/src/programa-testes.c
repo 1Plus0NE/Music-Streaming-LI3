@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
     clock_gettime(CLOCK_REALTIME, &start_time);
 
     // Execução das queries e comparação dos resultados com os esperados
-    parse_queries(queriesFile, gestorUser, gestorMusic, gestorArtist, 1);
+    parse_queries(queriesFile, gestorUser, gestorMusic, gestorArtist, gestorAlbum, gestorHistory, 1);
 
     // Caminho do arquivo de saída para comparar
     FILE *query_file = fopen(queriesFile, "r");
