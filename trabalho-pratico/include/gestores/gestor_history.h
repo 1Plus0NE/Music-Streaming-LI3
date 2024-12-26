@@ -38,7 +38,4 @@ bool containsHistoryID(GestorHistory* gestorHistory, long int id);
 // Função que verifica se todos a lista de ids existe na tabela de históricos.
 bool validateHistoryIDs(GestorHistory* gestorHistory, long int *idList, int N);
 
-// Função auxiliar para liberar a memória de um histórico na tabela.
-int getTotalReproducoes(long int artist_id, GestorHistory* gestorHistory, IsMusicByArtistFunc isMusicByArtist);
-
 #endif

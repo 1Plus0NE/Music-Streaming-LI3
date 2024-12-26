@@ -31,6 +31,21 @@ void foreachArtist(GestorArtist* gestorArtist, GHFunc func, gpointer user_data);
 // função que libera a memória alocada para a tabela de artistas.
 void freeGestorArtist(GestorArtist* gestorArtist);
 
+// função que adiciona um artista e a sua receita à tabela de receitas.
+void addArtistRecipe(GestorArtist* gestorArtist, long int artist_id, float recipe);
+
+// função que atualiza a receita de um artista na tabela de receitas.
+void updateArtistRecipe(GestorArtist* gestorArtist, long int artist_id, float recipe);
+
+// função que retorna a receita de um artista na tabela de receitas.
+float getArtistRecipe(GestorArtist* gestorArtist, long int artist_id);
+
+// função que remove um artista da tabela de receitas.
+void removeArtistRecipe(GestorArtist* gestorArtist, long int artist_id);
+
+// Função para liberar a memória alocada para os artistas na tabela.
+void freeArtistRecipeInTable(gpointer key, gpointer value, gpointer user_data);
+
 // Função que verifica se a chave existe na tabela de artistas.
 bool containsArtistID(GestorArtist* gestorArtist, long int id);
 
@@ -42,11 +57,5 @@ Discography* fillWithArtists(GestorArtist* gestorArtist, Discography* disco);
 
 // Função  para cada item da Hash Table
 void artistFromTableToLL(G_GNUC_UNUSED gpointer artistId, gpointer artistData, gpointer discoPtr);
-
-// Função que retorna um GPtrArray com os coletivos de um artista
-GPtrArray* getArtistCollectives(GestorArtist* gestorArtist, long int artist_id);
-
-// Função que retorna o número de constituintes de um coletivo
-int getNumConstituents(GestorArtist* gestorArtist, long int artist_id);
 
 #endif

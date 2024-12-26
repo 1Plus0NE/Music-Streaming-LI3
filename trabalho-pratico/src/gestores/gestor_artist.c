@@ -3,6 +3,7 @@
 //estrutura do gestor de artistas.
 struct gestor_artist {
     GHashTable* table;
+    GHashTable* recipe_table;
 };
 
 // função para criar uma tabela de artistas.
@@ -15,8 +16,15 @@ GestorArtist* createGestorArtist(){
     }
 
     gestorArtist -> table = g_hash_table_new(g_int_hash, g_int_equal);
-    if(gestorArtist -> table == NULL){
-        perror("Falha ao criar a tabela de hashing de artistas.\n");
+    gestorArtist -> recipe_table = g_hash_table_new(g_int_hash, g_int_equal);
+    if(!gestorArtist -> table || !gestorArtist -> recipe_table){
+        perror("Falha ao criar tabelas de hashing de artistas.\n");
+        if(gestorArtist -> table){
+            g_hash_table_destroy(gestorArtist -> table);
+        }
+        if(gestorArtist -> recipe_table){
+            g_hash_table_destroy(gestorArtist -> recipe_table);
+        }
         free(gestorArtist);
         return NULL;
     }
@@ -59,8 +67,60 @@ void freeGestorArtist(GestorArtist* gestorArtist){
             g_hash_table_foreach_remove(gestorArtist -> table,freeArtistInTable,NULL);
             g_hash_table_destroy(gestorArtist -> table);
         }
+        if(gestorArtist -> recipe_table){
+            g_hash_table_foreach_remove(gestorArtist -> recipe_table,freeArtistRecipeInTable,NULL);
+            g_hash_table_destroy(gestorArtist -> recipe_table);
+        }
         free(gestorArtist);
     }
+}
+
+// função que adiciona um artista e a sua receita à tabela de receitas.
+void addArtistRecipe(GestorArtist* gestorArtist, long int artist_id, float recipe){
+    if(gestorArtist && gestorArtist -> recipe_table){
+        float* recipe_ptr = malloc(sizeof(float));
+        if(!recipe_ptr){
+            perror("Erro ao alocar memória para a receita do artista.\n");
+            return;
+        }
+        *recipe_ptr = recipe;
+        g_hash_table_insert(gestorArtist -> recipe_table, GINT_TO_POINTER(artist_id), recipe_ptr);
+    }
+}
+
+// função que atualiza a receita de um artista na tabela de receitas.
+void updateArtistRecipe(GestorArtist* gestorArtist, long int artist_id, float recipe){
+    if(gestorArtist && gestorArtist -> recipe_table){
+        float* recipe_ptr = (float*)g_hash_table_lookup(gestorArtist->recipe_table, GINT_TO_POINTER(artist_id));
+        if(recipe_ptr){
+            *recipe_ptr = recipe;
+        }else{
+            addArtistRecipe(gestorArtist, artist_id, recipe);
+        }
+    }
+}
+
+// função que retorna a receita de um artista na tabela de receitas.
+float getArtistRecipe(GestorArtist* gestorArtist, long int artist_id){
+    if(gestorArtist && gestorArtist -> recipe_table){
+        float* recipe_ptr = (float*)g_hash_table_lookup(gestorArtist->recipe_table, GINT_TO_POINTER(artist_id));
+        if(recipe_ptr){
+            return *recipe_ptr;
+        }
+    }
+    return 0.0f;
+}
+
+// função que remove um artista da tabela de receitas.
+void removeArtistRecipe(GestorArtist* gestorArtist, long int artist_id){
+    if(gestorArtist && gestorArtist -> recipe_table){
+        g_hash_table_remove(gestorArtist -> recipe_table, GINT_TO_POINTER(artist_id));
+    }
+}
+
+// Função para liberar a memória alocada para os artistas na tabela.
+void freeArtistRecipeInTable(gpointer key, gpointer value, gpointer user_data){
+    free(value);
 }
 
 // Função que verifica se a chave existe na tabela de artistas.
@@ -113,54 +173,4 @@ void artistFromTableToLL(G_GNUC_UNUSED gpointer artistId, gpointer artistData, g
     artistInsert(disco, id, name, country, type);
     free(name);
     free(country);
-}
-
-// Função que retorna um GPtrArray com os coletivos de um artista
-GPtrArray* getArtistCollectives(GestorArtist* gestorArtist, long int artist_id){
-    GPtrArray* collectives = g_ptr_array_new_with_free_func(free);
-
-    GHashTableIter iter;
-    gpointer key, value;
-
-    g_hash_table_iter_init(&iter, gestorArtist -> table);
-    while(g_hash_table_iter_next(&iter, &key, &value)){
-        Artist* artist = (Artist*)value;
-        int* artist_id_constituent = getArtistIdConstituent(artist);
-        int num_constituents = getArtistNumConstituent(artist);
-        // Verifica se é um coletivo (GRUPO)
-        if(getArtistType(artist) == GRUPO){
-            for(int i = 0; i < num_constituents; i++){
-                if(artist_id_constituent[i] == artist_id){
-                    // Adiciona o ID do coletivo ao GPtrArray
-                    long int* collective_id = malloc(sizeof(long int));
-                    if(!collective_id){
-                        fprintf(stderr, "Erro ao alocar memória para o ID do coletivo\n");
-                        g_ptr_array_free(collectives, TRUE);
-                        exit(EXIT_FAILURE);
-                    }
-                    *collective_id = getArtistId(artist);
-                    g_ptr_array_add(collectives, collective_id);
-                    break;
-                }
-            }
-        }
-    }
-
-    return collectives;
-}
-
-// Função que retorna o número de constituintes de um coletivo
-int getNumConstituents(GestorArtist* gestorArtist, long int artist_id){
-    Artist* artist = (Artist*)g_hash_table_lookup(gestorArtist->table, &artist_id);
-    if(!artist){
-        fprintf(stderr, "Artista com ID %ld não encontrado\n", artist_id);
-        return 0;
-    }
-
-    if(getArtistType(artist) != GRUPO){
-        fprintf(stderr, "Artista com ID %ld não é um coletivo\n", artist_id);
-        return 0;
-    }
-    
-    return getArtistNumConstituent(artist);
 }

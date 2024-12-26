@@ -3,50 +3,6 @@
 
 // função que responde á query1.
 void query1(char* id_str, GestorUser* gestorUser, GestorArtist* gestorArtist, GestorAlbum* gestorAlbum, GestorHistory* gestorHistory, char delimiter, FILE* output_file){
-
-    /* long int id = 0;
-    if(id_str[0] == 'A'){
-        long int id = strtol(id_str + 1, NULL, 10);
-        Artist* artist = searchArtist(gestorArtist, id);
-        if(artist){
-            printf("ID: %ld\n", id);
-            char* name = getArtistName(artist);
-            char* type = typeToString(getArtistType(artist));
-            char* country = getArtistCountry(artist);
-
-            // Calcula o número de álbuns individuais
-            int num_albums_individual = getNumAlbumsIndividual(gestorAlbum, id);
-            printf("Número de álbuns individuais: %d\n", num_albums_individual);
-            // Calcula a receita total
-            float total_recipe = 0.0;
-            int reproductions = getTotalReproducoes(id, gestorHistory, isMusicByArtist);
-            printf("Reproduções: %d\n", reproductions);
-            total_recipe += reproductions * getArtistRecipePerStream(artist);
-
-            // Se for um artista individual, adiciona a receita de participação
-            if(getArtistType(artist) == INDIVIDUAL){
-                GPtrArray* collectives = getArtistCollectives(gestorArtist, id);
-                for(guint i = 0; i < collectives->len; i++){
-                    Artist* collective = g_ptr_array_index(collectives, id);
-                    int reproductions_collective = getTotalReproducoes(gestorHistory, getArtistId(collective), isMusicByArtist);
-                    total_recipe += (float)(reproductions_collective * getArtistRecipePerStream(collective)) / 
-                                    getNumConstituents(collective, getArtistId(collective));
-                }
-                g_ptr_array_free(collectives, TRUE);
-            }
-
-            // Escreve o resultado no arquivo
-            char* num_albums_buffer = intToString(num_albums_individual);
-            char* total_recipe_buffer = floatToString(total_recipe, 2);
-            genericOutputWriter(output_file, delimiter, name, type, country, num_albums_buffer, total_recipe_buffer, NULL);
-
-            free(name);
-            free(type);
-            free(country);
-            free(num_albums_buffer);
-            free(total_recipe_buffer);
-            return;
-        } */
     User* user = searchUser(gestorUser, id_str);
     if(user){
         char* email = getUserEmail(user);
