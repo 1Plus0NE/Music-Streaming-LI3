@@ -3,13 +3,13 @@
 #define MAX_LINE 2048
 
 // Função que dá parse ao ficheiro de álbuns.
-void parse_album(char* path, GestorAlbum* gestorAlbum){
-    parse_csv(path, "albums.csv", gestorAlbum, NULL, NULL, process_album_line, 4);
+void parse_album(char* path, GestorAlbum* gestorAlbum, GestorArtist* gestorArtist){
+    parse_csv(path, "albums.csv", gestorAlbum, gestorArtist, NULL, process_album_line, 4);
 }
 
 // Função que processa uma linha de álbum.
 void process_album_line(char* line, void* gestor, void* aux_dataX, void* aux_dataY){
-    (void)aux_dataX;
+    GestorArtist* gestorArtist = (GestorArtist*)aux_dataX;
     (void)aux_dataY;
     GestorAlbum* gestorAlbum = (GestorAlbum*)gestor;
 
@@ -54,6 +54,15 @@ void process_album_line(char* line, void* gestor, void* aux_dataX, void* aux_dat
 
     Album* album = createAlbum(id, title, artist_ids_converted, num_artists, year, producers_converted, num_producers);
     addAlbum(gestorAlbum, album);
+    for (int i = 0; i < num_artists; i++) {
+        long int artist_id = artist_ids_converted[i];
+
+        // Pega a contagem de álbuns atual para o artista
+        int count = getIndividualAlbumCount(gestorArtist, artist_id);
+
+        // Atualiza a contagem de álbuns para o artista
+        updateIndividualAlbumCount(gestorArtist, artist_id, count + 1);
+    }
 
     free(artist_ids_converted);
     freeStringArray(producers_converted, num_producers);

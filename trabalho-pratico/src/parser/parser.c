@@ -9,9 +9,9 @@ void parse_all(char* path, GestorArtist* gestorArtist, GestorMusic* gestorMusic,
     //parse de artistas
     parse_artist(path, gestorArtist);
     printf("Fiz o parse de artistas\n");
-    
+
     //parse de albúns
-    parse_album(path, gestorAlbum);
+    parse_album(path, gestorAlbum, gestorArtist);
     printf("Fiz o parse de albuns\n");
 
     //parse de músicas

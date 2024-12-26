@@ -46,6 +46,21 @@ void removeArtistRecipe(GestorArtist* gestorArtist, long int artist_id);
 // Função para liberar a memória alocada para os artistas na tabela.
 void freeArtistRecipeInTable(gpointer key, gpointer value, gpointer user_data);
 
+// função que adiciona um artista e o número de álbuns à tabela de contador de álbuns.
+void addIndividualAlbumCount(GestorArtist* gestorArtist, long int artist_id, int count);
+
+// função que atualiza o número de álbuns de um artista na tabela de contador de álbuns.
+void updateIndividualAlbumCount(GestorArtist* gestorArtist, long int artist_id, int count);
+
+// função que retorna o número de álbuns de um artista na tabela de contador de álbuns.
+int getIndividualAlbumCount(GestorArtist* gestorArtist, long int artist_id);
+
+// função que remove um artista da tabela de contador de álbuns.
+void removeIndividualAlbumCount(GestorArtist* gestorArtist, long int artist_id);
+
+// Função para liberar a memória alocada para os artistas na tabela de contador de álbuns.
+void freeAlbumCountInTable(gpointer key, gpointer value, gpointer user_data);
+
 // Função que verifica se a chave existe na tabela de artistas.
 bool containsArtistID(GestorArtist* gestorArtist, long int id);
 

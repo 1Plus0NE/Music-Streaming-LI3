@@ -10,7 +10,7 @@
 #include <string.h>
 
 // Função que dá parse ao ficheiro de álbuns.
-void parse_album(char* path, GestorAlbum* gestorAlbum);
+void parse_album(char* path, GestorAlbum* gestorAlbum, GestorArtist* gestorArtist);
 
 // Função que processa uma linha de álbum.
 void process_album_line(char* line, void* gestor, void* aux_dataX, void* aux_dataY);

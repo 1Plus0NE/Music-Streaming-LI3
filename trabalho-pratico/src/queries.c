@@ -3,70 +3,60 @@
 
 // função que responde á query1.
 void query1(char* id_str, GestorUser* gestorUser, GestorArtist* gestorArtist, GestorAlbum* gestorAlbum, GestorHistory* gestorHistory, char delimiter, FILE* output_file){
-    User* user = searchUser(gestorUser, id_str);
-    if(user){
-        char* email = getUserEmail(user);
-        char* first_name = getUserFirstName(user);
-        char* last_name = getUserLastName(user);
-        char* age_str = getUserBirthDate(user);
-        int age = calculaIdade(age_str);
-        char* country = getUserCountry(user);
+    if(id_str[0] == 'U'){
+        User* user = searchUser(gestorUser, id_str);
+        if(user){
+            char* email = getUserEmail(user);
+            char* first_name = getUserFirstName(user);
+            char* last_name = getUserLastName(user);
+            char* age_str = getUserBirthDate(user);
+            int age = calculaIdade(age_str);
+            char* country = getUserCountry(user);
+            char* age_buffer = intToString(age);
 
-        char* age_buffer = intToString(age);
+            genericOutputWriter(output_file, delimiter, email, first_name, last_name, age_buffer, country, NULL);
+            free(email);
+            free(first_name);
+            free(last_name);
+            free(age_str);
+            free(country);
+            free(age_buffer);
+            return;
+        }
+    }else if (id_str[0] == 'A'){
+        // Ignora o prefixo 'A' e converte para long
+        char* endptr;
+        long int id = strtol(id_str + 1, &endptr, 10);
+        // Validação do ID convertido
+        if(*endptr != '\0'){
+            fprintf(stderr, "Erro: ID de artista inválido (%s).\n", id_str);
+            fprintf(output_file, "\n");
+            return;
+        }
 
-        genericOutputWriter(output_file, delimiter, email, first_name, last_name, age_buffer, country, NULL);
-        free(email);
-        free(first_name);
-        free(last_name);
-        free(age_str);
-        free(country);
-        free(age_buffer);
-        return;
+        Artist* artist = searchArtist(gestorArtist, id);
+        if(artist){
+            char* name = getArtistName(artist);
+            ArtistType type = getArtistType(artist);
+            char* typeInChar = typeToString(type);
+            char* country = getArtistCountry(artist);
+            int num_albuns = getIndividualAlbumCount(gestorArtist, id);
+
+            // Converter número de álbuns para string
+            char* num_albums_str = intToString(num_albuns);
+
+            genericOutputWriter(output_file, delimiter, name, typeInChar, country, num_albums_str, NULL);
+            free(name);
+            free(country);
+            free(typeInChar);
+            free(num_albums_str);
+            return;
+        }
     }
 
     // Caso o ID não seja encontrado
     fprintf(output_file, "\n");
 }
-
-/* void query1_new(char* user_username, GestorUser* gestorUser, FILE* output_file){
-    User* user = searchUser(gestorUser, user_username);
-
-    if(user){
-        char* email = getUserEmail(user);
-        char* first_name = getUserFirstName(user);
-        char* last_name = getUserLastName(user);
-        char* birth_date = getUserBirthDate(user);
-        int age = calculaIdade(birth_date);
-        char* country = getUserCountry(user);
-
-        fprintf(output_file, "%s;%s;%s;%d;%s\n", email, first_name, last_name, age, country);
-
-        free(email);
-        free(first_name);
-        free(last_name);
-        free(birth_date);
-        free(country);
-    }
-
-    Artist* artist = searchArtist(gestorUser, user_username);
-    if(artist){
-        char* name = getArtistName(artist);
-        ArtistType type = getArtistType(artist);
-        char* type_str = typeToString(type);
-        char* country = getArtistCountry(artist);
-        double recipe_per_stream = getArtistRecipePerStream(artist);
-
-
-        fprintf(output_file, "%s;%s;%s;%s;%s\n", name, country, start_date, end_date, typeInChar);
-
-        free(name);
-        free(country);
-        free(start_date);
-        free(end_date);
-        free(typeInChar);
-    }
-    fprintf(output_file, "\n");
-} */
 
 // Results é necessário para escrever pela ordem pedida
 // Função para a query 2
