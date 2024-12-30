@@ -23,7 +23,7 @@ void parse_all(char* path, GestorArtist* gestorArtist, GestorMusic* gestorMusic,
     printf("Fiz o parse de users\n");
 
     //parse de históricos
-    parse_history(path, gestorHistory);
+    parse_history(path, gestorHistory, gestorMusic, gestorArtist);
     printf("Fiz o parse de historicos\n");
 
 }
@@ -120,7 +120,7 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
             user = strsep(&linePtr, "\n");
 
             if(measure_flag) clock_gettime(CLOCK_REALTIME, &query_start);
-            query1(user, gestorUser, gestorArtist, gestorAlbum, gestorHistory,  delimiter, outputQ1);
+            query1(user, gestorUser, gestorArtist, delimiter, outputQ1);
             if(measure_flag){
                 clock_gettime(CLOCK_REALTIME, &query_end);
                 query_elapsed = (query_end.tv_sec - query_start.tv_sec) +

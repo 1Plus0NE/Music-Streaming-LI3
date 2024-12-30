@@ -14,7 +14,7 @@
 #include <string.h>
 
 // função que responde á query1.
-void query1(char* id_str, GestorUser* gestorUser, GestorArtist* gestorArtist, GestorAlbum* gestorAlbum, GestorHistory* gestorHistory, char delimiter, FILE* output_file);
+void query1(char* id_str, GestorUser* gestorUser, GestorArtist* gestorArtist, char delimiter, FILE* output_file);
 
 // Função para a 2ª query sem especificação de informações
 void query2(int nArtists, Discography* disco, char delimiter, FILE* output);

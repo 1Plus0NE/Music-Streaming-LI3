@@ -39,7 +39,7 @@ char* getArtistDescription(Artist* a);
 
 float getArtistRecipePerStream(Artist* a);
 
-int* getArtistIdConstituent(Artist* a);
+long int* getArtistIdConstituent(Artist* a);
 
 int getArtistNumConstituent(Artist* a);
 

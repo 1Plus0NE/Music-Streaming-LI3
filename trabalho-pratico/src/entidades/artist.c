@@ -161,10 +161,11 @@ float getArtistRecipePerStream(Artist* a){
     return a -> recipe_per_stream;
 }
 
-int* getArtistIdConstituent(Artist* a){
-    if(a -> num_constituent > 0){
-        int* cpy = malloc(a -> num_constituent * sizeof(int));
-        memcpy(cpy, a -> id_constituent, a->num_constituent * sizeof(int));
+long int* getArtistIdConstituent(Artist* a) {
+    if (a->num_constituent > 0) {
+        // Alocar memória para a cópia dos IDs como `long int`
+        long int* cpy = malloc(a->num_constituent * sizeof(long int));
+        memcpy(cpy, a->id_constituent, a->num_constituent * sizeof(long int)); // Copiar corretamente como `long int`
         return cpy;
     }
     return NULL;

@@ -10,7 +10,7 @@
 #include <string.h>
 
 // Função que dá parse ao ficheiro de históricos.
-void parse_history(char* path, GestorHistory* gestorHistory);
+void parse_history(char* path, GestorHistory* gestorHistory, GestorMusic* gestorMusic, GestorArtist* gestorArtist);
 
 // Função que processa uma linha de histórico.
 void process_history_line(char* line, void* gestor, void* aux_dataX, void* aux_dataY);

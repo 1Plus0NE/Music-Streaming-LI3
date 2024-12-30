@@ -2,7 +2,7 @@
 #define MAX_GENRES 10
 
 // função que responde á query1.
-void query1(char* id_str, GestorUser* gestorUser, GestorArtist* gestorArtist, GestorAlbum* gestorAlbum, GestorHistory* gestorHistory, char delimiter, FILE* output_file){
+void query1(char* id_str, GestorUser* gestorUser, GestorArtist* gestorArtist, char delimiter, FILE* output_file){
     if(id_str[0] == 'U'){
         User* user = searchUser(gestorUser, id_str);
         if(user){
@@ -41,11 +41,42 @@ void query1(char* id_str, GestorUser* gestorUser, GestorArtist* gestorArtist, Ge
             char* typeInChar = typeToString(type);
             char* country = getArtistCountry(artist);
             int num_albuns = getIndividualAlbumCount(gestorArtist, id);
+            int reps = getMusicReps(gestorArtist, id);
+            float total_recipe = 0.00;
+            if (type == INDIVIDUAL) {
+                // Obter os coletivos nos quais o artista individual está envolvido
+                GList* collectives = getCollectiveArtistsContaining(gestorArtist, id);
+                // Calcular a receita própria do artista individual
+                float recipe_per_stream = getArtistRecipePerStream(artist);
+                total_recipe += reps * recipe_per_stream;  // Receita do artista individual própria
+
+                for (GList* node = collectives; node != NULL; node = node->next) {
+                    long int collective_id = (long int)(node->data); // Evitar truncamento
+                    Artist* collective = searchArtist(gestorArtist, collective_id);
+
+                    if (collective) {
+                        int collective_reps = getMusicReps(gestorArtist, collective_id);  // Reproduções do coletivo
+                        float collective_recipe_per_stream = getArtistRecipePerStream(collective);
+                        int num_members = getArtistNumConstituent(collective);  // Número de membros do coletivo
+                        if (num_members > 0) { // Garantir que não haja divisão por zero
+                            // Calcular a receita proporcional do coletivo para o artista individual
+                            float collective_recipe = (collective_reps * collective_recipe_per_stream) / num_members;
+                            total_recipe += collective_recipe;
+                        }
+                    }
+                }
+                g_list_free(collectives); // Liberar lista de coletivos
+            } else if (type == GRUPO) {
+                // Para artistas do tipo GRUPO, a receita é calculada normalmente
+                float recipe_per_stream = getArtistRecipePerStream(artist);
+                total_recipe = reps * recipe_per_stream;
+            }
 
             // Converter número de álbuns para string
             char* num_albums_str = intToString(num_albuns);
+            char* recipe_str = floatToString(total_recipe, 2);
 
-            genericOutputWriter(output_file, delimiter, name, typeInChar, country, num_albums_str, NULL);
+            genericOutputWriter(output_file, delimiter, name, typeInChar, country, num_albums_str, recipe_str, NULL);
             free(name);
             free(country);
             free(typeInChar);
@@ -53,7 +84,6 @@ void query1(char* id_str, GestorUser* gestorUser, GestorArtist* gestorArtist, Ge
             return;
         }
     }
-
     // Caso o ID não seja encontrado
     fprintf(output_file, "\n");
 }

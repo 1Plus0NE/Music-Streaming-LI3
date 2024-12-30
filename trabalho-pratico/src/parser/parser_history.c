@@ -3,14 +3,14 @@
 #define MAX_LINE 2048
 
 //função que dá parse ao ficheiro de histórico.
-void parse_history(char* path, GestorHistory* gestorHistory){
-    parse_csv(path, "history.csv", gestorHistory, NULL, NULL, process_history_line, 4);
+void parse_history(char* path, GestorHistory* gestorHistory, GestorMusic* gestorMusic, GestorArtist* gestorArtist){
+    parse_csv(path, "history.csv", gestorHistory, gestorMusic, gestorArtist, process_history_line, 4);
 }
 
 //função que processa uma linha do hsitórico.
 void process_history_line(char* line, void* gestor, void* aux_dataX, void* aux_dataY){
-    (void)aux_dataX;
-    (void)aux_dataY;
+    GestorMusic* gestorMusic = (GestorMusic*)aux_dataX;
+    GestorArtist* gestorArtist = (GestorArtist*)aux_dataY;
     GestorHistory* gestorHistory = (GestorHistory*)gestor;
 
     char original_line[MAX_LINE];
@@ -55,6 +55,16 @@ void process_history_line(char* line, void* gestor, void* aux_dataX, void* aux_d
 
     History* h = createHistory(id, user_id, music_id, timestamp, duration, platform);
     addHistory(gestorHistory, h);
+    Music* m = searchMusic(gestorMusic, music_id);
+    long int* artists_ids = getMusicArtistIDs(m);
+    int num_artists = getMusicNumArtists(m);
+    for(int i = 0; i <= num_artists; i++){
+        long int artist_id = artists_ids[i];
+        Artist* a = searchArtist(gestorArtist, artist_id);
+        int count = getMusicReps(gestorArtist, artist_id);
+        count++;
+        updateMusicReps(gestorArtist, artist_id, count);
+    }
 
     free(id_str);
     free(user_id_str);

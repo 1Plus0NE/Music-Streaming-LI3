@@ -3,8 +3,8 @@
 //estrutura do gestor de artistas.
 struct gestor_artist {
     GHashTable* table;
-    GHashTable* recipe_table;
     GHashTable* num_albums_table;
+    GHashTable* reps_musics_table;
 };
 
 // função para criar uma tabela de artistas.
@@ -17,18 +17,18 @@ GestorArtist* createGestorArtist(){
     }
 
     gestorArtist -> table = g_hash_table_new(g_int_hash, g_int_equal);
-    gestorArtist -> recipe_table = g_hash_table_new(g_int_hash, g_int_equal);
     gestorArtist -> num_albums_table = g_hash_table_new(g_direct_hash, g_direct_equal);
-    if(!gestorArtist -> table || !gestorArtist -> recipe_table || !gestorArtist -> num_albums_table){
+    gestorArtist -> reps_musics_table = g_hash_table_new(g_direct_hash, g_direct_equal);
+    if(!gestorArtist -> table || !gestorArtist -> num_albums_table || !gestorArtist -> reps_musics_table){
         perror("Falha ao criar tabelas de hashing de artistas.\n");
         if(gestorArtist -> table){
             g_hash_table_destroy(gestorArtist -> table);
         }
-        if(gestorArtist -> recipe_table){
-            g_hash_table_destroy(gestorArtist -> recipe_table);
-        }
         if(gestorArtist -> num_albums_table){
             g_hash_table_destroy(gestorArtist -> num_albums_table);
+        }
+        if(gestorArtist -> reps_musics_table){
+            g_hash_table_destroy(gestorArtist -> reps_musics_table);
         }
         free(gestorArtist);
         return NULL;
@@ -72,64 +72,16 @@ void freeGestorArtist(GestorArtist* gestorArtist){
             g_hash_table_foreach_remove(gestorArtist -> table,freeArtistInTable,NULL);
             g_hash_table_destroy(gestorArtist -> table);
         }
-        if(gestorArtist -> recipe_table){
-            g_hash_table_foreach_remove(gestorArtist -> recipe_table,freeArtistRecipeInTable,NULL);
-            g_hash_table_destroy(gestorArtist -> recipe_table);
-        }
         if(gestorArtist -> num_albums_table){
             g_hash_table_foreach_remove(gestorArtist -> num_albums_table,freeAlbumCountInTable,NULL);
             g_hash_table_destroy(gestorArtist -> num_albums_table);
         }
+        if(gestorArtist -> reps_musics_table){
+            g_hash_table_foreach_remove(gestorArtist -> reps_musics_table,freeMusicRepsInTable,NULL);
+            g_hash_table_destroy(gestorArtist -> reps_musics_table);
+        }
         free(gestorArtist);
     }
-}
-
-// função que adiciona um artista e a sua receita à tabela de receitas.
-void addArtistRecipe(GestorArtist* gestorArtist, long int artist_id, float recipe){
-    if(gestorArtist && gestorArtist -> recipe_table){
-        float* recipe_ptr = malloc(sizeof(float));
-        if(!recipe_ptr){
-            perror("Erro ao alocar memória para a receita do artista.\n");
-            return;
-        }
-        *recipe_ptr = recipe;
-        g_hash_table_insert(gestorArtist -> recipe_table, GINT_TO_POINTER(artist_id), recipe_ptr);
-    }
-}
-
-// função que atualiza a receita de um artista na tabela de receitas.
-void updateArtistRecipe(GestorArtist* gestorArtist, long int artist_id, float recipe){
-    if(gestorArtist && gestorArtist -> recipe_table){
-        float* recipe_ptr = (float*)g_hash_table_lookup(gestorArtist->recipe_table, GINT_TO_POINTER(artist_id));
-        if(recipe_ptr){
-            *recipe_ptr = recipe;
-        }else{
-            addArtistRecipe(gestorArtist, artist_id, recipe);
-        }
-    }
-}
-
-// função que retorna a receita de um artista na tabela de receitas.
-float getArtistRecipe(GestorArtist* gestorArtist, long int artist_id){
-    if(gestorArtist && gestorArtist -> recipe_table){
-        float* recipe_ptr = (float*)g_hash_table_lookup(gestorArtist->recipe_table, GINT_TO_POINTER(artist_id));
-        if(recipe_ptr){
-            return *recipe_ptr;
-        }
-    }
-    return 0.0f;
-}
-
-// função que remove um artista da tabela de receitas.
-void removeArtistRecipe(GestorArtist* gestorArtist, long int artist_id){
-    if(gestorArtist && gestorArtist -> recipe_table){
-        g_hash_table_remove(gestorArtist -> recipe_table, GINT_TO_POINTER(artist_id));
-    }
-}
-
-// Função para liberar a memória alocada para os artistas na tabela.
-void freeArtistRecipeInTable(gpointer key, gpointer value, gpointer user_data){
-    free(value);
 }
 
 // função que adiciona um artista e o número de álbuns à tabela de contador de álbuns.
@@ -204,6 +156,54 @@ void freeAlbumCountInTable(gpointer key, gpointer value, gpointer user_data){
     free(value);  // Libera a memória alocada para o valor
 }
 
+// Função que adiciona um artista e o número de reproduções à tabela de músicas.
+void addMusicReps(GestorArtist* gestorArtist, long int artist_id, int reps){
+    if(gestorArtist && gestorArtist->reps_musics_table){
+        int* reps = malloc(sizeof(int));
+        if(!reps){
+            perror("Erro ao alocar memória para o número de reproduções da música.\n");
+            return;
+        }
+        *reps = 0;
+        g_hash_table_insert(gestorArtist->reps_musics_table, GINT_TO_POINTER(artist_id), reps);
+    }
+}
+
+// Função que atualiza o número de reproduções de um artista na tabela de músicas.
+void updateMusicReps(GestorArtist* gestorArtist, long int artist_id, int reps){
+    if(gestorArtist && gestorArtist->reps_musics_table){
+        int* reps_ptr = (int*)g_hash_table_lookup(gestorArtist->reps_musics_table, GINT_TO_POINTER(artist_id));
+        if(reps_ptr){
+            *reps_ptr = reps;
+        }else{
+            addMusicReps(gestorArtist, artist_id, reps);
+        }
+    }
+}
+
+// Função que retorna o número de reproduções de um artista na tabela de músicas.
+int getMusicReps(GestorArtist* gestorArtist, long int artist_id){
+    if(gestorArtist && gestorArtist->reps_musics_table){
+        int* reps_ptr = (int*)g_hash_table_lookup(gestorArtist->reps_musics_table, GINT_TO_POINTER(artist_id));
+        if(reps_ptr){
+            return *reps_ptr;
+        }
+    }
+    return 0;
+}
+
+// Função que remove um artista da tabela de músicas.
+void removeMusicReps(GestorArtist* gestorArtist, long int artist_id){
+    if(gestorArtist && gestorArtist->reps_musics_table){
+        g_hash_table_remove(gestorArtist->reps_musics_table, GINT_TO_POINTER(artist_id));
+    }
+}
+
+// Função que libera a memória alocada para os artistas na tabela de músicas.
+void freeMusicRepsInTable(gpointer key, gpointer value, gpointer user_data){
+    free(value);
+}
+
 // Função que verifica se a chave existe na tabela de artistas.
 bool containsArtistID(GestorArtist* gestorArtist, long int id){
     if(gestorArtist && gestorArtist -> table){
@@ -254,4 +254,42 @@ void artistFromTableToLL(G_GNUC_UNUSED gpointer artistId, gpointer artistData, g
     artistInsert(disco, id, name, country, type);
     free(name);
     free(country);
+}
+
+// Função para obter o coletivo de artistas que contém um artista individual.
+GList* getCollectiveArtistsContaining(GestorArtist* gestorArtist, long int individual_artist_id) {
+    if(!gestorArtist){
+        return NULL;
+    }
+
+    GList* collective_ids = NULL; // Lista de IDs dos coletivos que contêm o artista individual
+
+    GHashTableIter iter;
+    gpointer key, value;
+
+    // Inicializar o iterador para percorrer os artistas no gestor
+    g_hash_table_iter_init(&iter, gestorArtist->table);
+    while(g_hash_table_iter_next(&iter, &key, &value)){
+        Artist* artist = (Artist*)value;
+        ArtistType type = getArtistType(artist);
+
+        // Verificar se o artista é do tipo coletivo
+        if(type == GRUPO){
+            long int collective_id = *(long int*)key;
+            long int* constituents = getArtistIdConstituent(artist); // Lista de membros do coletivo
+            int num_constituents = getArtistNumConstituent(artist); // Número de membros do coletivo
+
+            // Verificar se o ID do artista individual está na lista de membros
+            for (int i = 0; i < num_constituents; i++) {
+                if (constituents[i] == individual_artist_id) {
+                    // Adicionar o ID do coletivo à lista de resultados
+                    collective_ids = g_list_prepend(collective_ids, (gpointer)(long)collective_id);
+                    break; // Não precisamos continuar verificando este coletivo
+                }
+            }
+            free(constituents); // Liberar a memória alocada para os constituintes
+        }
+    }
+
+    return collective_ids; // Retorna a lista de IDs dos coletivos
 }
