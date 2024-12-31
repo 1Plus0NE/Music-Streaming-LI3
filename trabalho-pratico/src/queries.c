@@ -88,65 +88,44 @@ void query1(char* id_str, GestorUser* gestorUser, GestorArtist* gestorArtist, ch
     fprintf(output_file, "\n");
 }
 
-// Results é necessário para escrever pela ordem pedida
-// Função para a query 2
-void query2(int nArtists, Discography* disco, char delimiter, FILE* output){
+// Função para a Query 2
+void query2(int nArtists, char* country, Discography* disco, char delimiter, FILE* output){
     Discography* head = disco;
 
-    if(nArtists == 0) fprintf(output, "\n"); // Caso de ficheiro "vazio"
-    for(int i=0; i<nArtists && head!=NULL; i++){
-        int duration = getDiscographyDuration(head);
-        ArtistType type = getDiscographyType(head);
-        char* name = getDiscographyName(head);
-        char* country = getDiscographyCountry(head);
-        char* time = secondsToString(duration); // Transformação em formato char*
-        char* typeInChar = typeToString(type); // Transformação em formato char*
-
-        //fprintf(output, "%s;%s;%s;%s\n", name, typeInChar, time, country);  
-        genericOutputWriter(output, delimiter, name, typeInChar, time, country, NULL);
-
-        free(time);
-        free(typeInChar);
-        free(name);
-        free(country);
-
-        head = getDiscographyNext(head);
-    }
-}
-
-// Função para a query 2 com especificação do pais
-void query2b(int nArtists, char* country, Discography* disco, char delimiter, FILE* output){
-    Discography* head = disco;
-
-    if(nArtists == 0) fprintf(output, "\n"); // Caso de ficheiro "vazio"
+    if(nArtists==0) fprintf(output, "\n"); //Caso de ficheiro "vazio"
+    
     for(int i=0; i<nArtists && head!=NULL; i++){
         char* countryD = getDiscographyCountry(head);
         ArtistType type = getDiscographyType(head);
-        if(strcmp(countryD, country) == 0){ // Verificação do país do artista
+        
+        //Quando não há expecificação de país, ou se encontra no país pretendido
+        if(country == NULL || strcmp(country, countryD) == 0){
             int duration = getDiscographyDuration(head);
             char* time = secondsToString(duration); // Transformação em formato char*
             char* typeInChar = typeToString(type); // Transformação em formato char*
             char* name = getDiscographyName(head);
         
             genericOutputWriter(output, delimiter, name, typeInChar, time, countryD, NULL);
-            //fprintf(output, "%s;%s;%s;%s\n", name, typeInChar, time, countryD);  
-        
+
             free(time);
             free(typeInChar);
             free(name);
 
-            head = getDiscographyNext(head); 
-        }
-        else if(getDiscographyNext(head) == NULL && i==0){ // Caso de ficheiro "vazio"
-            fprintf(output, "\n");
             head = getDiscographyNext(head);
-            i--; // Mantém o contador para processar o próximo artista
         }
+
+        //Caso chegue ao ultimo elemento de discografia
+        else if(getDiscographyNext(head) == NULL){
+            //fprintf(output, "\n");
+            head = getDiscographyNext(head);
+        }
+
+        //Caso continue a busca pelo artista do país
         else{
             head = getDiscographyNext(head);
             i--; // Mantém o contador para processar o próximo artista
-        }
-        free(countryD);
+        }      
+        free(countryD);  
     }
 }
 

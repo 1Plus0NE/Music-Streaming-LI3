@@ -137,24 +137,23 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
                 exit(EXIT_FAILURE);
             }
 
+            // Tratamento da linha da 2ª Query
             strsep(&linePtr, " ");
             nArtists = atoi(strsep(&linePtr, " ")); // Numero de artistas
-            country = remove_aspas(strsep(&linePtr, "\n")); // País sem aspas
+            country = remove_aspas(strsep(&linePtr, "\n")); // País sem aspas || NULL
             
             if(measure_flag) clock_gettime(CLOCK_REALTIME, &query_start);
-            if(country == NULL){
-                query2(nArtists, disco, delimiter ,outputQ2);
-            }
-             // query 2 sem especificação de país
-            else{
-                query2b(nArtists, country, disco, delimiter, outputQ2);
-            }
+
+            // Execução da 2ª Query
+            query2(nArtists, country, disco, delimiter, outputQ2);
+    
             if(measure_flag){
                 clock_gettime(CLOCK_REALTIME, &query_end);
                 query_elapsed = (query_end.tv_sec - query_start.tv_sec) +
                                 (query_end.tv_nsec - query_start.tv_nsec) / 1e9;
                 total_time_query2 += query_elapsed;
             }
+
             if(country != NULL){
                 free(country);
             }
