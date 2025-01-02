@@ -52,6 +52,7 @@ GestorHistory* createGestorHistory(){
     return gestorHistory;
 }
 
+/*
 // Função que adiciona um histórico à tabela.
 void addHistory(GestorHistory* gestorHistory, History* history){
     if(gestorHistory && gestorHistory -> table){
@@ -64,6 +65,13 @@ void addHistory(GestorHistory* gestorHistory, History* history){
         g_hash_table_insert(gestorHistory -> table, key, history);
     }
 }
+*/
+void addHistory(GestorHistory* gestorHistory, History* history){
+    if(gestorHistory && gestorHistory -> table){
+        g_hash_table_insert(gestorHistory -> table, getHistoryId(history), history);
+    }
+}
+
 
 // Função que remove um histórico da tabela.
 void removeHistory(GestorHistory* gestorHistory, long int id){

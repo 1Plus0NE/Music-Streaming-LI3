@@ -86,10 +86,10 @@ void freeGestorArtist(GestorArtist* gestorArtist){
 
 // função que adiciona um artista e o número de álbuns à tabela de contador de álbuns.
 void addIndividualAlbumCount(GestorArtist* gestorArtist, long int artist_id, int count){
-    if(gestorArtist && gestorArtist->num_albums_table) {
+    if(gestorArtist && gestorArtist->num_albums_table){
         // Criar um ponteiro para o valor de tipo int
         int* count_ptr = malloc(sizeof(int));
-        if (!count_ptr) {
+        if(!count_ptr){
             // Falha ao alocar memória
             return;
         }
@@ -97,7 +97,6 @@ void addIndividualAlbumCount(GestorArtist* gestorArtist, long int artist_id, int
 
         // Inserir o ponteiro na tabela hash
         g_hash_table_insert(gestorArtist->num_albums_table, GINT_TO_POINTER(artist_id), count_ptr);
-
     }
 }
 
@@ -115,7 +114,7 @@ void updateIndividualAlbumCount(GestorArtist* gestorArtist, long int artist_id, 
     }else{
         // Caso a chave não exista, aloca memória e adiciona à tabela
         int* value = malloc(sizeof(int));
-        if (!value) {
+        if(!value){
             perror("Erro ao alocar memória para o valor.");
             return;
         }

@@ -19,7 +19,6 @@ void process_history_line(char* line, void* gestor, void* aux_dataX, void* aux_d
 
     char *id_str, *user_id_str, *music_id_str, *timestamp, *duration_str, *platform_str;
     long int id, user_id, music_id;
-    int duration;
     Platform platform;
 
     id_str = remove_aspas(strsep(&tmp_line, ";"));
@@ -50,10 +49,9 @@ void process_history_line(char* line, void* gestor, void* aux_dataX, void* aux_d
     //conversões.
     user_id = strtol(user_id_str + 1, NULL, 10);
     music_id = strtol(music_id_str + 1, NULL, 10);
-    duration = atoi(duration_str);
     platform = stringToPlatform(platform_str);
 
-    History* h = createHistory(id, user_id, music_id, timestamp, duration, platform);
+    History* h = createHistory(id, user_id, music_id, timestamp, duration_str, platform);
     addHistory(gestorHistory, h);
     
     Music* m = searchMusic(gestorMusic, music_id);
@@ -68,6 +66,7 @@ void process_history_line(char* line, void* gestor, void* aux_dataX, void* aux_d
         count++;
         updateMusicReps(gestorArtist, artist_id, count);
     }
+  
 /*
     // Dados utilizados para o pre-calculo dos generos ouvidos de cada utilizador
     char* genre = getMusicGenre(m);
@@ -77,6 +76,7 @@ void process_history_line(char* line, void* gestor, void* aux_dataX, void* aux_d
     free(genre);
     //free(artists_ids);
 */
+
     free(id_str);
     free(user_id_str);
     free(music_id_str);

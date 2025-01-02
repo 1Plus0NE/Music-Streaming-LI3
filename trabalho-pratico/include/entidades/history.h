@@ -19,7 +19,7 @@ typedef enum {
 } Platform;
 
 //função para criar uma estrutura da entidade histórico parametrizada.
-History* createHistory(long int id, long int user_id, long int music_id, char* timestamp, int duration, Platform platform);
+History* createHistory(long int id, long int user_id, long int music_id, char* timestamp, char* duration, Platform platform);
 
 //função para libertar a memória de uma entidade do tipo histórico.
 void freeHistory(History* history);
@@ -37,7 +37,7 @@ char* platformToString(Platform platform);
 int isValidPlatform(char* platform_str);
 
 //getters e setters de histórico.
-long int getHistoryId(History* history);
+long int* getHistoryId(History* history);
 
 long int getHistoryUserId(History* history);
 
@@ -45,7 +45,7 @@ long int getHistoryMusicId(History* history);
 
 char* getHistoryTimestamp(History* history);
 
-int getHistoryDuration(History* history);
+char* getHistoryDuration(History* history);
 
 Platform getHistoryPlatform(History* history);
 
@@ -57,7 +57,7 @@ void setHistoryMusicId(History* history, long int music_id);
 
 void setHistoryTimestamp(History* history, char* timestamp);
 
-void setHistoryDuration(History* history, int duration);
+void setHistoryDuration(History* h, char* duration);
 
 void setHistoryPlatform(History* history, Platform platform);
 

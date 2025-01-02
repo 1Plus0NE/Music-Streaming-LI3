@@ -14,7 +14,7 @@ struct music {
 };
 
 // Função para criar uma estrutura da entidade música parametrizada.
-Music* createMusic(long int id, char* title, long int* artist_id, int num_artists, long int album_id, char* duration, char* genre, int year, char* lyrics){ // tirei o album_id
+Music* createMusic(long int id, char* title, long int* artist_id, int num_artists, long int album_id, char* duration, char* genre, int year, char* lyrics){
     Music* music = (Music*)malloc(sizeof(Music));
     if(!music){
         perror("erro ao alocar memória para a música.\n");

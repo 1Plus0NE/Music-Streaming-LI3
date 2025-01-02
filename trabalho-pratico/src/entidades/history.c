@@ -5,12 +5,12 @@ struct history {
     long int user_id;
     long int music_id;
     char* timestamp;
-    int duration;
+    char* duration;
     Platform platform;
 };
 
 //função para criar uma estrutura da entidade histórico parametrizada.
-History* createHistory(long int id, long int user_id, long int music_id, char* timestamp, int duration, Platform platform){
+History* createHistory(long int id, long int user_id, long int music_id, char* timestamp, char* duration, Platform platform){
     History* history = malloc(sizeof(History));
     if(!history){
         perror("Erro ao alocar memória para o histórico.\n");
@@ -20,6 +20,7 @@ History* createHistory(long int id, long int user_id, long int music_id, char* t
     history -> id = id;
     history -> user_id = user_id;
     history -> music_id = music_id;
+
     history -> timestamp = malloc(strlen(timestamp) + 1);
     if(!history -> timestamp){
         perror("Erro ao alocar memória para o timestamp do histórico.\n");
@@ -28,7 +29,15 @@ History* createHistory(long int id, long int user_id, long int music_id, char* t
     }
     strcpy(history -> timestamp, timestamp);
 
-    history -> duration = duration;
+    history -> duration = malloc(strlen(duration) + 1);
+    if(!history -> duration){
+        perror("Erro ao alocar memória para a duração do histórico.\n");
+        free(history -> timestamp);
+        free(history);
+        exit(EXIT_FAILURE);
+    }
+    strcpy(history -> duration, duration);
+
     history -> platform = platform;
 
     return history;
@@ -38,6 +47,7 @@ History* createHistory(long int id, long int user_id, long int music_id, char* t
 void freeHistory(History* history){
     if(!history) return;
     free(history -> timestamp);
+    free(history -> duration);
     free(history);
 }
 
@@ -46,6 +56,7 @@ gboolean freeHistoryInTable(gpointer key, gpointer value, gpointer user_data){
     (void)key;
     (void)user_data;
     History* history = (History*)value;
+    free(history -> duration);
     free(history -> timestamp);
     free(history);
 
@@ -118,8 +129,8 @@ int isValidPlatform(char* platform_str){
 }
 
 //getters e setters de histórico.
-long int getHistoryId(History* h){
-    return h ? h -> id : -1;
+long int* getHistoryId(History* h){
+    return h ? &(h->id) : NULL;
 }
 
 long int getHistoryUserId(History* h){
@@ -134,8 +145,8 @@ char* getHistoryTimestamp(History* h){
     return h -> timestamp ? strdup(h -> timestamp) : NULL;
 }
 
-int getHistoryDuration(History* h){
-    return h ? h -> duration : -1;
+char* getHistoryDuration(History* h){
+    return h -> duration ? strdup(h -> duration) : NULL;
 }
 
 Platform getHistoryPlatform(History* h){
@@ -161,8 +172,11 @@ void setHistoryTimestamp(History* h, char* timestamp){
     h -> timestamp = strdup(timestamp);
 }
 
-void setHistoryDuration(History* h, int duration){
-    h -> duration = duration;
+void setHistoryDuration(History* h, char* duration){
+    if(h -> duration){
+        free(h -> duration);
+    }
+    h -> duration = strdup(duration);
 }
 
 void setHistoryPlatform(History* h, Platform platform){
