@@ -81,6 +81,7 @@ void query1(char* id_str, GestorUser* gestorUser, GestorArtist* gestorArtist, ch
             free(country);
             free(typeInChar);
             free(num_albums_str);
+            free(recipe_str);
             return;
         }
     }

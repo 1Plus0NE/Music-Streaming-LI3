@@ -51,11 +51,14 @@ void process_history_line(char* line, void* gestor, void* aux_dataX, void* aux_d
     music_id = strtol(music_id_str + 1, NULL, 10);
     platform = stringToPlatform(platform_str);
 
+    //printf("id: %ld, user_id: %ld, music_id: %ld\n", id, user_id, music_id);
+    //printf("timestamp: %s, duration: %s, platform: %d\n", timestamp, duration_str, platform);
+
     History* h = createHistory(id, user_id, music_id, timestamp, duration_str, platform);
     addHistory(gestorHistory, h);
     
     Music* m = searchMusic(gestorMusic, music_id);
-
+    //music_id = getMusicID(m);
     // Dados utilizados para o calculo da receita de cada artista
     long int* artists_ids = getMusicArtistIDs(m);
     int num_artists = getMusicNumArtists(m);
@@ -76,7 +79,6 @@ void process_history_line(char* line, void* gestor, void* aux_dataX, void* aux_d
     free(genre);
     //free(artists_ids);
 */
-
     free(id_str);
     free(user_id_str);
     free(music_id_str);

@@ -19,7 +19,7 @@ Album* createAlbum(long int id, char* title, long int* artist_ids, int num_artis
 void freeAlbum(Album* album);
 
 // Função para liberar a memória de um álbum em uma hash table.
-gboolean freeAlbumInTable(gpointer key, gpointer value, gpointer user_data);
+void freeAlbumInTable(gpointer value);
 
 // getters e setters de álbum.
 long int getAlbumId(Album* album);

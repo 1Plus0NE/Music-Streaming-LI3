@@ -14,7 +14,7 @@ GestorAlbum* createGestorAlbum() {
         return NULL;
     }
 
-    gestorAlbum->table = g_hash_table_new(g_int_hash, g_int_equal);
+    gestorAlbum->table = g_hash_table_new_full(g_int_hash, g_int_equal, free, freeAlbumInTable);
     if (gestorAlbum->table == NULL) {
         perror("Falha ao criar a tabela de hashing de álbuns.\n");
         free(gestorAlbum);
@@ -59,10 +59,9 @@ void foreachAlbum(GestorAlbum* gestorAlbum, GHFunc func, gpointer user_data) {
 }
 
 // Função que libera a memória alocada para a tabela de álbuns.
-void freeGestorAlbum(GestorAlbum* gestorAlbum) {
-    if (gestorAlbum) {
-        if (gestorAlbum->table) {
-            g_hash_table_foreach_remove(gestorAlbum->table, freeAlbumInTable, NULL);
+void freeGestorAlbum(GestorAlbum* gestorAlbum){
+    if (gestorAlbum){
+        if (gestorAlbum->table){
             g_hash_table_destroy(gestorAlbum->table);
         }
         free(gestorAlbum);

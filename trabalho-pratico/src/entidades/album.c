@@ -84,9 +84,7 @@ void freeAlbum(Album* album) {
 }
 
 // Função para liberar a memória de um álbum em uma hash table.
-gboolean freeAlbumInTable(gpointer key, gpointer value, gpointer user_data){
-    (void)key;
-    (void)user_data;
+void freeAlbumInTable(gpointer value){
     Album* album = (Album*)value;
 
     for(int i = 0; i < album->num_producers; i++){
@@ -96,8 +94,6 @@ gboolean freeAlbumInTable(gpointer key, gpointer value, gpointer user_data){
     free(album->artist_ids);
     free(album->title);
     free(album);
-
-    return TRUE;
 }
 
 // getters e setters de álbum.
