@@ -37,28 +37,28 @@ char* platformToString(Platform platform);
 int isValidPlatform(char* platform_str);
 
 //getters e setters de histórico.
-long int* getHistoryId(History* history);
+long int* getHistoryId(History* h);
 
-long int getHistoryUserId(History* history);
+long int getHistoryUserId(History* h);
 
-long int getHistoryMusicId(History* history);
+long int getHistoryMusicId(History* h);
 
-char* getHistoryTimestamp(History* history);
+char* getHistoryTimestamp(History* h);
 
-char* getHistoryDuration(History* history);
+char* getHistoryDuration(History* h);
 
-Platform getHistoryPlatform(History* history);
+Platform getHistoryPlatform(History* h);
 
-void setHistoryId(History* history, long int id);
+void setHistoryId(History* h, long int id);
 
-void setHistoryUserId(History* history, long int user_id);
+void setHistoryUserId(History* h, long int user_id);
 
-void setHistoryMusicId(History* history, long int music_id);
+void setHistoryMusicId(History* h, long int music_id);
 
-void setHistoryTimestamp(History* history, char* timestamp);
+void setHistoryTimestamp(History* h, char* timestamp);
 
 void setHistoryDuration(History* h, char* duration);
 
-void setHistoryPlatform(History* history, Platform platform);
+void setHistoryPlatform(History* h, Platform platform);
 
 #endif
