@@ -55,17 +55,28 @@ void process_history_line(char* line, void* gestor, void* aux_dataX, void* aux_d
 
     History* h = createHistory(id, user_id, music_id, timestamp, duration, platform);
     addHistory(gestorHistory, h);
+    
     Music* m = searchMusic(gestorMusic, music_id);
+
+    // Dados utilizados para o calculo da receita de cada artista
     long int* artists_ids = getMusicArtistIDs(m);
     int num_artists = getMusicNumArtists(m);
-    for(int i = 0; i <= num_artists; i++){
+    for(int i = 0; i < num_artists; i++){
         long int artist_id = artists_ids[i];
-        Artist* a = searchArtist(gestorArtist, artist_id);
+        //Artist* a = searchArtist(gestorArtist, artist_id);
         int count = getMusicReps(gestorArtist, artist_id);
         count++;
         updateMusicReps(gestorArtist, artist_id, count);
     }
+/*
+    // Dados utilizados para o pre-calculo dos generos ouvidos de cada utilizador
+    char* genre = getMusicGenre(m);
 
+    addGenresListened(gestorHistory, user_id_str, genre);
+
+    free(genre);
+    //free(artists_ids);
+*/
     free(id_str);
     free(user_id_str);
     free(music_id_str);

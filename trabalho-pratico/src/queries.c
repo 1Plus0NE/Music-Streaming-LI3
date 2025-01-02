@@ -88,6 +88,7 @@ void query1(char* id_str, GestorUser* gestorUser, GestorArtist* gestorArtist, ch
     fprintf(output_file, "\n");
 }
 
+// Results é necessário para escrever pela ordem pedida
 // Função para a Query 2
 void query2(int nArtists, char* country, Discography* disco, char delimiter, FILE* output){
     Discography* head = disco;
@@ -173,3 +174,40 @@ void query3(int ageMin, int ageMax, GestorUser* gestorUser, char delimiter, FILE
     freeStringArray(like_strings, size);
     freeStringArray(genres, size);
 }
+/*
+void query5(GestorHistory* gestorHistory, char* username, int numRecommendations, FILE* output){
+
+    if(numRecommendations <= 0){
+        fprintf(output, "\n");
+        return;
+    }
+
+    GenresListened* targetUser = searchGenresListened(gestorHistory, username);
+    if(!targetUser){
+        fprintf(output, "\n");
+        return;
+    }
+
+    addSimilarUsers(gestorHistory, targetUser);
+    
+    GPtrArray* similarUsers = getSimilarUsersArray(gestorHistory);
+    sortSimilarUsers(gestorHistory);
+        
+    for(guint i = 0; i < similarUsers->len && i < (guint)numRecommendations; i++){
+        GenresListened* similarUser = getSimilarUsersFromArray(gestorHistory, i);
+        char* printUsername = getGenresListenedUsername(similarUser);
+        fprintf(output, "%s\n", printUsername);
+        free(printUsername);
+        
+    }
+
+}
+*/
+
+
+
+
+
+
+
+

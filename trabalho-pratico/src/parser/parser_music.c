@@ -46,6 +46,7 @@ void process_music_line(char* line, void* gestor, void* aux_dataX, void* aux_dat
         free(id_str); 
         free(title);
         free(artist_id);
+        free(album_id_str);
         free(duration);
         free(genre);
         free(lyrics);
@@ -61,6 +62,7 @@ void process_music_line(char* line, void* gestor, void* aux_dataX, void* aux_dat
         free(id_str); 
         free(title);
         free(artist_id);
+        free(album_id_str);
         free(duration);
         free(genre);
         free(lyrics);
@@ -74,6 +76,7 @@ void process_music_line(char* line, void* gestor, void* aux_dataX, void* aux_dat
     free(artist_id_converted);
     free(title);
     free(artist_id);
+    free(album_id_str);
     free(duration);
     free(genre);
     free(lyrics);

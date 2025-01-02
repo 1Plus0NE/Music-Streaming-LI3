@@ -22,4 +22,8 @@ void query2(int nArtists, char* country, Discography* disco, char delimiter, FIL
 // Função para a 3ª query
 void query3(int ageMin, int ageMax, GestorUser* gestorUser, char delimiter, FILE* output);
 
+// Função para a 5ª query
+void query5(GestorHistory* gestorHistory, char* username, int numRecommendations, FILE* output);
+
+
 #endif

@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <time.h>
+#include <math.h>
 #include "entidades/artist.h"
 #include "entidades/user.h"
 
@@ -63,6 +64,15 @@ int isAgeInRange(int age, int minAge, int maxAge);
 
 // Função que dados novos arrays de generos e likes, atualiza o conteúdo dos arrays originais de generos e likes
 void updateGenresAndLikes(char*** genres, long int** likes, int* size, char** newGenres, long int* newLikes, int newSize);
+
+// Função que dado um gênero atualiza o conteúdo dos arrays originais
+void updateGenresListenedArray(char*** genres, int** listened, int* size, char* newGenre);
+
+// Função que verifica se todos os generos de um utilizador candidato a ser recomendado estão no array do user que procura recomendações
+int allGenresMatch(char** targetGenres, int targetSize, char** userGenres, int userSize);
+
+// Função que calcula o score de similaridade entre um utilizador alvo e um utilizador novo
+int calculateSimilarityScore(char** targetGenres, int* targetListened, int targetSize, char** newGenres, int* newListened, int newSize);
 
 // Função que converte um inteiro para uma string
 char* intToString(int value);

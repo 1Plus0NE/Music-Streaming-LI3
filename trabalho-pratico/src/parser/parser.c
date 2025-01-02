@@ -66,6 +66,7 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
     FILE* outputQ1;
     FILE* outputQ2;
     FILE* outputQ3;
+    FILE* outputQ5;
     int command = 0; // Para escrita individual de ficheiros de output
     char outputPath[MAX_FILENAME]; // Caminho para ficheiros de output individuais
 
@@ -108,80 +109,101 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
 
         char delimiter = getDelimiter(line); // obter o delimitador que irá ser utilizado no writing
         // Identificação da Query
-        if(line[0] == '1'){
-            // Criação do ficheiro de output da query para argumento do função query1
-            outputQ1 = fopen(outputPath, "w");
-            if(!outputQ1){
-                perror("Erro ao criar o ficheiro de output da query 1.\n");
-                exit(EXIT_FAILURE);
-            }
-            // Tratamento da linha para a 1ª Query
-            strsep(&linePtr, " "); // Ignora o id da Query e o espaço 
-            user = strsep(&linePtr, "\n");
+        switch(line[0]){
+            case '1':{
+                // Criação do ficheiro de output da query para argumento da função query1
+                outputQ1 = fopen(outputPath, "w");
+                if(!outputQ1){
+                    perror("Erro ao criar o ficheiro de output da query 1.\n");
+                    exit(EXIT_FAILURE);
+                }
+                // Tratamento da linha para a 1ª Query
+                strsep(&linePtr, " "); // Ignora o id da Query e o espaço
+                user = strsep(&linePtr, "\n");
 
-            if(measure_flag) clock_gettime(CLOCK_REALTIME, &query_start);
-            query1(user, gestorUser, gestorArtist, delimiter, outputQ1);
-            if(measure_flag){
-                clock_gettime(CLOCK_REALTIME, &query_end);
-                query_elapsed = (query_end.tv_sec - query_start.tv_sec) +
-                                (query_end.tv_nsec - query_start.tv_nsec) / 1e9;
-                total_time_query1 += query_elapsed;
+                if(measure_flag) clock_gettime(CLOCK_REALTIME, &query_start);
+                query1(user, gestorUser, gestorArtist, delimiter, outputQ1);
+                if(measure_flag){
+                    clock_gettime(CLOCK_REALTIME, &query_end);
+                    query_elapsed = (query_end.tv_sec - query_start.tv_sec) +
+                                    (query_end.tv_nsec - query_start.tv_nsec) / 1e9;
+                    total_time_query1 += query_elapsed;
+                }
+                // Processo completo, fechar ficheiro
+                fclose(outputQ1);
+                break;
             }
-            // Processo completo, fechar ficheiro
-            fclose(outputQ1);
+
+            case '2':{
+                outputQ2 = fopen(outputPath, "w");
+                if(!outputQ2){
+                    perror("Erro ao criar o ficheiro de output da query 2.\n");
+                    exit(EXIT_FAILURE);
+                }
+
+                strsep(&linePtr, " ");
+                nArtists = atoi(strsep(&linePtr, " ")); // Numero de artistas
+                country = remove_aspas(strsep(&linePtr, "\n")); // País sem aspas || NULL
+
+                if(measure_flag) clock_gettime(CLOCK_REALTIME, &query_start);
+
+                query2(nArtists, country, disco, delimiter, outputQ2); // query 2 sem especificação de país
+
+                if(measure_flag){
+                    clock_gettime(CLOCK_REALTIME, &query_end);
+                    query_elapsed = (query_end.tv_sec - query_start.tv_sec) +
+                                    (query_end.tv_nsec - query_start.tv_nsec) / 1e9;
+                    total_time_query2 += query_elapsed;
+                }
+                if(country != NULL){
+                    free(country);
+                }
+                fclose(outputQ2);
+                break;
+            }
+
+            case '3':{
+                outputQ3 = fopen(outputPath, "w");
+                if(!outputQ3){
+                    perror("Erro ao criar o ficheiro de output da query 3.\n");
+                    exit(EXIT_FAILURE);
+                }
+
+                strsep(&linePtr, " ");
+                ageMin = atoi(strsep(&linePtr, " "));
+                ageMax = atoi(strsep(&linePtr, "\n"));
+
+                if(measure_flag) clock_gettime(CLOCK_REALTIME, &query_start);
+                query3(ageMin, ageMax, gestorUser, delimiter, outputQ3);
+                if(measure_flag){
+                    clock_gettime(CLOCK_REALTIME, &query_end);
+                    query_elapsed = (query_end.tv_sec - query_start.tv_sec) +
+                                    (query_end.tv_nsec - query_start.tv_nsec) / 1e9;
+                    total_time_query3 += query_elapsed;
+                }
+                fclose(outputQ3);
+                break;
+            }
+        /*
+            case '5':{
+                // Tratamento da linha para a 1ª Query
+                strsep(&linePtr, " "); // Ignora o id da Query e o espaço
+                user = strsep(&linePtr, " ");
+                int numRecommendations = atoi(strsep(&linePtr, "\n"));
+                outputQ5 = fopen(outputPath, "w");
+                if(!outputQ5){
+                    perror("Erro ao criar o ficheiro de output da query 3.\n");
+                    exit(EXIT_FAILURE);
+                }
+                query5(gestorHistory, user, numRecommendations, outputQ5);
+                fclose(outputQ5);
+                break;
+            }
+        */
+            default:
+                continue;
         }
-        else if(line[0] == '2'){
-            outputQ2 = fopen(outputPath, "w");
-            if(!outputQ2){
-                perror("Erro ao criar o ficheiro de output da query 2.\n");
-                exit(EXIT_FAILURE);
-            }
 
-            // Tratamento da linha da 2ª Query
-            strsep(&linePtr, " ");
-            nArtists = atoi(strsep(&linePtr, " ")); // Numero de artistas
-            country = remove_aspas(strsep(&linePtr, "\n")); // País sem aspas || NULL
-            
-            if(measure_flag) clock_gettime(CLOCK_REALTIME, &query_start);
-
-            // Execução da 2ª Query
-            query2(nArtists, country, disco, delimiter, outputQ2);
-    
-            if(measure_flag){
-                clock_gettime(CLOCK_REALTIME, &query_end);
-                query_elapsed = (query_end.tv_sec - query_start.tv_sec) +
-                                (query_end.tv_nsec - query_start.tv_nsec) / 1e9;
-                total_time_query2 += query_elapsed;
-            }
-
-            if(country != NULL){
-                free(country);
-            }
-            fclose(outputQ2);
-        }
-        else if(line[0] == '3'){
-            outputQ3 = fopen(outputPath, "w");
-            if(!outputQ3){
-                perror("Erro ao criar o ficheiro de output da query 3.\n");
-                exit(EXIT_FAILURE);
-            }
-
-            strsep(&linePtr, " ");
-            ageMin = atoi(strsep(&linePtr, " "));
-            ageMax = atoi(strsep(&linePtr, "\n"));
-
-            if(measure_flag) clock_gettime(CLOCK_REALTIME, &query_start);
-            query3(ageMin, ageMax, gestorUser, delimiter, outputQ3);
-            if(measure_flag){
-                clock_gettime(CLOCK_REALTIME, &query_end);
-                query_elapsed = (query_end.tv_sec - query_start.tv_sec) +
-                                (query_end.tv_nsec - query_start.tv_nsec) / 1e9;
-                total_time_query3 += query_elapsed;
-            }
-
-            fclose(outputQ3);
-        }  
-        else continue;
     }
     freeDiscography(disco);
     fclose(queries);

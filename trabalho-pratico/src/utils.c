@@ -460,6 +460,73 @@ void updateGenresAndLikes(
     }
 }
 
+// Função que dado um genero, adiciona ao array de generos ou atualiza o numero de vezes que foi ouvido
+void updateGenresListenedArray(char*** genres, int** listened, int* size, char* newGenre){
+    // Verificar se o newGenre existe
+    for(int i = 0; i < *size; i++){
+        if(strcmp((*genres)[i], newGenre) == 0){
+            // Se o genero existir, atualizamos o numero de vezes que foi ouvido
+            (*listened)[i]++;
+            return;
+        }
+    }
+
+    // Neste caso o genero não existe, então adicionamos ao array de generos
+    (*size)++;
+    *genres = realloc(*genres, *size * sizeof(char*));
+    *listened = realloc(*listened, *size * sizeof(int));
+    if(!*genres || !*listened){
+        fprintf(stderr, "Falha na alocação de memória para o array de generos ou o array de musicas ouvidas.\n");
+        return;
+    }
+    (*genres)[*size - 1] = strdup(newGenre);
+    (*listened)[*size - 1] = 1;
+}
+
+// Função que verifica se todos os generos de um utilizador candidato a ser recomendado estão no array do user que procura recomendações
+int allGenresMatch(char** targetGenres, int targetSize, char** userGenres, int userSize){
+    for(int i = 0; i < userSize; i++){
+        int found = 0;
+        for(int j = 0; j < targetSize; j++){
+            if(strcmp(userGenres[i], targetGenres[j]) == 0){
+                found = 1;
+                break;
+            }
+        }
+        if(!found){
+            return 0; // At least one genre did not match
+        }
+    }
+    return 1; // All genres matched
+}
+
+int calculateSimilarityScore(char** targetGenres, int* targetListened, int targetSize,
+                             char** newGenres, int* newListened, int newSize){
+    int similarityScore = 0;
+
+    // Check for missing genres and calculate listening discrepancy
+    for(int i = 0; i < targetSize; i++){
+        int found = 0;
+        for(int j = 0; j < newSize; j++){
+            if(strcmp(targetGenres[i], newGenres[j]) == 0){
+                found = 1;
+
+                // Calculate listening discrepancy penalty
+                int diff = abs(targetListened[i] - newListened[j]);
+                similarityScore += diff;
+
+                break;
+            }
+        }
+        if(!found){
+            // Penalize for missing genre
+            similarityScore += targetListened[i];
+        }
+    }
+
+    return similarityScore;
+}
+
 // Função que converte um inteiro para uma string
 char* intToString(int value){
     // Calcula o tamanho necessário para armazenar a string
