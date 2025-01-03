@@ -69,7 +69,7 @@ void process_music_line(char* line, void* gestor, void* aux_dataX, void* aux_dat
         return;
     }
 
-    Music* m = createMusic(id, title, artist_id_converted, num_artists, album_id, duration, genre, year, lyrics);
+    Music* m = createMusic(id, artist_id_converted, num_artists, album_id, duration, genre, year);
     addMusic(gestorMusic, m);
 
     free(id_str);

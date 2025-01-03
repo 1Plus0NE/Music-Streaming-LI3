@@ -54,7 +54,7 @@ void process_artist_line(char* line, void* gestor, void* aux_dataX, void* aux_da
     type = stringToArtistType(type_str);
     id_constituent_converted = convertID(id_constituent, &num_constituent);
 
-    Artist* a = createArtist(id, name, description, recipe_per_stream, id_constituent_converted, num_constituent, country, type);
+    Artist* a = createArtist(id, name, recipe_per_stream, id_constituent_converted, num_constituent, country, type);
     addArtist(gestorArtist, a);
     addIndividualAlbumCount(gestorArtist, id, 0);
     addMusicReps(gestorArtist, id, 0);

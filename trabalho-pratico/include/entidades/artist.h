@@ -19,7 +19,7 @@ typedef enum {
 } ArtistType;
 
 // Função para criar uma estrutura da entidade artista parametrizada.
-Artist* createArtist(long int id, char* name, char* description, float recipe_per_stream, long int* id_constituent, int num_constituent, char* country, ArtistType type);
+Artist* createArtist(long int id, char* name, float recipe_per_stream, long int* id_constituent, int num_constituent, char* country, ArtistType type);
 
 //função que passa uma string do tipo do artista para o enum type
 ArtistType stringToArtistType(char* type_str);
@@ -35,8 +35,6 @@ long int* getArtistId(Artist* a);
 
 char* getArtistName(Artist* a);
 
-char* getArtistDescription(Artist* a);
-
 float getArtistRecipePerStream(Artist* a);
 
 long int* getArtistIdConstituent(Artist* a);
@@ -50,8 +48,6 @@ ArtistType getArtistType(Artist* a);
 void setArtistId(Artist* a, int id);
 
 void setArtistName(Artist* a, char* name);
-
-void setArtistDescription(Artist* a, char* description);
 
 void setArtistRecipePerStream(Artist* a, float recipe_per_stream);
 

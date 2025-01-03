@@ -3,7 +3,6 @@
 struct artist {
     long int id;
     char* name;
-    char* description;
     float recipe_per_stream;
     long int* id_constituent;
     int num_constituent;
@@ -12,7 +11,7 @@ struct artist {
 };
 
 // Função para criar uma estrutura da entidade artista parametrizada.
-Artist* createArtist(long int id, char* name, char* description, float recipe_per_stream, long int* id_constituent, int num_constituent, char* country, ArtistType type) {
+Artist* createArtist(long int id, char* name, float recipe_per_stream, long int* id_constituent, int num_constituent, char* country, ArtistType type) {
     Artist* artist = (Artist*)malloc(sizeof(Artist));
     if (!artist) {
         perror("Erro ao alocar memória para o artista.\n");
@@ -29,21 +28,11 @@ Artist* createArtist(long int id, char* name, char* description, float recipe_pe
     }
     strcpy(artist -> name, name);
 
-    artist -> description = malloc(strlen(description) + 1);
-    if (!artist -> description) {
-        perror("Erro ao alocar memória para a descrição do artista.\n");
-        free(artist -> name);
-        free(artist);
-        exit(EXIT_FAILURE);
-    }
-    strcpy(artist -> description, description);
-
     artist -> recipe_per_stream = recipe_per_stream;
 
     artist -> id_constituent = malloc(num_constituent * sizeof(long int));
     if (!artist -> id_constituent) {
         perror("Erro ao alocar memória para a lista de constituintes.\n");
-        free(artist -> description);
         free(artist -> name);
         free(artist);
         exit(EXIT_FAILURE);
@@ -58,7 +47,6 @@ Artist* createArtist(long int id, char* name, char* description, float recipe_pe
     if (!artist -> country) {
         perror("Erro ao alocar memória para o país do artista.\n");
         free(artist -> id_constituent);
-        free(artist -> description);
         free(artist -> name);
         free(artist);
         exit(EXIT_FAILURE);
@@ -125,7 +113,6 @@ void freeArtist(Artist* artist){
     if(!artist) return;
     free(artist -> country);
     free(artist -> id_constituent);
-    free(artist -> description);
     free(artist -> name);
     free(artist);
 }
@@ -137,7 +124,6 @@ gboolean freeArtistInTable(gpointer key, gpointer value, gpointer user_data){
     Artist* artist = (Artist*)value;
     free(artist -> country);
     free(artist -> id_constituent);
-    free(artist -> description);
     free(artist -> name);
     free(artist);
 
@@ -151,10 +137,6 @@ long int* getArtistId(Artist* a){
 
 char* getArtistName(Artist* a){
     return a -> name ? strdup(a -> name) : NULL;
-}
-
-char* getArtistDescription(Artist* a){
-    return a -> description ? strdup(a -> description) : NULL;
 }
 
 float getArtistRecipePerStream(Artist* a){
@@ -193,13 +175,6 @@ void setArtistName(Artist* a, char* name){
         free(a -> name);
     }
     a -> name = strdup(name);
-}
-
-void setArtistDescription(Artist* a, char* description){
-    if(a -> description){
-        free(a -> description);
-    }
-    a -> description = strdup(description);
 }
 
 void setArtistRecipePerStream(Artist* a, float recipe_per_stream){

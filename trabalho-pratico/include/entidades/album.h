@@ -13,7 +13,7 @@
 typedef struct album Album;
 
 // função para criar uma estrutura da entidade álbum parametrizada.
-Album* createAlbum(long int id, char* title, long int* artist_ids, int num_artists,  int year, char** producers, int num_producers);
+Album* createAlbum(long int id, long int* artist_ids, int num_artists,  int year, char** producers, int num_producers);
 
 // Função para liberar a memória de uma entidade do tipo álbum.
 void freeAlbum(Album* album);
@@ -23,8 +23,6 @@ void freeAlbumInTable(gpointer value);
 
 // getters e setters de álbum.
 long int getAlbumId(Album* album);
-
-char* getAlbumTitle(Album* album);
 
 long int* getAlbumArtistIds(Album* album);
 
@@ -37,8 +35,6 @@ char** getAlbumProducers(Album* album);
 int getAlbumNumProducers(Album* album);
 
 void setAlbumId(Album* album, long int id);
-
-void setAlbumTitle(Album* album, char* title);
 
 void setAlbumArtistIds(Album* album, long int* artist_ids, int num_artists);
 
