@@ -47,14 +47,6 @@ Music* createMusic(long int id, char* title, long int* artist_id, int num_artist
 long int* getMusicID(Music* m);
 
 /**
- * @brief Função que retorna o título de uma entidade do tipo música.
- * 
- * @param m Apontador para a entidade do tipo música.
- * @return Título da entidade do tipo música.
- */
-char* getMusicTitle(Music* m);
-
-/**
  * @brief Função que retorna o id do(s) artista(s) de uma entidade do tipo música.
  * 
  * @param m Apontador para a entidade do tipo música.
@@ -103,28 +95,12 @@ char* getMusicGenre(Music* m);
 int getMusicYear(Music* m);
 
 /**
- * @brief Função que retorna a letra de uma entidade do tipo música.
- * 
- * @param m Apontador para a entidade do tipo música.
- * @return Letra da entidade do tipo música.
- */
-char* getMusicLyrics(Music* m);
-
-/**
  * @brief Função que modifica o id de uma entidade do tipo música.
  * 
  * @param m Apontador para a entidade do tipo música.
  * @param newID Novo id da entidade do tipo música.
  */
 void setMusicID(Music* m, long int newID);
-
-/**
- * @brief Função que modifica o título de uma entidade do tipo música.
- * 
- * @param m Apontador para a entidade do tipo música.
- * @param newTitle Novo título da entidade do tipo música.
- */
-void setMusicTitle(Music* m, char* newTitle);
 
 /**
  * @brief Função que modifica o id do(s) artista(s) de uma entidade do tipo música.
@@ -166,14 +142,6 @@ void setMusicGenre(Music* m, char* newGenre);
  * @param newYear Novo ano da entidade do tipo música.
  */
 void setMusicYear(Music* m, int newYear);
-
-/**
- * @brief Função que modifica a letra de uma entidade do tipo música.
- * 
- * @param m Apontador para a entidade do tipo música.
- * @param newLyrics Nova letra da entidade do tipo música.
- */
-void setMusicLyrics(Music* m, char* newLyrics);
 
 /**
  * @brief Função que liberta a memória ocupada pela entidade do tipo música.

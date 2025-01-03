@@ -52,7 +52,7 @@ void process_album_line(char* line, void* gestor, void* aux_dataX, void* aux_dat
     year = atoi(year_str);
     producers_converted = splitString(producers_str, ",", &num_producers);
 
-    Album* album = createAlbum(id, title, artist_ids_converted, num_artists, year, producers_converted, num_producers);
+    Album* album = createAlbum(id, artist_ids_converted, num_artists, year, producers_converted, num_producers);
     addAlbum(gestorAlbum, album);
     for (int i = 0; i < num_artists; i++) {
         long int artist_id = artist_ids_converted[i];

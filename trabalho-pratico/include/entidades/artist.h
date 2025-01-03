@@ -92,16 +92,6 @@ long int* getArtistId(Artist* a);
 char* getArtistName(Artist* a);
 
 /**
- * @brief Função que devolve a descrição de um artista.
- * @details Função que devolve a descrição de um artista.
- * 
- * @param a Ponteiro para o artista.
- * 
- * @return Retorna a descrição do artista.
- */
-char* getArtistDescription(Artist* a);
-
-/**
  * @brief Função que devolve a receita por stream de um artista.
  * @details Função que devolve a receita por stream de um artista.
  * 
@@ -168,15 +158,6 @@ void setArtistId(Artist* a, int id);
  * @param name Novo nome do artista.
  */
 void setArtistName(Artist* a, char* name);
-
-/**
- * @brief Função que atualiza a descrição de um artista.
- * @details Função que atualiza a descrição de um artista.
- * 
- * @param a Ponteiro para o artista.
- * @param description Nova descrição do artista.
- */
-void setArtistDescription(Artist* a, char* description);
 
 /**
  * @brief Função que atualiza a receita por stream de um artista.

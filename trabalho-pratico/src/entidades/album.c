@@ -2,7 +2,6 @@
 
 struct album{
     long int id;
-    char* title;
     long int* artist_ids;
     int num_artists;
     int year;
@@ -11,7 +10,7 @@ struct album{
 };
 
 // função para criar uma estrutura da entidade álbum parametrizada.
-Album* createAlbum(long int id, char* title, long int* artist_ids, int num_artists,  int year, char** producers, int num_producers){
+Album* createAlbum(long int id, long int* artist_ids, int num_artists, int year, char** producers, int num_producers){
     Album* album = (Album*)malloc(sizeof(Album));
     if (!album) {
         perror("Erro ao alocar memória para o álbum.\n");
@@ -20,18 +19,9 @@ Album* createAlbum(long int id, char* title, long int* artist_ids, int num_artis
 
     album->id = id;
 
-    album->title = malloc(strlen(title) + 1);
-    if(!album->title){
-        perror("Erro ao alocar memória para o título do álbum.\n");
-        free(album);
-        exit(EXIT_FAILURE);
-    }
-    strcpy(album->title, title);
-
     album->artist_ids = malloc(num_artists * sizeof(long int));
     if(!album->artist_ids){
         perror("Erro ao alocar memória para os IDs dos artistas.\n");
-        free(album->title);
         free(album);
         exit(EXIT_FAILURE);
     }
@@ -46,7 +36,6 @@ Album* createAlbum(long int id, char* title, long int* artist_ids, int num_artis
     if(!album->producers){
         perror("Erro ao alocar memória para os produtores do álbum.\n");
         free(album->artist_ids);
-        free(album->title);
         free(album);
         exit(EXIT_FAILURE);
     }
@@ -59,7 +48,6 @@ Album* createAlbum(long int id, char* title, long int* artist_ids, int num_artis
             }
             free(album->producers);
             free(album->artist_ids);
-            free(album->title);
             free(album);
             exit(EXIT_FAILURE);
         }
@@ -79,7 +67,6 @@ void freeAlbum(Album* album) {
     }
     free(album->producers);
     free(album->artist_ids);
-    free(album->title);
     free(album);
 }
 
@@ -92,17 +79,12 @@ void freeAlbumInTable(gpointer value){
     }
     free(album->producers);
     free(album->artist_ids);
-    free(album->title);
     free(album);
 }
 
 // getters e setters de álbum.
 long int getAlbumId(Album* album){
     return album ? album->id : -1;
-}
-
-char* getAlbumTitle(Album* album){
-    return album->title ? strdup(album->title) : NULL;
 }
 
 long int* getAlbumArtistIds(Album* album){
@@ -135,11 +117,6 @@ int getAlbumNumProducers(Album* album){
 
 void setAlbumId(Album* album, long int id){
     if(album) album->id = id;
-}
-
-void setAlbumTitle(Album* album, char* title){
-    if(album->title) free(album->title);
-    album->title = strdup(title);
 }
 
 void setAlbumArtistIds(Album* album, long int* artist_ids, int num_artists){

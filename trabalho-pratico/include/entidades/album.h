@@ -63,16 +63,6 @@ void freeAlbumInTable(gpointer value);
 long int getAlbumId(Album* album);
 
 /**
- * @brief Função que devolve o título de um álbum.
- * @details Função que devolve o título de um álbum.
- * 
- * @param album Ponteiro para o álbum.
- * 
- * @return Retorna o título do álbum.
- */
-char* getAlbumTitle(Album* album);
-
-/**
  * @brief Função que devolve os IDs dos artistas que participaram num álbum.
  * @details Função que devolve os IDs dos artistas que participaram num álbum.
  * 
@@ -130,15 +120,6 @@ int getAlbumNumProducers(Album* album);
  * @param id Novo ID do álbum.
  */
 void setAlbumId(Album* album, long int id);
-
-/**
- * @brief Função que atualiza o título de um álbum.
- * @details Função que atualiza o título de um álbum.
- * 
- * @param album Ponteiro para o álbum.
- * @param title Novo título do álbum.
- */
-void setAlbumTitle(Album* album, char* title);
 
 /**
  * @brief Função que atualiza os IDs dos artistas que participaram num álbum.
