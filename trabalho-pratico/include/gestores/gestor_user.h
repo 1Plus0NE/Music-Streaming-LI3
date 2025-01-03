@@ -1,3 +1,7 @@
+/**
+ * @file gestor_user.h
+ * @brief Definição da estrutura do gestor de utilizadores e das funções que a manipulam.
+ */
 #ifndef GESTOR_USER_H
 #define GESTOR_USER_H
 #include <stdio.h>
@@ -8,51 +12,126 @@
 #include <glib.h>
 #include <stdbool.h>
 
-//estrutura de gestor de utilizadores.
+/**
+ * @brief Estrutura que armazena a informação dos utilizadores.
+ * 
+ */
 typedef struct gestor_user GestorUser;
 
-//estrutura do iterador de utilizadores.
+/**
+ * @brief Estrutura que armazena a informação dos iterador de utilizadores.
+ * 
+ */
 typedef struct user_iterator UserIterator;
 
 typedef void (*GHFunc)(void *key, void *value, void *user_data);
 
-// função para criar uma tabela de utilizadores.
+/**
+ * @brief Função que cria uma entidade do tipo gestor de utilizadores.
+ * @details A função aloca memória para a estrutura do gestor de utilizadores e inicializa a tabela de utilizadores.
+ * 
+ * @return Apontador para a entidade do tipo gestor de utilizadores.
+ */
 GestorUser* createGestorUser();
 
-// função que adiciona um utilizador á tabela de utilizadores.
+/**
+ * @brief Função que adiciona um utilizador à tabela.
+ * 
+ * @param gestorUser Apontador para a entidade do tipo gestor de utilizadores.
+ * @param user Utilizador a ser adicionado.
+ */
 void addUser(GestorUser* gestorUser, User* user);
 
-// função que remove um utilizador da tabela de utilizadores.
+/**
+ * @brief Função que remove um utilizador da tabela.
+ * 
+ * @param gestorUser Apontador para a entidade do tipo gestor de utilizadores.
+ * @param username Username do utilizador a ser removido.
+ */
 void removeUser(GestorUser* gestorUser, char* username);
 
-// função que encontra um utilizador pelo username na tabela.
+/**
+ * @brief Função que procura um utilizador na tabela.
+ * 
+ * @param gestorUser Apontador para a entidade do tipo gestor de utilizadores.
+ * @param username Username do utilizador a ser procurado.
+ * @return Apontador para o utilizador encontrado.
+ */
 User* searchUser(GestorUser* gestorUser, char* username);
 
-// função que itera sobre todos os utilizadores na tabela de utilizadores
+/**
+ * @brief Função que faz um ciclo sobre todos os utilizadores da tabela.
+ * 
+ * @param gestorUser Apontador para a entidade do tipo gestor de utilizadores.
+ * @param func Função a ser aplicada a cada utilizador.
+ * @param user_data Dados a serem passados para a função.
+ */
 void foreachUser(GestorUser* gestorUser, GHFunc func, gpointer user_data);
 
-// Função que cria um iterator para percorrer os elementos da tabela de utilizadores
+/**
+ * @brief Função que cria um iterador de utilizadores.
+ * 
+ * @param gestorUser Apontador para a entidade do tipo gestor de utilizadores.
+ * @return Apontador para o iterador de utilizadores.
+ */
 UserIterator* createUserIterator(GestorUser* gestorUser);
 
-// Função que retorna um user sobre a função que itera
+/**
+ * @brief Função que retorna o próximo utilizador do iterador.
+ * 
+ * @param iterator Apontador para o iterador de utilizadores.
+ * @return Apontador para o próximo utilizador.
+ */
 User* getNextUser(UserIterator* iterator);
 
-// Função que liberta a memória do iterator 
+/**
+ * @brief Função que liberta a memória alocada para o iterador de utilizadores.
+ * 
+ * @param iterator Apontador para o iterador de utilizadores.
+ */
 void freeUserIterator(UserIterator* iterator);
 
-// Função que retorna uma entidade userLikes na tabela através da idade
+/**
+ * @brief Função que procura uma entidade do tipo userLikes na tabela.
+ * 
+ * @param gestorUser Apontador para a entidade do tipo gestor de utilizadores.
+ * @param age Idade do utilizador.
+ */
 UserLikes* searchUserLikes(GestorUser* gestorUser, int age);
 
-// Função que adiciona uma estrutura userLike na hashtable
+/**
+ * @brief Função que adiciona uma entidade do tipo userLikes à tabela.
+ * 
+ * @param gestorUser Apontador para a entidade do tipo gestor de utilizadores.
+ * @param genres Array de géneros.
+ * @param likes Array de likes.
+ * @param size Tamanho dos arrays.
+ * @param age Idade do utilizador.
+ */
 void addUserLikes(GestorUser* gestorUser, char** genres, long int* likes, int size, int age);
 
-// Função que retorna o array que contem todos os elementos da estrutura userLikes
+/**
+ * @brief Função que devolve o array de userLikes.
+ * 
+ * @param gestorUser Apontador para a entidade do tipo gestor de utilizadores.
+ * @return Apontador para o array de userLikes.
+ */
 GPtrArray* getUserLikesArray(GestorUser* gestorUser);
 
-// Função que retorna um elemento do array que armazena a estrutura de userLikes
+/**
+ * @brief Função que devolve o userLikes de um determinado index do array.
+ * 
+ * @param gestorUser Apontador para a entidade do tipo gestor de utilizadores.
+ * @param index Index do userLikes no array.
+ * @return Apontador para o userLikes.
+ */
 UserLikes* getUserLikeFromArray(GestorUser* gestorUser, int index);
 
-// função que libera a memória alocada para a tabela de utilizadores.
+/**
+ * @brief Função que liberta a memória alocada para a entidade do tipo gestor de utilizadores.
+ * 
+ * @param gestorUser Apontador para a entidade do tipo gestor de utilizadores.
+ */
 void freeGestorUser(GestorUser* gestorUser);
 
 #endif
