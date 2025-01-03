@@ -26,17 +26,15 @@ typedef struct music Music;
  * @details A função recebe o id da música, o título, o id do(s) artista(s), o número de artistas, o id do álbum, a duração, o género, o ano e a letra da música e cria uma entidade do tipo música.
  *
  * @param id Id da música.
- * @param title Título da música.
  * @param artist_id Id do(s) artista(s).
  * @param num_artists Número de artistas.
  * @param album_id Id do álbum.
  * @param duration Duração.
  * @param genre Género.
  * @param year Ano.
- * @param lyrics Letra.
  * @return Apontador para a entidade do tipo música.
  */
-Music* createMusic(long int id, char* title, long int* artist_id, int num_artists, long int album_id, char* duration, char* genre, int year, char* lyrics);
+Music* createMusic(long int id, long int* artist_id, int num_artists, long int album_id, char* duration, char* genre, int year);
 
 /**
  * @brief Função que retorna o id de uma entidade do tipo música.

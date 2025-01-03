@@ -34,7 +34,6 @@ typedef enum {
  * 
  * @param id ID do artista.
  * @param name Nome do artista.
- * @param description Descrição do artista.
  * @param recipe_per_stream Receita por stream do artista.
  * @param id_constituent IDs dos artistas que constituem o artista.
  * @param num_constituent Número de artistas que constituem o artista.
@@ -43,7 +42,7 @@ typedef enum {
  *
  * @return Retorna um ponteiro para a nova instância de artista.
  */
-Artist* createArtist(long int id, char* name, char* description, float recipe_per_stream, long int* id_constituent, int num_constituent, char* country, ArtistType type);
+Artist* createArtist(long int id, char* name, float recipe_per_stream, long int* id_constituent, int num_constituent, char* country, ArtistType type);
 
 /**
  * @brief Conversão de uma string para um tipo de artista.

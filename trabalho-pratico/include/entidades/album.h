@@ -25,7 +25,6 @@ typedef struct album Album;
  * @details Função que aloca memória para uma nova instância de um álbum e inicializa os seus valores.
  * 
  * @param id ID do álbum.
- * @param title Título do álbum.
  * @param artist_ids IDs dos artistas que participaram no álbum.
  * @param num_artists Número de artistas que participaram no álbum.
  * @param year Ano de lançamento do álbum.
@@ -34,7 +33,7 @@ typedef struct album Album;
  *
  * @return Retorna um ponteiro para a nova instância de álbum.
  */
-Album* createAlbum(long int id, char* title, long int* artist_ids, int num_artists,  int year, char** producers, int num_producers);
+Album* createAlbum(long int id, long int* artist_ids, int num_artists,  int year, char** producers, int num_producers);
 
 /**
  * @brief Liberta a memória alocada para um álbum.
