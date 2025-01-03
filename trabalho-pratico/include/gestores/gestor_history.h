@@ -159,6 +159,13 @@ int compareUsersBySizeAndSimilarity(gconstpointer a, gconstpointer b);
 void sortSimilarUsers(GestorHistory* gestorHistory);
 
 /**
+ * @brief Função que altera o tamanho do array de utilizadores semelhantes a 0.
+ * 
+ * @param gestorHistory Apontador para a entidade do tipo gestor de históricos.
+ */
+void resetSimilarUsersArray(GestorHistory* gestorHistory);
+
+/**
  * @brief Função que liberta a memória alocada para a lista de géneros ouvidos.
  * 
  * @param gestorHistory Apontador para a entidade do tipo gestor de históricos.

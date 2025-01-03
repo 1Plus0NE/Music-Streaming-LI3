@@ -184,7 +184,7 @@ int getGenreIndex(char *genre, char **genre_array, int genre_count);
 void sortGenresByLikes(char* genres[], long int genre_likes[], int genre_count);
 
 /**
- * @brief Função que se uma idade está dentro de um intervalo.
+ * @brief Função que verifica se uma idade está dentro de um intervalo.
  * @details Função que verifica se uma idade está dentro de um intervalo.
  * 
  * @param age Idade.

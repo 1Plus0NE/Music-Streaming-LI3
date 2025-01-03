@@ -24,7 +24,7 @@ GestorHistory* createGestorHistory(){
         return NULL;
     }
 
-    gestorHistory -> genres_listened_table = g_hash_table_new(g_str_hash, g_str_equal);
+    gestorHistory -> genres_listened_table = g_hash_table_new_full(g_str_hash, g_str_equal, free, freeGenresListenedInTable);
     if(gestorHistory -> genres_listened_table == NULL){
         perror("Falha ao criar a tabela de generos ouvidos\n");
         g_hash_table_destroy(gestorHistory -> table);
@@ -32,7 +32,7 @@ GestorHistory* createGestorHistory(){
         return NULL;
     }
 
-    gestorHistory -> genres_listened_array = g_ptr_array_new_with_free_func((GDestroyNotify)freeGenresListened);
+    gestorHistory -> genres_listened_array = g_ptr_array_new();
     if(gestorHistory -> genres_listened_array == NULL){
         perror("Falha ao criar o array de musicas ouvidas\n");
         g_hash_table_destroy(gestorHistory -> table);
@@ -139,6 +139,8 @@ void addGenresListened(GestorHistory* gestorHistory, char* username, char* genre
         char* usernameKey = getGenresListenedUsername(genresListened);
         g_hash_table_insert(gestorHistory -> genres_listened_table, usernameKey, genresListened);
         g_ptr_array_add(gestorHistory -> genres_listened_array, genresListened);
+        freeStringArray(genres, size);
+        free(listened);
     }
     else{
         // getters
@@ -172,7 +174,7 @@ GenresListened* getGenresListenedFromArray(GestorHistory* gestorHistory, int ind
 // Função que dá store de utilizadores semelhantes temporariamente
 void addSimilarUsers(GestorHistory* gestorHistory, GenresListened* targetUser){
     
-    g_ptr_array_set_size(gestorHistory->similar_users_array, 0);
+    //g_ptr_array_set_size(gestorHistory->similar_users_array, 0);
 
     // Dados sobre o user recebido
     char* targetUserUsername = getGenresListenedUsername(targetUser);
@@ -203,9 +205,9 @@ void addSimilarUsers(GestorHistory* gestorHistory, GenresListened* targetUser){
                 setSimilarityScore(newUser, similarityScore); // Atualizar a similaridade do utilizador
                 // Utilizadores semelhantes já filtrados
                 g_ptr_array_add(gestorHistory->similar_users_array, newUser);
-                freeStringArray(newUserGenres, newUserSize);
+                free(newUserGenresListened);
             }
-
+            freeStringArray(newUserGenres, newUserSize);
         }
         free(newUserUsername);
     }
@@ -260,16 +262,24 @@ int compareUsersBySizeAndSimilarity(gconstpointer a, gconstpointer b){
     return (idA > idB) - (idA < idB);
 }
 
+// Função que ordena todos os elementos do Array de utilizadores semelhantes
 void sortSimilarUsers(GestorHistory* gestorHistory){
     if(gestorHistory && gestorHistory -> similar_users_array){
         g_ptr_array_sort(gestorHistory -> similar_users_array, compareUsersBySizeAndSimilarity);
     }
 }
 
+// Função que seta a size do array de utilizadores semelhantes a 0
+void resetSimilarUsersArray(GestorHistory* gestorHistory){
+    if(gestorHistory -> similar_users_array){
+        g_ptr_array_set_size(gestorHistory->similar_users_array, 0);
+    }
+}
+
 // Função liberta a memoria alocada de um GPtrArray para utilizadores semelhantes
 void freeSimilarUsersArray(GestorHistory* gestorHistory){
     if(gestorHistory -> similar_users_array){
-        g_ptr_array_free(gestorHistory -> similar_users_array, FALSE);
+        g_ptr_array_free(gestorHistory -> similar_users_array, TRUE);
     }
 }
 
@@ -287,6 +297,7 @@ void freeGestorHistory(GestorHistory* gestorHistory){
             g_ptr_array_free(gestorHistory->genres_listened_array, TRUE);
         }
         if(gestorHistory -> similar_users_array){
+            g_ptr_array_set_size(gestorHistory->similar_users_array, 0);
             freeSimilarUsersArray(gestorHistory); 
         }
 

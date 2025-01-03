@@ -70,15 +70,14 @@ void process_history_line(char* line, void* gestor, void* aux_dataX, void* aux_d
         updateMusicReps(gestorArtist, artist_id, count);
     }
   
-/*
+
     // Dados utilizados para o pre-calculo dos generos ouvidos de cada utilizador
     char* genre = getMusicGenre(m);
 
     addGenresListened(gestorHistory, user_id_str, genre);
 
     free(genre);
-    //free(artists_ids);
-*/
+
     free(id_str);
     free(user_id_str);
     free(music_id_str);

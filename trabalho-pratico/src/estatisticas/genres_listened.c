@@ -161,3 +161,16 @@ void freeGenresListened(GenresListened* genresListened){
     free(genresListened);             // Free da propria estrutura
 }
 
+// Função auxiliar para fazer free da estrutura de musicas ouvidas
+void freeGenresListenedInTable(gpointer data){
+    GenresListened* genresListened = (GenresListened*)data; 
+    if(!genresListened) return;
+
+    free(genresListened->username);
+    for (int i = 0; i < genresListened->size; i++)
+        free(genresListened->genres[i]); // Free a cada genero dentro do array
+
+    free(genresListened->genres);   // Free do array de generos
+    free(genresListened->listened); // Free do array de musicas ouvidas
+    free(genresListened);           // Free da propria estrutura
+}

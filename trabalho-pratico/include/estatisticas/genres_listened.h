@@ -107,4 +107,12 @@ void setSimilarityScore(GenresListened* genresListened, int newSimilarityScore);
  */
 void freeGenresListened(GenresListened* genresListened);
 
+/** 
+ * @brief Função que liberta a memória alocada para a entidade do tipo géneros ouvidos 
+ * 
+ * 
+ * 
+*/
+void freeGenresListenedInTable(gpointer data);
+
 #endif

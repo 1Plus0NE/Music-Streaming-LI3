@@ -184,7 +184,7 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
                 fclose(outputQ3);
                 break;
             }
-        /*
+        
             case '5':{
                 // Tratamento da linha para a 1ª Query
                 strsep(&linePtr, " "); // Ignora o id da Query e o espaço
@@ -199,7 +199,7 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
                 fclose(outputQ5);
                 break;
             }
-        */
+        
             default:
                 continue;
         }

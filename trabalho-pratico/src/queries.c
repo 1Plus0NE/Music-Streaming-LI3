@@ -175,7 +175,7 @@ void query3(int ageMin, int ageMax, GestorUser* gestorUser, char delimiter, FILE
     freeStringArray(like_strings, size);
     freeStringArray(genres, size);
 }
-/*
+
 void query5(GestorHistory* gestorHistory, char* username, int numRecommendations, FILE* output){
 
     if(numRecommendations <= 0){
@@ -199,11 +199,12 @@ void query5(GestorHistory* gestorHistory, char* username, int numRecommendations
         char* printUsername = getGenresListenedUsername(similarUser);
         fprintf(output, "%s\n", printUsername);
         free(printUsername);
-        
     }
+    
+    resetSimilarUsersArray(gestorHistory);
 
 }
-*/
+
 
 
 
