@@ -30,7 +30,7 @@ GestorUser* createGestorUser(){
         return NULL;
     }
 
-    gestorUser -> user_likes_table = g_hash_table_new(g_int_hash, g_int_equal);
+    gestorUser -> user_likes_table = g_hash_table_new_full(g_int_hash, g_int_equal, free, NULL);
     if(gestorUser -> user_likes_table == NULL){
         perror("Falha ao criar a tabela de likes\n");
         g_hash_table_destroy(gestorUser -> table);
@@ -125,7 +125,13 @@ void addUserLikes(GestorUser* gestorUser, char** genres, long int* likes, int si
     if(!userLikes){
         // No caso de não existir
         userLikes = createUserLikes(genres, likes, size, age);
-        g_hash_table_insert(gestorUser->user_likes_table, getUserLikesAge(userLikes), userLikes);
+        int* key = malloc(sizeof(int));
+        if(!key){
+            perror("Erro ao alocar memória para a chave do user_likes.\n");
+            return;
+        }
+        *key = getUserLikesAge(userLikes);
+        g_hash_table_insert(gestorUser->user_likes_table, key, userLikes);
         g_ptr_array_add(gestorUser->user_likes_array, userLikes);
     }
     else{

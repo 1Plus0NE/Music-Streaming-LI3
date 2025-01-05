@@ -14,7 +14,7 @@ GestorMusic* createGestorMusic(){
         return NULL;
     }
 
-    gestorMusic -> table = g_hash_table_new(g_int_hash, g_int_equal);
+    gestorMusic -> table = g_hash_table_new_full(g_int_hash, g_int_equal, free, freeMusicInTable);
     if(gestorMusic -> table == NULL){
         perror("Falha ao criar a tabela de hashing de artistas.\n");
         free(gestorMusic);
@@ -26,7 +26,13 @@ GestorMusic* createGestorMusic(){
 // função que adiciona uma música á tabela de músicas.
 void addMusic(GestorMusic* gestorMusic, Music* music){
     if(gestorMusic && gestorMusic -> table){
-        g_hash_table_insert(gestorMusic -> table, getMusicID(music), music);
+        long int* key = malloc(sizeof(long int));
+        if(!key){
+            perror("Erro ao alocar memória para a chave da música.\n");
+            return;
+        }
+        *key = getMusicID(music);
+        g_hash_table_insert(gestorMusic -> table, key, music);
     }
 }
 
@@ -56,7 +62,6 @@ void foreachMusic(GestorMusic* gestorMusic, GHFunc func, gpointer user_data){
 void freeGestorMusic(GestorMusic* gestorMusic){
     if(gestorMusic){
         if(gestorMusic -> table){
-            g_hash_table_foreach_remove(gestorMusic -> table, freeMusicInTable, NULL);
             g_hash_table_destroy(gestorMusic -> table);
         }
         free(gestorMusic);

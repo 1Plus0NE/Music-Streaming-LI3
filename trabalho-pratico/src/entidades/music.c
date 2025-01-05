@@ -62,10 +62,9 @@ Music* createMusic(long int id, long int* artist_id, int num_artists, long int a
 // GETTERS
 
 // Função que retorna o ID da música
-long int* getMusicID(Music* m){
-    return m->id ? &(m->id) : NULL;
+long int getMusicID(Music* m){
+    return m->id;
 }
-
 
 // Função que retorna o array de IDs de artistas da música
 long int* getMusicArtistIDs(Music* m){
@@ -155,7 +154,6 @@ void setMusicYear(Music* m, int newYear){
     m->year = newYear;
 }
 
-
 // Função para libertar a memória de uma entidade do tipo música.
 void freeMusic(Music* music){
     free(music -> artist_id);
@@ -165,14 +163,10 @@ void freeMusic(Music* music){
 }
 
 // Função para libertar a memória de uma entidade do tipo música contida numa hash table
-gboolean freeMusicInTable(gpointer key, gpointer value, gpointer user_data){
-    (void)key;
-    (void)user_data;
+void freeMusicInTable(gpointer value){
     Music* music = (Music*)value;
     free(music -> artist_id);
     free(music -> duration);
     free(music -> genre);
     free(music);
-
-    return TRUE;
 }

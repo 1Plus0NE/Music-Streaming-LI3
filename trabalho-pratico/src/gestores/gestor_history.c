@@ -17,7 +17,7 @@ GestorHistory* createGestorHistory(){
         return NULL;
     }
 
-    gestorHistory -> table = g_hash_table_new(g_int_hash, g_int_equal);
+    gestorHistory -> table = g_hash_table_new_full(g_int_hash, g_int_equal, free, freeHistoryInTable);
     if(gestorHistory -> table == NULL){
         perror("Falha ao criar a tabela de hashing de histórico.\n");
         free(gestorHistory);
@@ -52,7 +52,7 @@ GestorHistory* createGestorHistory(){
     return gestorHistory;
 }
 
-/*
+
 // Função que adiciona um histórico à tabela.
 void addHistory(GestorHistory* gestorHistory, History* history){
     if(gestorHistory && gestorHistory -> table){
@@ -65,13 +65,6 @@ void addHistory(GestorHistory* gestorHistory, History* history){
         g_hash_table_insert(gestorHistory -> table, key, history);
     }
 }
-*/
-void addHistory(GestorHistory* gestorHistory, History* history){
-    if(gestorHistory && gestorHistory -> table){
-        g_hash_table_insert(gestorHistory -> table, getHistoryId(history), history);
-    }
-}
-
 
 // Função que remove um histórico da tabela.
 void removeHistory(GestorHistory* gestorHistory, long int id){
@@ -287,7 +280,6 @@ void freeSimilarUsersArray(GestorHistory* gestorHistory){
 void freeGestorHistory(GestorHistory* gestorHistory){
     if(gestorHistory){
         if(gestorHistory -> table){
-            g_hash_table_foreach_remove(gestorHistory -> table, freeHistoryInTable, NULL);
             g_hash_table_destroy(gestorHistory -> table);
         }
         if(gestorHistory -> genres_listened_table){

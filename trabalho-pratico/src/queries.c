@@ -148,7 +148,7 @@ void query3(int ageMin, int ageMax, GestorUser* gestorUser, char delimiter, FILE
     GPtrArray* userLikesArr = getUserLikesArray(gestorUser);
     for(guint i = 0; i < userLikesArr->len; i++){
         UserLikes* userLikes = getUserLikeFromArray(gestorUser, i);
-        int age = getUserLikesAgeInt(userLikes);
+        int age = getUserLikesAge(userLikes);
         if(isAgeInRange(age, ageMin, ageMax)){
             flag = 1;
             char** genresUL = getUserLikesArrayGenres(userLikes);
@@ -188,12 +188,12 @@ void query5(GestorHistory* gestorHistory, char* username, int numRecommendations
         fprintf(output, "\n");
         return;
     }
-
+    // Processo de adicionar os utilizadores semelhantes num GPtrArray auxiliar
     addSimilarUsers(gestorHistory, targetUser);
     
     GPtrArray* similarUsers = getSimilarUsersArray(gestorHistory);
-    sortSimilarUsers(gestorHistory);
-        
+    sortSimilarUsers(gestorHistory); // Sorting dos utilizadores conforme os critérios de semelhança
+
     for(guint i = 0; i < similarUsers->len && i < (guint)numRecommendations; i++){
         GenresListened* similarUser = getSimilarUsersFromArray(gestorHistory, i);
         char* printUsername = getGenresListenedUsername(similarUser);

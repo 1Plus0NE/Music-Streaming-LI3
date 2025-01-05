@@ -16,7 +16,7 @@ GestorArtist* createGestorArtist(){
         return NULL;
     }
 
-    gestorArtist -> table = g_hash_table_new(g_int_hash, g_int_equal);
+    gestorArtist -> table = g_hash_table_new_full(g_int_hash, g_int_equal, free, freeArtistInTable);
     gestorArtist -> num_albums_table = g_hash_table_new(g_direct_hash, g_direct_equal);
     gestorArtist -> reps_musics_table = g_hash_table_new(g_direct_hash, g_direct_equal);
     if(!gestorArtist -> table || !gestorArtist -> num_albums_table || !gestorArtist -> reps_musics_table){
@@ -39,7 +39,13 @@ GestorArtist* createGestorArtist(){
 // função que adiciona um artista á tabela de artistas.
 void addArtist(GestorArtist* gestorArtist, Artist* artist){
     if(gestorArtist && gestorArtist -> table){
-        g_hash_table_insert(gestorArtist -> table, getArtistId(artist), artist);
+        long int* key = malloc(sizeof(long int));
+        if(!key){
+            perror("Erro ao alocar memória para a chave do artista");
+            return;
+        }
+        *key = getArtistId(artist);
+        g_hash_table_insert(gestorArtist -> table, key, artist);
     }
 }
 
@@ -69,15 +75,14 @@ void foreachArtist(GestorArtist* gestorArtist, GHFunc func, gpointer user_data) 
 void freeGestorArtist(GestorArtist* gestorArtist){
     if(gestorArtist){
         if(gestorArtist -> table){
-            g_hash_table_foreach_remove(gestorArtist -> table,freeArtistInTable,NULL);
             g_hash_table_destroy(gestorArtist -> table);
         }
         if(gestorArtist -> num_albums_table){
-            g_hash_table_foreach_remove(gestorArtist -> num_albums_table,freeAlbumCountInTable,NULL);
+            g_hash_table_foreach_remove(gestorArtist -> num_albums_table, freeAlbumCountInTable, NULL);
             g_hash_table_destroy(gestorArtist -> num_albums_table);
         }
         if(gestorArtist -> reps_musics_table){
-            g_hash_table_foreach_remove(gestorArtist -> reps_musics_table,freeMusicRepsInTable,NULL);
+            g_hash_table_foreach_remove(gestorArtist -> reps_musics_table, freeMusicRepsInTable, NULL);
             g_hash_table_destroy(gestorArtist -> reps_musics_table);
         }
         free(gestorArtist);
@@ -151,12 +156,16 @@ void removeIndividualAlbumCount(GestorArtist* gestorArtist, long int artist_id){
 }
 
 // Função para liberar a memória alocada para os artistas na tabela de contador de álbuns.
-void freeAlbumCountInTable(gpointer key, gpointer value, gpointer user_data){
+gboolean freeAlbumCountInTable(gpointer key, gpointer value, gpointer user_data){
+    (void)key;   
+    (void)user_data;
     free(value);  // Libera a memória alocada para o valor
+
+    return TRUE;
 }
 
 // Função que adiciona um artista e o número de reproduções à tabela de músicas.
-void addMusicReps(GestorArtist* gestorArtist, long int artist_id, int reps){
+void addMusicReps(GestorArtist* gestorArtist, long int artist_id){
     if(gestorArtist && gestorArtist->reps_musics_table){
         int* reps = malloc(sizeof(int));
         if(!reps){
@@ -175,7 +184,7 @@ void updateMusicReps(GestorArtist* gestorArtist, long int artist_id, int reps){
         if(reps_ptr){
             *reps_ptr = reps;
         }else{
-            addMusicReps(gestorArtist, artist_id, reps);
+            addMusicReps(gestorArtist, artist_id);
         }
     }
 }
@@ -199,8 +208,12 @@ void removeMusicReps(GestorArtist* gestorArtist, long int artist_id){
 }
 
 // Função que libera a memória alocada para os artistas na tabela de músicas.
-void freeMusicRepsInTable(gpointer key, gpointer value, gpointer user_data){
+gboolean freeMusicRepsInTable(gpointer key, gpointer value, gpointer user_data){
+    (void)key;
+    (void)user_data;
     free(value);
+
+    return TRUE;
 }
 
 // Função que verifica se a chave existe na tabela de artistas.
@@ -237,13 +250,7 @@ void artistFromTableToLL(G_GNUC_UNUSED gpointer artistId, gpointer artistData, g
     
     Artist* artist = (Artist*)artistData;
     Discography** disco = (Discography**)discoPtr;
-    long int* idPtr = getArtistId(artist);
-    long int id;
-    if (idPtr) {
-        id = *idPtr; // Transforma o ponteiro em long int
-    } else {
-        id = 0;  //  Não deve acontecer
-    }
+    long int id = getArtistId(artist);
     //long int id = (idPtr != NULL) ? *idPtr : -1; //Transformar o ponteiro em long int
     char* name = getArtistName(artist);
     char* country = getArtistCountry(artist);

@@ -373,6 +373,8 @@ void removeEnters(char *input){
 
 // Função para voltar a transformar o total de segundos na discografia no formato "hh:mm:ss"
 char* secondsToString(int totSeconds){
+    // Garantir que não seja negativo
+    if(totSeconds < 0) totSeconds = 0;
 
     int hours = totSeconds / 3600;
     int minutes = (totSeconds % 3600) / 60;
@@ -386,7 +388,7 @@ char* secondsToString(int totSeconds){
     }
 
     // Formata a string como "hh:mm:ss"
-    snprintf(timeString, 9, "%02d:%02d:%02d", hours, minutes, seconds);
+    snprintf(timeString, 13, "%02d:%02d:%02d", hours, minutes, seconds);
 
     return timeString;
 }

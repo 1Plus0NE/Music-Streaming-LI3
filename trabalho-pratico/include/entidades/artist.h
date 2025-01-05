@@ -65,10 +65,8 @@ void freeArtist(Artist* artist);
  * @details Função que liberta a memória alocada para um artista numa hashtable.
  * 
  * @param artist Ponteiro para o artista a ser libertado.
- * 
- * @return Retorna TRUE se a libertação foi bem sucedida, FALSE caso contrário.
  */
-gboolean freeArtistInTable(gpointer key, gpointer value, gpointer user_data);
+void freeArtistInTable(gpointer value);
 
 /**
  * @brief Função que devolve o ID de um artista.
@@ -78,7 +76,7 @@ gboolean freeArtistInTable(gpointer key, gpointer value, gpointer user_data);
  * 
  * @return Retorna o ID do artista.
  */
-long int* getArtistId(Artist* a);
+long int getArtistId(Artist* a);
 
 /**
  * @brief Função que devolve o nome de um artista.

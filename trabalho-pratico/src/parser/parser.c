@@ -8,23 +8,23 @@ typedef void (*EntityProcessor)(char* line, void* gestor, void* aux_dataX, void*
 void parse_all(char* path, GestorArtist* gestorArtist, GestorMusic* gestorMusic, GestorUser* gestorUser, GestorAlbum* gestorAlbum, GestorHistory* gestorHistory){
     //parse de artistas
     parse_artist(path, gestorArtist);
-    printf("Fiz o parse de artistas\n");
+    printf("Artists parsed!\n");
 
     //parse de albúns
     parse_album(path, gestorAlbum, gestorArtist);
-    printf("Fiz o parse de albuns\n");
+    printf("Albums parsed!\n");
 
     //parse de músicas
     parse_music(path, gestorMusic, gestorArtist, gestorAlbum);
-    printf("Fiz o parse de musicas\n");
+    printf("Musics parsed!\n");
 
     //parse de utilizadores
     parse_user(path, gestorUser, gestorMusic);
-    printf("Fiz o parse de users\n");
+    printf("Users parsed!\n");
 
     //parse de históricos
     parse_history(path, gestorHistory, gestorMusic, gestorArtist);
-    printf("Fiz o parse de historicos\n");
+    printf("History parsed!\n");
 
 }
 

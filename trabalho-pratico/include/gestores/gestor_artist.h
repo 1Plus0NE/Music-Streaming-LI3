@@ -113,17 +113,18 @@ void removeIndividualAlbumCount(GestorArtist* gestorArtist, long int artist_id);
  * @param key Chave da tabela.
  * @param value Valor da tabela.
  * @param user_data Dados a serem passados para a função.
+ * 
+ * @return TRUE para que entidade seja removida da hash table.
  */
-void freeAlbumCountInTable(gpointer key, gpointer value, gpointer user_data);
+gboolean freeAlbumCountInTable(gpointer key, gpointer value, gpointer user_data);
 
 /**
  * @brief Função que adiciona um artista à tabela de contador de músicas.
  * 
  * @param gestorArtist Apontador para a entidade do tipo gestor de artistas.
  * @param artist_id Id do artista a ser adicionado.
- * @param count Número de músicas do artista.
  */
-void addMusicReps(GestorArtist* gestorArtist, long int artist_id, int reps);
+void addMusicReps(GestorArtist* gestorArtist, long int artist_id);
 
 /**
  * @brief Função que atualiza o número de músicas de um artista na tabela de contador de músicas.
@@ -157,8 +158,10 @@ void removeMusicReps(GestorArtist* gestorArtist, long int artist_id);
  * @param key Chave da tabela.
  * @param value Valor da tabela.
  * @param user_data Dados a serem passados para a função.
+ * 
+ * @return TRUE para que entidade seja removida da hash table.
  */
-void freeMusicRepsInTable(gpointer key, gpointer value, gpointer user_data);
+gboolean freeMusicRepsInTable(gpointer key, gpointer value, gpointer user_data);
 
 /**
  * @brief Função que verifica se um artista existe na tabela de artistas.

@@ -42,7 +42,7 @@ Music* createMusic(long int id, long int* artist_id, int num_artists, long int a
  * @param m Apontador para a entidade do tipo música.
  * @return Id da entidade do tipo música.
  */
-long int* getMusicID(Music* m);
+long int getMusicID(Music* m);
 
 /**
  * @brief Função que retorna o id do(s) artista(s) de uma entidade do tipo música.
@@ -152,11 +152,8 @@ void freeMusic(Music* music);
  * @brief Função que insere uma entidade do tipo música numa hashtable.
  * @details A função recebe um apontador para a hashtable e um apontador para a entidade do tipo música e insere a entidade do tipo música na hashtable.
  *
- * @param key Chave da entidade do tipo música.
  * @param value Apontador para a entidade do tipo música.
- * @param user_data Apontador para a hashtable.
- * @return TRUE se a entidade do tipo música foi inserida na hashtable e FALSE caso contrário.
  */
-gboolean freeMusicInTable(gpointer key, gpointer value, gpointer user_data);
+void freeMusicInTable(gpointer value);
 
 #endif

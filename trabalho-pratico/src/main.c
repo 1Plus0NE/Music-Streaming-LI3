@@ -12,6 +12,7 @@ int main(int argc, char* argv[]){
     char* dataDir = argv[1];
     char* queriesFile = argc > 2 ? argv[2] : NULL;
 
+    printf("Initializing data structures...\n");
     GestorArtist* gestorArtist = createGestorArtist();
     GestorMusic* gestorMusic = createGestorMusic();
     GestorUser* gestorUser = createGestorUser();
@@ -19,13 +20,16 @@ int main(int argc, char* argv[]){
     GestorHistory* gestorHistory = createGestorHistory();
 
     errosDir();
-    
+    printf("Parsing csv files...\n\n");
     parse_all(dataDir, gestorArtist, gestorMusic, gestorUser, gestorAlbum, gestorHistory);
 
     if(queriesFile){
+        printf("\nExecuting queries...\n");
         parse_queries(queriesFile, gestorUser, gestorMusic, gestorArtist, gestorAlbum, gestorHistory, 0);
+        printf("Queries executed with success!\n\n");
     }
 
+    printf("Cleaning data structures...\n");
     freeGestorArtist(gestorArtist);
     freeGestorMusic(gestorMusic);
     freeGestorUser(gestorUser);

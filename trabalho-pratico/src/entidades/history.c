@@ -52,15 +52,11 @@ void freeHistory(History* history){
 }
 
 //função para libertar a memória de uma entidade do tipo histórico contida numa hash table.
-gboolean freeHistoryInTable(gpointer key, gpointer value, gpointer user_data){
-    (void)key;
-    (void)user_data;
+void freeHistoryInTable(gpointer value){
     History* history = (History*)value;
     free(history -> duration);
     free(history -> timestamp);
     free(history);
-
-    return TRUE;
 }
 
 //função para converter uma string de plataforma para a forma de enum.
@@ -129,8 +125,8 @@ int isValidPlatform(char* platform_str){
 }
 
 //getters e setters de histórico.
-long int* getHistoryId(History* h){
-    return h ? &(h->id) : NULL;
+long int getHistoryId(History* h){
+    return h->id;
 }
 
 long int getHistoryUserId(History* h){

@@ -84,10 +84,7 @@ void setGenresListenedArrayGenres(GenresListened* genresListened, char** newGenr
 
     // Libertar a memoria do array existente na estrutura
     if(genresListened->genres){
-        for(int i = 0; i < genresListened->size; i++){
-            free(genresListened->genres[i]);
-        }
-        free(genresListened->genres);
+        freeStringArray(genresListened -> genres, genresListened -> size);
     }
 
     if(newSize > 0 && newGenres){
@@ -101,10 +98,7 @@ void setGenresListenedArrayGenres(GenresListened* genresListened, char** newGenr
             genresListened->genres[i] = strdup(newGenres[i]);
             if(!genresListened->genres[i]){
                 fprintf(stderr, "Erro de alocação de memória para gênero\n");
-                for(int j = 0; j < i; j++){
-                    free(genresListened->genres[j]);
-                }
-                free(genresListened->genres);
+                freeStringArray(genresListened -> genres, genresListened -> size);
                 genresListened->genres = NULL;
                 genresListened->size = 0;
                 return;
@@ -153,10 +147,7 @@ void freeGenresListened(GenresListened* genresListened){
     if(!genresListened) return;
 
     free(genresListened -> username);
-    for(int i = 0; i < genresListened -> size; i++)
-        free(genresListened -> genres[i]); // Free a cada genero dentro do array
-
-    free(genresListened -> genres);   // Free do array de generos
+    freeStringArray(genresListened -> genres, genresListened -> size); // Free do array de generos
     free(genresListened -> listened); // Free do array de musicas ouvidas
     free(genresListened);             // Free da propria estrutura
 }
@@ -167,10 +158,7 @@ void freeGenresListenedInTable(gpointer data){
     if(!genresListened) return;
 
     free(genresListened->username);
-    for (int i = 0; i < genresListened->size; i++)
-        free(genresListened->genres[i]); // Free a cada genero dentro do array
-
-    free(genresListened->genres);   // Free do array de generos
+    freeStringArray(genresListened -> genres, genresListened -> size); // Free do array de generos
     free(genresListened->listened); // Free do array de musicas ouvidas
     free(genresListened);           // Free da propria estrutura
 }

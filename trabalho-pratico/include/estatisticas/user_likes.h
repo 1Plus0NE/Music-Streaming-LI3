@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include "../utils.h"
 #include <glib.h>
 
 /**
@@ -59,15 +60,7 @@ int getUserLikesSizeArray(UserLikes* userLikes);
  * @param userLikes Estrutura de likes
  * @return int Idade do utilizador
  */
-int* getUserLikesAge(UserLikes* userLikes);
-
-/**
- * @brief Função que retorna a idade da estrutura de likes
- * 
- * @param userLikes Estrutura de likes
- * @return int Idade do utilizador
- */
-int getUserLikesAgeInt(UserLikes* userLikes);
+int getUserLikesAge(UserLikes* userLikes);
 
 /**
  * @brief Função que retorna o número de likes da estrutura de likes

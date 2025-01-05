@@ -64,13 +64,8 @@ int getUserLikesSizeArray(UserLikes* userLikes){
     return userLikes -> size;
 }
 
-// Função que retorna o apontador da idade da estrutura de likes
-int* getUserLikesAge(UserLikes* userLikes){
-    return userLikes->age ? &(userLikes -> age) : NULL;
-}
-
 // Função que retorna a idade da estrutura de likes
-int getUserLikesAgeInt(UserLikes* userLikes){
+int getUserLikesAge(UserLikes* userLikes){
     return userLikes->age;
 }
 
@@ -80,10 +75,7 @@ void setUserLikesArrayGenres(UserLikes* userLikes, char** newGenres, int newSize
 
     // Libertar a memoria do array existente na estrutura
     if(userLikes->genres){
-        for(int i = 0; i < userLikes->size; i++){
-            free(userLikes->genres[i]);
-        }
-        free(userLikes->genres);
+        freeStringArray(userLikes -> genres, userLikes -> size);
     }
 
     if(newSize > 0 && newGenres){
@@ -97,10 +89,7 @@ void setUserLikesArrayGenres(UserLikes* userLikes, char** newGenres, int newSize
             userLikes->genres[i] = strdup(newGenres[i]);
             if(!userLikes->genres[i]){
                 fprintf(stderr, "Erro de alocação de memória para gênero\n");
-                for (int j = 0; j < i; j++){
-                    free(userLikes->genres[j]);
-                }
-                free(userLikes->genres);
+                freeStringArray(userLikes -> genres, userLikes -> size);
                 userLikes->genres = NULL;
                 userLikes->size = 0;
                 return;
@@ -143,10 +132,7 @@ void setUserLikesArrayLikes(UserLikes* userLikes, long int* newLikes, int newSiz
 void freeUserLikes(UserLikes* userLikes){
     if(!userLikes) return;
 
-    for(int i = 0; i < userLikes -> size; i++)
-        free(userLikes -> genres[i]); // Free a cada genero dentro do array
-
-    free(userLikes -> genres);   // Free do array de generos
+    freeStringArray(userLikes -> genres, userLikes -> size); // Free do array de generos
     free(userLikes -> likes);    // Free do array de likes
     free(userLikes);             // Free da propria estrutura
 }

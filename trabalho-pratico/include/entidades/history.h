@@ -54,12 +54,9 @@ void freeHistory(History* history);
  * @brief Função que insere uma entidade do tipo histórico numa hashtable.
  * @details A função recebe um apontador para a hashtable e um apontador para a entidade do tipo histórico e insere a entidade do tipo histórico na hashtable.
  *
- * @param key Chave da entidade do tipo histórico.
  * @param value Apontador para a entidade do tipo histórico.
- * @param user_data Apontador para a hashtable.
- * @return TRUE se a entidade do tipo histórico foi inserida na hashtable e FALSE caso contrário.
  */
-gboolean freeHistoryInTable(gpointer key, gpointer value, gpointer user_data);
+void freeHistoryInTable(gpointer value);
 
 /**
  * @brief Função que converte uma string numa plataforma.
@@ -95,7 +92,7 @@ int isValidPlatform(char* platform_str);
  * @param h Apontador para a entidade do tipo histórico.
  * @return Id da entidade do tipo histórico.
  */
-long int* getHistoryId(History* h);
+long int getHistoryId(History* h);
 
 /**
  * @brief Função que devolve o id do utilizador de uma entidade do tipo histórico.
