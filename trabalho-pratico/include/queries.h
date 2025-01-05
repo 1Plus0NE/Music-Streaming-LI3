@@ -16,6 +16,7 @@
 #include "entidades/discography.h"
 #include "writer.h"
 #include <string.h>
+#include "entidades/wrapped.h"
 
 /**
  * @brief Função que responde á query 1.
@@ -59,46 +60,5 @@ void query3(int ageMin, int ageMax, GestorUser* gestorUser, char delimiter, FILE
  * @param output Ficheiro de output.
  */
 void query5(GestorHistory* gestorHistory, char* username, int numRecommendations, FILE* output);
-
-typedef struct artistsTimes ArtistsTimes;
-typedef struct wrapped Wrapped;
-typedef struct query6Data Query6Data;
-
-Wrapped* wrappedInit();
-void freeWrapped(Wrapped* wrap);
-char* getWrapAno(Wrapped* wrap);
-long int getWrapUserId(Wrapped* wrap);
-int** getWrapAlbuns(Wrapped* wrap);
-int* getWrapHoras(Wrapped* wrap);
-int* getWrapGeneros(Wrapped* wrap);
-int** getWrapDias(Wrapped* wrap);
-ArtistsTimes* getWrapArtistsTimes(Wrapped* wrap);
-long int* getArtistTimesArtistId(ArtistsTimes* at);
-int getArtistTimesListTime(ArtistsTimes* at);
-long int* getArtistTimesListMus(ArtistsTimes* at);
-ArtistsTimes* getArtistTimesNext(ArtistsTimes* at);
-void setWrapAno(Wrapped* wrap, char* ano);
-void setWrapUserId(Wrapped* wrap, long int userId);
-void setWrapAlbum(Wrapped* wrap, long int albumId, int segundos);
-void setWrapHoras(Wrapped* wrap, char* hora, int segundos);
-void setWrapGeneros(Wrapped* wrap, char* generos, int segundos);
-void setWrapDias(Wrapped* wrap, char* data, int segundos);
-void setWrapArtistTime(Wrapped* wrap, long int* idArtist, int numArtists, long int idMusic, int segundos);
-
-int listArtistasIguais(long int* artistaHist, int numArtistsHist, long int* artistaWrap);
-ArtistsTimes* newArtistTime(long int* idArtist, int numArtists, long int idMusic, int segundos);
-void procuraMusica(long int* listMus, long int idMusic);
-Query6Data* query6DataInit();
-void yearResumed(G_GNUC_UNUSED gpointer gestor_history, gpointer linhaHistory, gpointer q6data);
-void printWrapped(Wrapped* wrap);
-char* wrapTotalListTime(Wrapped* wrap, char** totalGenre);
-char* wrapTotalMusics(Wrapped* wrap);
-char* wrapTotalArtist(Wrapped* wrap);
-char* wrapTotalDay(Wrapped* wrap);
-char* wrapTotalAlbum(Wrapped* wrap);
-char* wrapTotalHour(Wrapped* wrap);
-void sortWrap(Wrapped* wrap);
-void printWrap(Wrapped* wrap); // Remover
-void freeQuery6Data(Query6Data* query6Data);
 void query6(char* idUser, char* year, char* n, GestorHistory* gestor_history, GestorMusic* gestorMusic, char delimiter, FILE* output);
 #endif
