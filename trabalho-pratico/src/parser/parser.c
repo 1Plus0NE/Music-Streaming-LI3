@@ -67,6 +67,7 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
     FILE* outputQ2;
     FILE* outputQ3;
     FILE* outputQ5;
+    FILE* outputQ6;
     int command = 0; // Para escrita individual de ficheiros de output
     char outputPath[MAX_FILENAME]; // Caminho para ficheiros de output individuais
 
@@ -100,6 +101,7 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
     // discografia pronta para a 2ª query
 
     // Leitura query a query
+    int i=1; //Eliminar antes de submeter
     while(fgets(line, sizeof(line), queries) != NULL){ 
 
         linePtr = line;
@@ -199,7 +201,41 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
                 fclose(outputQ5);
                 break;
             }
-        
+
+            case '6':{
+                outputQ6 = fopen(outputPath, "w");
+                if(!outputQ6){
+                    perror("Erro ao criar o ficheiro de output da query 6.\n");
+                    exit(EXIT_FAILURE);
+                }
+
+                // Tratamento da linha da 2ª Query
+                strsep(&linePtr, " ");
+                char* userQ6 = strsep(&linePtr, " "); // Id do utilizador
+                char* yearQ6 = strsep(&linePtr, " "); // Ano
+                char* listQ6 = strsep(&linePtr, "\n"); // argumento opcional
+                //char* listQ6 = NULL;
+                if(listQ6 == NULL){
+                    yearQ6[4]='\0';
+                }
+            
+                if(measure_flag) clock_gettime(CLOCK_REALTIME, &query_start);
+
+                // Execução da 6ª Query
+                printf("Começa a %dª linha da 6ª Query\n", i);
+                query6(userQ6,yearQ6,listQ6,gestorHistory,gestorMusic,delimiter,outputQ6);
+                printf("Termina a %dªlinha da 6ª Query\n", i);
+                i++;
+
+                if(measure_flag){
+                    clock_gettime(CLOCK_REALTIME, &query_end);
+                    query_elapsed = (query_end.tv_sec - query_start.tv_sec) +
+                                    (query_end.tv_nsec - query_start.tv_nsec) / 1e9;
+                    total_time_query2 += query_elapsed;
+                }
+
+                fclose(outputQ6);
+                }
             default:
                 continue;
         }
