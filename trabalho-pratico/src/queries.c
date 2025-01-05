@@ -86,7 +86,7 @@ void query1(char* id_str, GestorUser* gestorUser, GestorArtist* gestorArtist, ch
         }
     }
     // Caso o ID não seja encontrado
-    fprintf(output_file, "\n");
+    genericOutputWriter(output_file, delimiter, NULL);
 }
 
 // Results é necessário para escrever pela ordem pedida
@@ -94,7 +94,10 @@ void query1(char* id_str, GestorUser* gestorUser, GestorArtist* gestorArtist, ch
 void query2(int nArtists, char* country, Discography* disco, char delimiter, FILE* output){
     Discography* head = disco;
 
-    if(nArtists==0) fprintf(output, "\n"); //Caso de ficheiro "vazio"
+    if(nArtists==0){
+        genericOutputWriter(output, delimiter, NULL); //Caso de ficheiro "vazio"
+        return;
+    }
     
     for(int i=0; i<nArtists && head!=NULL; i++){
         char* countryD = getDiscographyCountry(head);
@@ -135,7 +138,7 @@ void query2(int nArtists, char* country, Discography* disco, char delimiter, FIL
 void query3(int ageMin, int ageMax, GestorUser* gestorUser, char delimiter, FILE* output){
     
     if(ageMin == 100 || ageMax == 0){
-        fprintf(output, "\n");
+        genericOutputWriter(output, delimiter, NULL);
         return;
     }
 
@@ -161,7 +164,7 @@ void query3(int ageMin, int ageMax, GestorUser* gestorUser, char delimiter, FILE
     }
     // No caso de nao termos encontrado um user na range de idades
     if(!flag){
-        fprintf(output, "\n");
+        genericOutputWriter(output, delimiter, NULL);
         return;
     }
     sortGenresByLikes(genres, likes, size);

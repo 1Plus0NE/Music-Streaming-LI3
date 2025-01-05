@@ -17,12 +17,12 @@ void genericOutputWriter(FILE* output, char delimiter, ...){
         if(!first){
             fputc(delimiter, output); // Escreve o delimitador como um char 
         }
-        fprintf(output, "%s", currentArg);  // Write the current argument
+        fprintf(output, "%s", currentArg);  
         first = 0;
 
-        currentArg = va_arg(args, const char*); // Get the next argument
+        currentArg = va_arg(args, const char*); // get do prox argumento
     }
 
     va_end(args);
-    fprintf(output, "\n"); // End with a newline for clean output
+    fprintf(output, "\n"); 
 }
