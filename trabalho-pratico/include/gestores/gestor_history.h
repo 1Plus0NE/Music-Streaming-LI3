@@ -18,6 +18,12 @@
  */
 typedef struct gestor_history GestorHistory;
 
+/**
+ * @brief Estrutura que armazena a informação dos artistas.
+ * 
+ */
+typedef struct artist_table ArtistTable;
+
 typedef void (*GHFunc)(void *key, void *value, void *user_data);
 
 typedef bool (*IsMusicByArtistFunc)(long int music_id, long int artist_id);
@@ -82,6 +88,39 @@ bool containsHistoryID(GestorHistory* gestorHistory, long int id);
  * @return True se todos os ids existem, false caso contrário.
  */
 bool validateHistoryIDs(GestorHistory* gestorHistory, long int *idList, int N);
+
+/**
+ * @brief Função que cria uma tabela de artistas.
+ * 
+ * @return Apontador para a entidade do tipo tabela de artistas.
+ */
+ArtistTable* createArtistTable();
+
+/**
+ * @brief Função que destroi a tabela de artistas.
+ * 
+ * @param value Apontador para a entidade do tipo tabela de artistas.
+ */
+void destroyArtistTable(gpointer value);
+
+/**
+ * @brief Função que adiciona um artista e a sua duração ouvida numa semana.
+ * 
+ * @param gestorHistory Apontador para a entidade do tipo gestor de históricos.
+ * @param week_key Chave da semana.
+ * @param artist_id Id do artista.
+ * @param duration Duração ouvida.
+ */
+void addArtistDurationWeek(GestorHistory* gestorHistory, char* week_key, long int artist_id, int duration);
+
+/**
+ * @brief Função que adiciona um artista à tabela de artistas.
+ * 
+ * @param artistTable Apontador para a entidade do tipo tabela de artistas.
+ * @param artist_id Id do artista.
+ * @param duration Duração ouvida.
+ */
+void addToArtistTable(ArtistTable* artistTable, long int artist_id, int duration);
 
 /**
  * @brief Função que procura os genéros ouvidos por um utilizador.

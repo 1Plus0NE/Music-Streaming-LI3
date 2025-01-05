@@ -10,6 +10,11 @@ struct artist {
     ArtistType type;
 };
 
+struct artist_data{
+    long int artist_id;
+    int total_reproduction;
+};
+
 // Função para criar uma estrutura da entidade artista parametrizada.
 Artist* createArtist(long int id, char* name, float recipe_per_stream, long int* id_constituent, int num_constituent, char* country, ArtistType type) {
     Artist* artist = (Artist*)malloc(sizeof(Artist));
@@ -56,6 +61,20 @@ Artist* createArtist(long int id, char* name, float recipe_per_stream, long int*
     artist -> type = type;
 
     return artist;
+}
+
+// Função para criar uma estrutura da entidade artista_data parametrizada.
+ArtistData* createArtistData(long int artist_id, int total_reproduction) {
+    ArtistData* artist_data = (ArtistData*)malloc(sizeof(ArtistData));
+    if (!artist_data) {
+        perror("Erro ao alocar memória para a estrutura de dados do artista.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    artist_data -> artist_id = artist_id;
+    artist_data -> total_reproduction = total_reproduction;
+
+    return artist_data;
 }
 
 //função que passa uma string do tipo do artista para o enum type
@@ -115,6 +134,12 @@ void freeArtist(Artist* artist){
     free(artist -> id_constituent);
     free(artist -> name);
     free(artist);
+}
+
+// Função para libertar a memória de uma entidade do tipo artista_data.
+void freeArtistData(ArtistData* artist_data){
+    if(!artist_data) return;
+    free(artist_data);
 }
 
 // Função para libertar a memória de uma entidade do tipo artista contida numa hash table
@@ -195,6 +220,22 @@ void setArtistCountry(Artist* a, char* country){
 
 void setArtistType(Artist* a, ArtistType type){
     a -> type = type;
+}
+
+long int getArtistIdFromData(ArtistData* a){
+    return a ? a -> artist_id : -1;
+}
+
+int getArtistTotalReproduction(ArtistData* a){
+    return a -> total_reproduction;
+}
+
+void setArtistIdFromData(ArtistData* a, long int artist_id){
+    a -> artist_id = artist_id;
+}
+
+void setArtistTotalReproduction(ArtistData* a, int total_reproduction){
+    a -> total_reproduction = total_reproduction;
 }
 
 // Função para transformar o enum type em string para impressão nas queries

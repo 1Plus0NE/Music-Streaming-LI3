@@ -45,11 +45,14 @@ void process_history_line(char* line, void* gestor, void* aux_dataX, void* aux_d
         free(platform_str);
         return;
     }
+    //gerar a chave da semana.
+    char* week_key = getWeekKey(timestamp);
 
     //conversões.
     user_id = strtol(user_id_str + 1, NULL, 10);
     music_id = strtol(music_id_str + 1, NULL, 10);
     platform = stringToPlatform(platform_str);
+    int duration_int = duration_to_seconds(duration_str);
 
     History* h = createHistory(id, user_id, music_id, timestamp, duration_str, platform);
     addHistory(gestorHistory, h);
@@ -60,12 +63,11 @@ void process_history_line(char* line, void* gestor, void* aux_dataX, void* aux_d
     int num_artists = getMusicNumArtists(m);
     for(int i = 0; i < num_artists; i++){
         long int artist_id = artists_ids[i];
-        //Artist* a = searchArtist(gestorArtist, artist_id);
+        addArtistDurationWeek(gestorHistory, week_key, artist_id, duration_int);
         int count = getMusicReps(gestorArtist, artist_id);
         count++;
         updateMusicReps(gestorArtist, artist_id, count);
     }
-  
 
     // Dados utilizados para o pre-calculo dos generos ouvidos de cada utilizador
     char* genre = getMusicGenre(m);
@@ -79,4 +81,5 @@ void process_history_line(char* line, void* gestor, void* aux_dataX, void* aux_d
     free(timestamp);
     free(duration_str);
     free(platform_str);
+    free(week_key);
 }

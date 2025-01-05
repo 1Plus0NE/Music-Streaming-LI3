@@ -4,8 +4,13 @@
 struct gestor_history{
     GHashTable* table;
     GHashTable* genres_listened_table;
+    GHashTable* week_artist_duration_table;
     GPtrArray* genres_listened_array;
     GPtrArray* similar_users_array;
+};
+
+struct artist_table{
+    GHashTable* artist_ht; // Key: artist_id, Value: ArtistData
 };
 
 // Função para criar um gestor de histórico.
@@ -23,11 +28,18 @@ GestorHistory* createGestorHistory(){
         free(gestorHistory);
         return NULL;
     }
-
+    gestorHistory -> week_artist_duration_table = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, destroyArtistTable);
+    if(gestorHistory -> week_artist_duration_table == NULL){
+        perror("Falha ao criar a tabela de hashing de artistas por semana.\n");
+        g_hash_table_destroy(gestorHistory -> table);
+        free(gestorHistory);
+        return NULL;
+    }
     gestorHistory -> genres_listened_table = g_hash_table_new_full(g_str_hash, g_str_equal, free, freeGenresListenedInTable);
     if(gestorHistory -> genres_listened_table == NULL){
         perror("Falha ao criar a tabela de generos ouvidos\n");
         g_hash_table_destroy(gestorHistory -> table);
+        g_hash_table_destroy(gestorHistory -> week_artist_duration_table);
         free(gestorHistory);
         return NULL;
     }
@@ -36,6 +48,7 @@ GestorHistory* createGestorHistory(){
     if(gestorHistory -> genres_listened_array == NULL){
         perror("Falha ao criar o array de musicas ouvidas\n");
         g_hash_table_destroy(gestorHistory -> table);
+        g_hash_table_destroy(gestorHistory -> week_artist_duration_table);
         g_hash_table_destroy(gestorHistory -> genres_listened_table);
         free(gestorHistory);
         return NULL;
@@ -45,13 +58,13 @@ GestorHistory* createGestorHistory(){
     if(gestorHistory -> similar_users_array == NULL){
         perror("Falha ao criar o array de utilizadores semelhantes\n");
         g_hash_table_destroy(gestorHistory -> table);
+        g_hash_table_destroy(gestorHistory -> week_artist_duration_table);
         g_hash_table_destroy(gestorHistory -> genres_listened_table);
         g_ptr_array_free(gestorHistory->genres_listened_array, TRUE);
     }
 
     return gestorHistory;
 }
-
 
 // Função que adiciona um histórico à tabela.
 void addHistory(GestorHistory* gestorHistory, History* history){
@@ -107,6 +120,57 @@ bool validateHistoryIDs(GestorHistory* gestorHistory, long int* idList, int N){
         return true;
     }
     return false;
+}
+
+// Função que cria uma tabela de artistas.
+ArtistTable* createArtistTable(){
+    ArtistTable* table = malloc(sizeof(ArtistTable));
+    table -> artist_ht = g_hash_table_new_full(g_int_hash, g_int_equal, free, free);
+    return table;
+}
+
+// funcao que destroi a tabela de artistas
+void destroyArtistTable(gpointer value) {
+    if (value) {
+        ArtistTable* artist_table = (ArtistTable*) value;
+
+        // Destruir a tabela de artistas
+        if (artist_table->artist_ht) {
+            g_hash_table_destroy(artist_table->artist_ht);
+        }
+
+        // Liberar o próprio objeto ArtistTable
+        free(artist_table);
+    }
+}
+
+// Função que adiciona um artista e a sua duração ouvida numa semana.
+void addArtistDurationWeek(GestorHistory* gestorHistory, char* week_key, long int artist_id, int duration){
+    ArtistTable* artist_duration_table = g_hash_table_lookup(gestorHistory -> week_artist_duration_table, week_key);
+    if(!artist_duration_table){
+        artist_duration_table = createArtistTable();
+        g_hash_table_insert(gestorHistory -> week_artist_duration_table, g_strdup(week_key), artist_duration_table);
+    }
+    addToArtistTable(artist_duration_table, artist_id, duration);
+}
+
+// Função que adiciona um artista à tabela de artistas.
+void addToArtistTable(ArtistTable* artistTable, long int artist_id, int duration){
+    long int key_lookup = artist_id;
+    ArtistData* artist_data_found = g_hash_table_lookup(artistTable -> artist_ht, &key_lookup);
+    if(!artist_data_found){
+        long int* key = malloc(sizeof(long int));
+        if(!key){
+            perror("Erro ao alocar memória para a chave do histórico");
+            return;
+        }
+        *key = artist_id;
+        ArtistData* artist_data = createArtistData(artist_id, duration);
+        g_hash_table_insert(artistTable -> artist_ht, key, artist_data);
+    }else{
+        int duration_found = getArtistTotalReproduction(artist_data_found);
+        setArtistTotalReproduction(artist_data_found, duration_found + duration);
+    }
 }
 
 // Função que encontra um GenresListened pelo username na tabela
@@ -285,6 +349,9 @@ void freeGestorHistory(GestorHistory* gestorHistory){
         if(gestorHistory -> genres_listened_table){
             g_hash_table_destroy(gestorHistory -> genres_listened_table);
         }
+        if(gestorHistory -> week_artist_duration_table){
+            g_hash_table_destroy(gestorHistory -> week_artist_duration_table);
+        }
         if(gestorHistory -> genres_listened_array){
             g_ptr_array_free(gestorHistory->genres_listened_array, TRUE);
         }
@@ -292,8 +359,6 @@ void freeGestorHistory(GestorHistory* gestorHistory){
             g_ptr_array_set_size(gestorHistory->similar_users_array, 0);
             freeSimilarUsersArray(gestorHistory); 
         }
-
         free(gestorHistory);
     }
 }
-

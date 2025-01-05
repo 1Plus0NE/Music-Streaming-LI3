@@ -679,3 +679,50 @@ void writeErrors(char* line, int csvFile){
             break;
     }
 }
+
+// Função que gerar a chave de semana a partir de um timestamp.
+char* getWeekKey(const char* timestamp) {
+    struct tm tm_date = {0};
+    char* week_key = g_new(char, 8); // "YYYY-WW" = 8 bytes incluindo '\0'
+
+    // Parse do timestamp no formato "YYYY/MM/DD HH:MM:SS"
+    if (strptime(timestamp, "%Y/%m/%d %H:%M:%S", &tm_date) == NULL) {
+        fprintf(stderr, "Erro ao parsear o timestamp: %s\n", timestamp);
+        return NULL;
+    }
+
+    // Determinar o dia da semana (0 = domingo, 1 = segunda, ..., 6 = sábado)
+    time_t raw_time = mktime(&tm_date);
+    if (raw_time == -1) {
+        fprintf(stderr, "Erro ao converter para time_t\n");
+        return NULL;
+    }
+
+    localtime_r(&raw_time, &tm_date); // Garantir que tm_date é atualizado com dia da semana
+    int day_of_week = tm_date.tm_wday;
+
+    // Ajustar para o início da semana (domingo)
+    tm_date.tm_mday -= day_of_week; // Subtrair dias até chegar no domingo
+    mktime(&tm_date);               // Normalizar data para domingo
+
+    // Criar chave no formato "YYYY-WW"
+    int year = tm_date.tm_year + 1900;
+    int week = (tm_date.tm_yday / 7) + 1; // Estimativa simples do número da semana
+    snprintf(week_key, 8, "%d-W%02d", year, week);
+
+    return week_key;
+}
+
+// Função para converter duração no formato "HH:MM:SS" para segundos
+int duration_to_seconds(const char* duration) {
+    int hours = 0, minutes = 0, seconds = 0;
+
+    // Usamos sscanf para extrair as partes da string
+    if (sscanf(duration, "%d:%d:%d", &hours, &minutes, &seconds) != 3) {
+        fprintf(stderr, "Erro: Formato de duração inválido. Use 'HH:MM:SS'.\n");
+        return -1;
+    }
+
+    // Convertendo para segundos
+    return (hours * 3600) + (minutes * 60) + seconds;
+}

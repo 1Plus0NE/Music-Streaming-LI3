@@ -6,6 +6,7 @@
 #define UTILS_H
 #ifndef _DEFAULT_SOURCE
 #define _DEFAULT_SOURCE
+#define _XOPEN_SOURCE 700
 #endif
 #include <string.h>
 #include <stdlib.h>
@@ -289,6 +290,24 @@ char** longArrayToStringArray(const long* array, int size);
  * @param size Tamanho.
  */
 void freeStringArray(char** string_array, int size);
+
+/**
+ * @brief Função que devolve a chave da semana.
+ * @details Função que devolve a chave da semana.
+ * 
+ * @param timestamp Timestamp.
+ * @return Retorna a chave da semana.
+ */
+char* getWeekKey(const char* timestamp);
+
+/**
+ * @brief Função que converte a duração no formato "HH:MM:SS" para segundos.
+ * @details Função que converte a duração no formato "HH:MM:SS" para segundos.
+ * 
+ * @param duration Duração.
+ * @return Retorna os segundos.
+ */
+int duration_to_seconds(const char* duration);
 
 /**
  * @brief Função que cria a diretoria "dataset-errors" e respetivos ficheiros com cabeçalhos.

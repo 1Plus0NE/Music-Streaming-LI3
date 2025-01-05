@@ -20,6 +20,12 @@
 typedef struct artist Artist;
 
 /**
+ * @struct artist_data
+ * @brief Estrutura que armazena a informação de um artista numa hashtable.
+ */
+typedef struct artist_data ArtistData;
+
+/**
  * @brief Enumeração que representa o tipo de artista.
  * 
  */
@@ -45,6 +51,17 @@ typedef enum {
 Artist* createArtist(long int id, char* name, float recipe_per_stream, long int* id_constituent, int num_constituent, char* country, ArtistType type);
 
 /**
+ * @brief Cria uma nova instância de um artista numa hashtable.
+ * @details Função que aloca memória para uma nova instância de um artista numa hashtable e inicializa os seus valores.
+ * 
+ * @param artist_id ID do artista.
+ * @param total_reproduction Total de reproduções do artista.
+ *
+ * @return Retorna um ponteiro para a nova instância de artista numa hashtable.
+ */
+ArtistData* createArtistData(long int artist_id, int total_reproduction);
+
+/**
  * @brief Conversão de uma string para um tipo de artista.
  * 
  * @param type_str String com o tipo de artista.
@@ -59,6 +76,14 @@ ArtistType stringToArtistType(char* type_str);
  * @param artist Ponteiro para o artista a ser libertado.
  */
 void freeArtist(Artist* artist);
+
+/**
+ * @brief Liberta a memória alocada para um artista numa hashtable.
+ * @details Função que liberta a memória alocada para um artista numa hashtable.
+ * 
+ * @param artist_data Ponteiro para a estrutura de dados do artista a ser libertado.
+ */
+void freeArtistData(ArtistData* artist_data);
 
 /**
  * @brief Liberta a memória alocada para um artista numa hashtable.
@@ -192,6 +217,44 @@ void setArtistCountry(Artist* a, char* country);
  * @param type Novo tipo do artista.
  */
 void setArtistType(Artist* a, ArtistType type);
+
+/**
+ * @brief Função que devolve o ID de um artista numa hashtable.
+ * @details Função que devolve o ID de um artista numa hashtable.
+ * 
+ * @param a Ponteiro para a estrutura de dados do artista.
+ * 
+ * @return Retorna o ID do artista.
+ */
+long int getArtistIdFromData(ArtistData* a);
+
+/**
+ * @brief Função que devolve o total de reproduções de um artista numa hashtable.
+ * @details Função que devolve o total de reproduções de um artista numa hashtable.
+ * 
+ * @param a Ponteiro para a estrutura de dados do artista.
+ * 
+ * @return Retorna o total de reproduções do artista.
+ */
+int getArtistTotalReproduction(ArtistData* a);
+
+/**
+ * @brief Função que atualiza o ID de um artista numa hashtable.
+ * @details Função que atualiza o ID de um artista numa hashtable.
+ * 
+ * @param a Ponteiro para a estrutura de dados do artista.
+ * @param artist_id Novo ID do artista.
+ */
+void setArtistIdFromData(ArtistData* a, long int artist_id);
+
+/**
+ * @brief Função que atualiza o total de reproduções de um artista numa hashtable.
+ * @details Função que atualiza o total de reproduções de um artista numa hashtable.
+ * 
+ * @param a Ponteiro para a estrutura de dados do artista.
+ * @param total_reproduction Novo total de reproduções do artista.
+ */
+void setArtistTotalReproduction(ArtistData* a, int total_reproduction);
 
 /**
  * @brief Função que imprime a informação de um artista.
