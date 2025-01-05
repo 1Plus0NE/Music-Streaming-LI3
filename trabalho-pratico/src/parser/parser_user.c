@@ -105,8 +105,7 @@ void process_user_line(char* line, void* gestor, void* aux_dataX, void* aux_data
     countUserLikedMusics(gestorMusic, &genres, &genre_likes, &genre_count, liked_musics_id_converted, num_liked_musics);
     addUserLikes(gestorUser, genres, genre_likes, genre_count, age);
 
-    for (int i = 0; i < genre_count; i++) free(genres[i]);
-    free(genres);
+    freeStringArray(genres, genre_count);
     free(genre_likes);
     free(liked_musics_id_converted);
     free(username);

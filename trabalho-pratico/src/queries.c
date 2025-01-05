@@ -155,8 +155,7 @@ void query3(int ageMin, int ageMax, GestorUser* gestorUser, char delimiter, FILE
             long int* likesUL = getUserLikesArrayLikes(userLikes);
             int sizeUL = getUserLikesSizeArray(userLikes);
             updateGenresAndLikes(&genres, &likes, &size, genresUL, likesUL, sizeUL);
-            for(int i = 0; i < sizeUL; i++) free(genresUL[i]); 
-            free(genresUL);
+            freeStringArray(genresUL, sizeUL);
             free(likesUL);
         }
     }
