@@ -201,7 +201,7 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
                 fclose(outputQ5);
                 break;
             }
-
+            /*
             case '6':{
                 outputQ6 = fopen(outputPath, "w");
                 if(!outputQ6){
@@ -235,7 +235,8 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
                 }
 
                 fclose(outputQ6);
-                }
+            }
+            */
             default:
                 continue;
         }
