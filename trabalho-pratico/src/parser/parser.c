@@ -249,6 +249,7 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
 
     // Para o modo de testes
     if(measure_flag){
+        printf("============== Tempo de execução das queries ===============\n");
         printf("Tempo de execucao da Query 1: %.6f segundos\n", total_time_query1);
         printf("Tempo de execucao da Query 2: %.6f segundos\n", total_time_query2);
         printf("Tempo de execucao da Query 3: %.6f segundos\n", total_time_query3);
