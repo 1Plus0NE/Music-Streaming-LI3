@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include "../entidades/music.h"
 #include "../entidades/discography.h"
+#include "../entidades/wrapped.h"
 #include <glib.h>
 #include <stdbool.h>
 #define MAX_GENRES 10
@@ -28,6 +29,7 @@ typedef void (*GHFunc)(void *key, void *value, void *user_data);
  * @return Apontador para a entidade do tipo gestor de músicas.
  */
 GestorMusic* createGestorMusic();
+GestorMusic* createGestorMusicWrapped(GestorMusic* gestorMusic);
 
 /**
  * @brief Função que adiciona uma música à tabela.
@@ -117,5 +119,10 @@ bool validateMusicId(GestorMusic* gestorMusic, long int* id, int N);
  * @return true Se a música existir.
  */
 bool containsMusicID(GestorMusic* gestorMusic, long int id);
+Wrapped* getMusicWrap(GestorMusic* gestorMusic);
+GHashTable* getMusicTable(GestorMusic* gestorMusic);
+void yearResumed(G_GNUC_UNUSED gpointer key, gpointer value, gpointer q6data);
+void setMusicWrap(GestorMusic* gestorMusic, Wrapped* wrap);
+void freeMusicWrap(GestorMusic* gestorMusic);
 
 #endif

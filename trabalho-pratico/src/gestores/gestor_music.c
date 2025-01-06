@@ -3,6 +3,7 @@
 //estrutura do gestor de músicas.
 struct gestor_music {
     GHashTable* table;
+    Wrapped* wrap;
 };
 
 // função para criar uma tabela de músicas.
@@ -21,6 +22,14 @@ GestorMusic* createGestorMusic(){
         return NULL;
     }
     return gestorMusic;
+}
+
+GestorMusic* createGestorMusicWrapped(GestorMusic* gestorMusic){
+    if(gestorMusic){
+        gestorMusic -> wrap = wrappedInit();
+        return gestorMusic;
+    }
+    return NULL;
 }
 
 // função que adiciona uma música á tabela de músicas.
@@ -63,6 +72,9 @@ void freeGestorMusic(GestorMusic* gestorMusic){
     if(gestorMusic){
         if(gestorMusic -> table){
             g_hash_table_destroy(gestorMusic -> table);
+        }
+        if(gestorMusic -> wrap){
+            freeWrapped(gestorMusic -> wrap);
         }
         free(gestorMusic);
     }
@@ -128,4 +140,120 @@ bool validateMusicId(GestorMusic* gestorMusic, long int* id, int N){
 // Função que verifica a existência de uma musica pelo seu id, na tabela de musicas
 bool containsMusicID(GestorMusic* gestorMusic, long int id){
     return g_hash_table_contains(gestorMusic -> table, &id);
+}
+
+Wrapped* getMusicWrap(GestorMusic* gestorMusic){
+    if(!gestorMusic->wrap) return NULL;
+    return gestorMusic->wrap;
+}
+
+GHashTable* getMusicTable(GestorMusic* gestorMusic){
+    if(!gestorMusic) return NULL;
+    return gestorMusic->table;
+}
+
+
+// Função que percorre a Hash de History e preenche o wrap do user no ano especificado
+void yearResumed(G_GNUC_UNUSED gpointer key, gpointer value, gpointer q6data){
+
+    History* history = (History*)value; // Possível erro
+    GestorMusic** query6Data = (GestorMusic**)q6data;
+    Wrapped* wrap = (Wrapped*) getMusicWrap(*query6Data); // NOVO
+    GestorMusic* table = (GestorMusic*) (*query6Data); // NOVO
+    //GHashTable* table = (GHashTable*) getMusicTable(*query6Data); // NOVO
+
+    // Obtenção dos userId para comparação wrap
+    long int userId = getHistoryUserId(history);
+    if(userId==-1){
+        perror("Erro getHistoryUserId, função 'yearResumed'\n");
+    }
+    
+    //printf("UserID: %ld\n", userId);
+    //printf("getUserId ... Done\n");
+    long int userIdWrap = getWrapUserId(wrap); //(*query6Data)->wrap
+    if(userIdWrap==0){
+        perror("Erro getWrapUserId, função 'yearResumed'\n");
+    }
+    //printf("getUserIdWrap ... Done\n");
+    // Ano do wrap/query para comparação ...
+    char* anoWrap = getWrapAno(wrap);
+    
+    // Obtenção e formatação propriamente ditas
+    char* timeStampPtr = getHistoryTimestamp(history); // LEAK 
+    //char* aux = strdup(timeStampPtr);
+    //char* anoTimeStamp = strsep(&aux, "/");
+    char* anoTimeStamp = (char*)malloc(5*sizeof(char));
+    strncpy(anoTimeStamp, timeStampPtr, 4);
+    //for(int i=0;i<4;i++){
+    //    anoTimeStamp[i] = timeStampPtr[i];
+    //}
+    anoTimeStamp[4] = '\0';
+
+    //Verificar se o registo do histórico é relevante
+    if(userId==userIdWrap && strcmp(anoTimeStamp,anoWrap)==0){
+        printf("Historico encontrado!\n");
+        // Extrair o id da musica do historico
+        long int musicId = getHistoryMusicId(history);
+        printf("getHistoryMusicId ... Done\n");
+        // Extrair de musicas, o id, o album_id e o artist_id e o genero
+        Music* music = searchMusic(table, musicId);
+        //printf("Variável musica criada com o ID: %ld\n", musicId);
+        long int albumId = getMusicAlbumId(music);
+        //printf("getMusicAlbumId ... Done\n");
+        int numArtists = getMusicNumArtists(music);
+        //printf("getMusicNumArtists ... Done\n");
+        long int* artist_id = getMusicArtistIDs(music);
+        //printf("getMusicArtistIDs ... Done\n");
+        char* genre = getMusicGenre(music);
+        //printf("getMusicGenre ... Done\n");
+
+        // Extrair e calcular a duração a incrementar (segundos)
+        char* duration = getHistoryDuration(history);
+        int h,m,s;
+        if(sscanf(duration, "%d:%d:%d", &h, &m, &s)!=3){
+            perror("Erro sscanf, função 'yearResumed'\n");
+            exit(EXIT_FAILURE);
+        }
+        int segundos = h*3600 + m*60 + s;
+
+        //printf("Antes do setWrapAlbum \n");
+        //Preennchimento do Wrapped e consequentemente da Query6data
+        setWrapAlbum(wrap, albumId, segundos);
+        printf("setWrapAlbum ... Done\n");
+        setWrapHoras(wrap, timeStampPtr, segundos);
+        printf("setWrapHoras ... Done\n");
+        setWrapGeneros(wrap, genre, segundos);
+        printf("setWrapGeneros ... Done\n");
+        setWrapDias(wrap, timeStampPtr, segundos);
+        printf("setWrapDias ... Done\n");
+        setWrapArtistTime(wrap, artist_id, numArtists, musicId, segundos);
+        printf("setWrapArtistTime ... Done\n\n");
+
+        free(duration);
+        free(genre);
+        free(artist_id);
+    }
+
+    //free(aux);
+
+    //free(timeStampPtr);
+    //printf("free 1\n");
+    //free(timeStampPtrCopy);
+    //printf("free 2\n");
+    free(anoTimeStamp);
+    //printf("free 3\n");
+    free(anoWrap);
+}
+
+void setMusicWrap(GestorMusic* gestorMusic, Wrapped* wrap){
+    if(gestorMusic && wrap){
+        gestorMusic->wrap = wrap;
+    }
+}
+
+void freeMusicWrap(GestorMusic* gestorMusic){
+    if(gestorMusic && gestorMusic->wrap){
+        freeWrapped(gestorMusic->wrap);
+        gestorMusic->wrap = NULL;
+    }
 }

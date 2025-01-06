@@ -222,10 +222,12 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
                 if(measure_flag) clock_gettime(CLOCK_REALTIME, &query_start);
 
                 // Execução da 6ª Query
+                setMusicWrap(gestorMusic, wrappedInit());
                 printf("Começa a %dª linha da 6ª Query\n", i);
                 query6(userQ6,yearQ6,listQ6,gestorHistory,gestorMusic,delimiter,outputQ6);
                 printf("Termina a %dªlinha da 6ª Query\n", i);
                 i++;
+                freeMusicWrap(gestorMusic);
 
                 if(measure_flag){
                     clock_gettime(CLOCK_REALTIME, &query_end);
@@ -235,8 +237,8 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
                 }
 
                 fclose(outputQ6);
-            }
-            */
+            }*/
+            
             default:
                 continue;
         }

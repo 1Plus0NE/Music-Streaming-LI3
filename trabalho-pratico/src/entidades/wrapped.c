@@ -1,6 +1,6 @@
 #include "../../include/entidades/wrapped.h"
 
-/*
+
 // Lista ligada com dados de cada artista ouvido no wrapped
 struct artistsTimes{
     long int* artistId;
@@ -23,14 +23,14 @@ struct wrapped{
 // Estrutura com os dados para resolver a Query 6
 // Possui a estrutura com a resposta da Query 6 (wrap)
 // Possui a Hash de musicas necessária para passar como argumento para o foreachHistory
-struct query6Data{
+/*struct query6Data{
     Wrapped* wrap;
     GestorMusic* gestorMusic;
 };*/
 
 // ----------------------------------------------------------------INITS E FREES----------------------------------------------------------------
 // Inicialização da estrutura para a Query 6
-Query6Data* query6DataInit(){
+/*Query6Data* query6DataInit(){
     Query6Data* query6Data = (Query6Data*)malloc(sizeof(Query6Data));
     if(!query6Data){
         perror("Erro ao alocar memória na Query 6\n");
@@ -40,7 +40,7 @@ Query6Data* query6DataInit(){
     //query6Data->gestorMusic = NULL;
     query6Data->gestorMusic = createGestorMusic(); //NUU»LL?
     return query6Data;
-}
+}*/
 
 // Inicializa a subestructura Wrapped
 Wrapped* wrappedInit(){
@@ -168,15 +168,8 @@ Wrapped* wrappedInit(){
     return newWrapped;
 }
 
-// Libertação de memória da estrutura da Query 6
-void freeQuery6Data(Query6Data* query6Data){
-    freeWrapped(query6Data->wrap);
-    freeGestorMusic(query6Data->gestorMusic);
-    free(query6Data);
-}
-
 // Libertação de memória da subestrutura Wrapped
-void freeWrapped(Wrapped* wrap) {
+/*void freeWrapped(Wrapped* wrap) {
     if(!wrap) return;
 
     free(wrap->ano);
@@ -199,16 +192,76 @@ void freeWrapped(Wrapped* wrap) {
     // Liberta memória alocada para a lista de ArtistsTimes
     while (wrap->artistsTimes != NULL){
         ArtistsTimes* aux = wrap->artistsTimes;
+        wrap->artistsTimes = wrap->artistsTimes->next;
         // Liberta memória alocada para artistId
         free(aux->artistId);
         free(aux->listMus);
         free(aux);
-        wrap->artistsTimes = wrap->artistsTimes->next;
     }
-
     // liberta o ponteiro para a estrutura principal ?
     free(wrap);
+}*/
+void freeWrapped(Wrapped* wrapped) {
+    if (wrapped == NULL) {
+        return; // Se o ponteiro for NULL, não faz nada.
+    }
+
+    // Liberação da memória para 'ano'
+    if (wrapped->ano != NULL) {
+        free(wrapped->ano);
+    }
+
+    // Liberação do array de 'horas'
+    if (wrapped->horas != NULL) {
+        free(wrapped->horas);
+    }
+
+    // Liberação do array 'generos'
+    if (wrapped->generos != NULL) {
+        free(wrapped->generos);
+    }
+
+    // Liberação da matriz 'dias' (12 meses e 31 dias por mês)
+    if (wrapped->dias != NULL) {
+        for (int i = 0; i < 12; i++) {
+            if (wrapped->dias[i] != NULL) {
+                free(wrapped->dias[i]); // Libera as colunas de cada mês
+            }
+        }
+        free(wrapped->dias); // Libera o array de ponteiros para os meses
+    }
+
+    // Liberação da matriz 'albuns' (2 linhas: códigos e tempos)
+    if (wrapped->albuns != NULL) {
+        if (wrapped->albuns[0] != NULL) {
+            free(wrapped->albuns[0]); // Libera a 1ª linha (códigos dos álbuns)
+        }
+        if (wrapped->albuns[1] != NULL) {
+            free(wrapped->albuns[1]); // Libera a 2ª linha (tempos dos álbuns)
+        }
+        free(wrapped->albuns); // Libera o array de ponteiros
+    }
+
+    // Liberação da lista ligada 'artistsTimes'
+    while (wrapped->artistsTimes != NULL) {
+        ArtistsTimes* next = wrapped->artistsTimes->next;
+        
+        // Libera os arrays na estrutura 'ArtistsTimes'
+        if (wrapped->artistsTimes->listMus != NULL) {
+            free(wrapped->artistsTimes->listMus);
+        }
+        if (wrapped->artistsTimes->artistId != NULL) {
+            free(wrapped->artistsTimes->artistId);
+        }
+        
+        free(wrapped->artistsTimes); // Libera a própria estrutura 'ArtistsTimes'
+        wrapped->artistsTimes = next; // Avança para o próximo nó
+    }
+
+    // Libera o ponteiro principal 'Wrapped'
+    free(wrapped);
 }
+
 
 // ----------------------------------------------------------------FUNÇÕES----------------------------------------------------------------
 // Função que cria uma lista com respetivos valores para adicionar ao fim da lista existente
@@ -244,114 +297,6 @@ ArtistsTimes* newArtistTime(long int* idArtist, int numArtists, long int idMusic
     newAT->next = NULL;
 
     return newAT;
-}
-
-// Função que percorre a Hash de History e preenche o wrap do user no ano especificado
-void yearResumed(G_GNUC_UNUSED gpointer key, gpointer value, gpointer q6data){
-
-    History* history = (History*)value; // Possível erro
-    Query6Data** query6Data = (Query6Data**)q6data;
-
-    // Obtenção dos userId para comparação wrap
-    long int userId = getHistoryUserId(history);
-    if(userId==-1){
-        perror("Erro getHistoryUserId, função 'yearResumed'\n");
-    }
-    
-    //printf("UserID: %ld\n", userId);
-    //printf("getUserId ... Done\n");
-    long int userIdWrap = getWrapUserId((*query6Data)->wrap);
-    if(userIdWrap==0){
-        perror("Erro getWrapUserId, função 'yearResumed'\n");
-    }
-    //printf("getUserIdWrap ... Done\n");
-    // Ano do wrap/query para comparação ...
-    char* anoWrap =(char*)malloc(5*sizeof(char));
-    if(!anoWrap){
-        perror("Erro getWrapAno, função 'yearResumed'\n");   
-    }
-    anoWrap = getWrapAno((*query6Data)->wrap);
-    //printf("getAnoWrap ... Done\n");
-    // Obter o timeStamp e formatar para ano para comparação
-    char* anoTimeStamp = (char*)malloc(5*sizeof(char));
-    if (anoTimeStamp==NULL){
-        perror("Falha ao alocar memória para o anoTimeStamp, função	'yearResumed'\n");
-    }
-    char* timeStampPtr = (char*)malloc(20*sizeof(char));
-    if (timeStampPtr==NULL){
-        free(anoWrap);
-        free(anoTimeStamp);
-        free(timeStampPtr);
-        perror("Falha ao alocar memória para o timeStampPtr, função	'yearResumed'\n");
-    }
-    char* timeStampPtrCopy = (char*)malloc(20*sizeof(char));
-    if (timeStampPtrCopy==NULL){
-        free(anoWrap);
-        free(anoTimeStamp);
-        free(timeStampPtr);
-        free(timeStampPtrCopy);
-        perror("Falha ao alocar memória para o timeStampPtrCopy, função	'yearResumed'\n");
-    }
-    
-    // Obtenção e formatação propriamente ditas
-    timeStampPtr = getHistoryTimestamp(history); 
-    //printf("TimeStamp: %s\n", timeStampPtr);
-    timeStampPtrCopy = getHistoryTimestamp(history);
-    //printf("getHistoryTimestamp x2 ... Done\n"); // Para ser usada mais tarde
-    anoTimeStamp = strsep(&timeStampPtr, "/");
-
-    //Verificar se o registo do histórico é relevante
-    if(userId==userIdWrap && strcmp(anoTimeStamp,anoWrap)==0){
-        printf("Historico encontrado!\n");
-        // Extrair o id da musica do historico
-        long int musicId = getHistoryMusicId(history);
-        printf("getHistoryMusicId ... Done\n");
-        // Extrair de musicas, o id, o album_id e o artist_id e o genero
-        Music* music = searchMusic((*query6Data)->gestorMusic, musicId);
-        printf("Variável musica criada com o ID: %ld\n", musicId);
-        long int albumId = getMusicAlbumId(music);
-        printf("getMusicAlbumId ... Done\n");
-        int numArtists = getMusicNumArtists(music);
-        printf("getMusicNumArtists ... Done\n");
-        long int* artist_id = getMusicArtistIDs(music);
-        printf("getMusicArtistIDs ... Done\n");
-        char* genre = getMusicGenre(music);
-        printf("getMusicGenre ... Done\n");
-
-        // Extrair e calcular a duração a incrementar (segundos)
-        char* duration = getHistoryDuration(history);
-        int h,m,s;
-        if(sscanf(duration, "%d:%d:%d", &h, &m, &s)!=3){
-            perror("Erro sscanf, função 'yearResumed'\n");
-            exit(EXIT_FAILURE);
-        }
-        int segundos = h*3600 + m*60 + s;
-
-        //printf("Antes do setWrapAlbum \n");
-        //Preennchimento do Wrapped e consequentemente da Query6data
-        setWrapAlbum((*query6Data)->wrap, albumId, segundos);
-        printf("setWrapAlbum ... Done\n");
-        setWrapHoras((*query6Data)->wrap, timeStampPtrCopy, segundos);
-        printf("setWrapHoras ... Done\n");
-        setWrapGeneros((*query6Data)->wrap, genre, segundos);
-        printf("setWrapGeneros ... Done\n");
-        setWrapDias((*query6Data)->wrap, timeStampPtrCopy, segundos);
-        printf("setWrapDias ... Done\n");
-        setWrapArtistTime((*query6Data)->wrap, artist_id, numArtists, musicId, segundos);
-        printf("setWrapArtistTime ... Done\n\n");
-
-        free(duration);
-        free(genre);
-        free(artist_id);
-    }
-
-    //free(timeStampPtr);
-    //printf("free 1\n");
-    free(timeStampPtrCopy);
-    //printf("free 2\n");
-    free(anoTimeStamp);
-    //printf("free 3\n");
-    free(anoWrap);
 }
 // Função que procura uma musica por id na lista de um artista no Wrapped
 void procuraMusica(long int* listMus, long int idMusic){
@@ -596,7 +541,7 @@ char* getWrapTotalListTime(Wrapped* wrap, char** totalGenre){
     else if(indice == 7){ strcpy(*totalGenre, "Pop"); (*totalGenre)[3] = '\0'; }
     else if(indice == 8){ strcpy(*totalGenre, "Reggae"); (*totalGenre)[6] = '\0'; }
     else if(indice == 9){ strcpy(*totalGenre, "Rock"); (*totalGenre)[4] = '\0'; }
-    else{ strcpy(*totalGenre, "Genero Desconhecido"); (*totalGenre)[20] = '\0'; }
+    else{ strcpy(*totalGenre, "Genero Desconhecido"); (*totalGenre)[19] = '\0'; }
     
     // Cenário em que não foram adicionados históricos, (para outpu \n)
     if(total==0){
@@ -685,6 +630,7 @@ char* getWrapTotalHour(Wrapped* wrap){
     sprintf(strTotalHour, "%02d", max);
     return strTotalHour;
 }
+
 
 // ----------------------------------------------------------------PRINT E SORT----------------------------------------------------------------
 

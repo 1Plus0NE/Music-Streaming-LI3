@@ -209,92 +209,112 @@ void query5(GestorHistory* gestorHistory, char* username, int numRecommendations
 // Função para a Query 6
 void query6(char* idUser, char* year, char* n, GestorHistory* gestorHistory, GestorMusic* gestorMusic, char delimiter, FILE* output){
     // Cria listaLigada 
-    Query6Data* query6Data = query6DataInit();
-    GestorMusic* gestorMusicAux = gestorMusic;
+    //Query6Data* query6Data = query6DataInit();
+    //GestorMusic* gestorMusicAux = gestorMusic;
+    printf("Entrou na função da query 6\n");
+    //printf("%p\n",(void*)getMusicTable(gestorMusic));
+    //printf("%p\n",(void*)getMusicWrap(gestorMusic));
+    //setMusicWrap(gestorMusic, wrappedInit());
+    Wrapped* wrap = getMusicWrap(gestorMusic);
+    //printf("%p", (void*)wrap);
 
     // Dados para a estrutura para a query 6
     long int convertedUserId = strtol(idUser+1, NULL, 10);
-    query6Data->gestorMusic = gestorMusicAux;
-    query6Data->wrap->userId = convertedUserId;
-    strcpy(query6Data->wrap->ano, year);
+    //query6Data->gestorMusic = gestorMusicAux;
+    //gestorMusic->wrap->userId = convertedUserId;
+    setWrapUserId(wrap, convertedUserId);
+    setWrapAno(wrap, year);
+    //strcpy(gestorMusic->wrap->ano, year);
     
     printf("----------------------------Execução da função query 6\n");
     printf("                            Antes do Wrap preenchido\n");
     printf("                                 %ld e %s\n", convertedUserId, year);
     printf("                               Entra no foreach()\n");
 
-    foreachHistory(gestorHistory, yearResumed, &query6Data); // Função para fazer o for_each e devolver o wrap preenchido
+    foreachHistory(gestorHistory, yearResumed, &gestorMusic); // Função para fazer o for_each e devolver o wrap preenchido
     
     printf("                               Sai do foreach()\n");
     printf("                            Wrap preenchido com sucesso\n");
-    sortWrap(query6Data->wrap);
+    sortWrap(wrap);
     printf("\n                            Wrap ordenado com sucesso\n");
-    printWrapped(query6Data->wrap);
+    printWrapped(wrap);
 
     // Formatar os valores para o output individual
     char* totalGenre = (char*)malloc(20*sizeof(char)); // Suporta um possivel "genero desconhecido"
-    char* totalListTime = getWrapTotalListTime(query6Data->wrap, &totalGenre); // Altera o valor do genero para o + ouvido
+    char* totalListTime = getWrapTotalListTime(wrap, &totalGenre); // Altera o valor do genero para o + ouvido
     // Cenário sem históricos encontrados
     if(totalListTime==NULL){
         printf("Cenário sem históricos encontrados\n");
         //strcpy(totalListTime, "\n");
         genericOutputWriter(output, delimiter, NULL);
-        printf("Output feito\n");
+        //printf("Output feito\n");
         free(totalGenre);
-        printf("free Genre\n");
+        totalGenre = NULL;
+        //printf("free Genre\n");
         free(totalListTime);
-        printf("free ListTime\n");
-        freeQuery6Data(query6Data);
-        printf("free Query6Data\n");
+        totalListTime = NULL;
+        //printf("free ListTime\n");
+        //freeWrapped(wrap);
+        //printf("free Wrap\n");
+        //freeQuery6Data(query6Data);
+        //printf("free Query6Data\n");
         return;
     }    
     //printf("totalListTime = %s ... Done\n", totalListTime);
-    char* nMusics = getWrapTotalMusics(query6Data->wrap);
+    char* nMusics = getWrapTotalMusics(wrap);
     //printf("nMusics = %s ... Done\n", nMusics);
-    char* totalArtist = getWrapTotalArtist(query6Data->wrap);
+    char* totalArtist = getWrapTotalArtist(wrap);
     //printf("totalArtist = %s ... Done\n", totalArtist);
-    char* totalDay = getWrapTotalDay(query6Data->wrap);
+    char* totalDay = getWrapTotalDay(wrap);
     //printf("totalDay = %s ... Done\n", totalDay);
-    char* totalAlbum = getWrapTotalAlbum(query6Data -> wrap);
+    char* totalAlbum = getWrapTotalAlbum(wrap);
     //printf("totalAlbum = %s ... Done\n", totalAlbum);
-    char* totalHour = getWrapTotalHour(query6Data->wrap);
+    char* totalHour = getWrapTotalHour(wrap);
     //printf("totalHour = %s ... Done\n", totalHour);
     printf("Antes output\n");
     genericOutputWriter(output, delimiter, totalListTime, nMusics, totalArtist, totalDay, totalGenre,totalAlbum, totalHour, NULL);
     printf("Antes dos frees\n");
 
     free(totalGenre);
+    totalGenre = NULL;
     free(totalListTime);
+    totalListTime = NULL;
     free(nMusics);
+    nMusics = NULL;
     free(totalArtist);
+    totalArtist = NULL;
     free(totalDay);
+    totalDay = NULL;
     free(totalAlbum);
+    totalAlbum = NULL;
     free(totalHour);
+    totalHour = NULL;
 
     if(n != NULL){
-        Wrapped* aux = query6Data->wrap;
+        Wrapped* aux = wrap;
+        ArtistsTimes* auxList = getWrapArtistsTimes(aux);
         int nInt = atoi(n);
         //printf("Numero de listas : %d\n", nInt);
-        while (aux->artistsTimes != NULL && nInt>0){
+        while (auxList != NULL && nInt>0){
             // Lista a lista
             char* totalArtist2 = getWrapTotalArtist(aux);
             char* totalMusics2 = getWrapTotalMusics(aux);
-            char* totalListTime2 = secondsToString(aux->artistsTimes->listTime);
+            char* totalListTime2 = secondsToString(getArtistTimesListTime(auxList));
             genericOutputWriter(output, delimiter, totalArtist2, totalMusics2, totalListTime2, NULL);
         
             nInt--;
-            aux->artistsTimes = aux->artistsTimes->next;
+            auxList = getArtistTimesNext(auxList);
             free(totalArtist2);
+            totalArtist2 = NULL;
             free(totalMusics2);
+            totalMusics2 = NULL;
             free(totalListTime2);
+            totalListTime2 = NULL;
         }
     }
-    freeQuery6Data(query6Data);
-    printf("Free query6Data ... Done\n");
+    //printf("Free wrapped ... Done\n");
+    //printf("Pointer da estrutura :%p\n", (void*)gestorMusic);
+    //printf("Pointer da tabela : %p\n", (void*)getMusicTable(gestorMusic));
+    //printf("Pointer do Wrap : %p\n", (void*)getMusicWrap(gestorMusic));
     printf("-----------------------------Fim da execução da função query6\n");  
 }
-
-
-
-
-
