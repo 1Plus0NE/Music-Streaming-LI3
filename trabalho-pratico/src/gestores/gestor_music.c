@@ -91,7 +91,6 @@ Discography* updateArtistsDurationFromMusic(GestorMusic* gestorMusic, Discograph
 // Função para processar cada música e atualizar a duração nos artistas correspondentes
 void artistDurationAdd(G_GNUC_UNUSED gpointer musicId, gpointer musicData, gpointer discoPtr){
    
-    //Music* music = (Music*)musicData;
     Discography* disco = *((Discography**)discoPtr);
     int numArtists = getMusicNumArtists(musicData);
     char* duration = getMusicDuration(musicData);
@@ -220,7 +219,7 @@ void yearResumed(G_GNUC_UNUSED gpointer key, gpointer value, gpointer q6data){
         free(genre);
         free(artist_id);
     }
-    //free(timeStampPtr); // double free, usar apenas getHistoryTimestamp
+    //free(timeStampPtr); // double free, usar apenas getHistoryTimestamp?
     free(anoTimeStamp);
     free(anoWrap);
 }
