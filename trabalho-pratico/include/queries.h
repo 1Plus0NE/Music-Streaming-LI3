@@ -55,10 +55,34 @@ void query3(int ageMin, int ageMax, GestorUser* gestorUser, char delimiter, FILE
  * @brief Função que responde á query 4
  * 
  * @param gestorHistory Gestor de históricos.
+ * @param start_week Intervalo da semana onde começa
+ * @param end_week Intervalo da semana onde acaba
+ * @param delimiter Delimitador.
+ * @param output Ficheiro de output.
+ */
+void query4(GestorHistory* gestorHistory, char* start_week, char* end_week, char delimiter, FILE* output);
+
+/**
+ * @brief Função que responde á query 5
+ * 
+ * @param gestorHistory Gestor de históricos.
  * @param username Nome de utilizador.
  * @param numRecommendations Número de recomendações.
+ * @param delimiter Delimitador.
  * @param output Ficheiro de output.
  */
 void query5(GestorHistory* gestorHistory, char* username, int numRecommendations, FILE* output);
+
+/**
+ * @brief Função que responde á query 6
+ * 
+ * @param idUser ID/Username de um utilizador.
+ * @param year Ano para o recap do utilizador.
+ * @param n N artistas mais ouvidos.
+ * @param gestorHistory Gestor de históricos.
+ * @param gestorMusic Gestor de músicas.
+ * @param delimiter Delimitador.
+ * @param output Ficheiro de output.
+ */
 void query6(char* idUser, char* year, char* n, GestorHistory* gestor_history, GestorMusic* gestorMusic, char delimiter, FILE* output);
 #endif

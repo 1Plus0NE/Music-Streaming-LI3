@@ -13,6 +13,7 @@ struct artist {
 struct artist_data{
     long int artist_id;
     int total_reproduction;
+    ArtistType type;
 };
 
 // Função para criar uma estrutura da entidade artista parametrizada.
@@ -64,7 +65,7 @@ Artist* createArtist(long int id, char* name, float recipe_per_stream, long int*
 }
 
 // Função para criar uma estrutura da entidade artista_data parametrizada.
-ArtistData* createArtistData(long int artist_id, int total_reproduction) {
+ArtistData* createArtistData(long int artist_id, int total_reproduction, ArtistType type){
     ArtistData* artist_data = (ArtistData*)malloc(sizeof(ArtistData));
     if (!artist_data) {
         perror("Erro ao alocar memória para a estrutura de dados do artista.\n");
@@ -73,6 +74,7 @@ ArtistData* createArtistData(long int artist_id, int total_reproduction) {
 
     artist_data -> artist_id = artist_id;
     artist_data -> total_reproduction = total_reproduction;
+    artist_data -> type = type;
 
     return artist_data;
 }
@@ -228,6 +230,10 @@ long int getArtistIdFromData(ArtistData* a){
 
 int getArtistTotalReproduction(ArtistData* a){
     return a -> total_reproduction;
+}
+
+ArtistType getArtistTypeFromData(ArtistData* a){
+    return a -> type;
 }
 
 void setArtistIdFromData(ArtistData* a, long int artist_id){

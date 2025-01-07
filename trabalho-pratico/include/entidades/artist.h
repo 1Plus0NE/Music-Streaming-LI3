@@ -56,10 +56,11 @@ Artist* createArtist(long int id, char* name, float recipe_per_stream, long int*
  * 
  * @param artist_id ID do artista.
  * @param total_reproduction Total de reproduções do artista.
+ * @param type Tipo do Artista
  *
  * @return Retorna um ponteiro para a nova instância de artista numa hashtable.
  */
-ArtistData* createArtistData(long int artist_id, int total_reproduction);
+ArtistData* createArtistData(long int artist_id, int total_reproduction, ArtistType data);
 
 /**
  * @brief Conversão de uma string para um tipo de artista.
@@ -237,6 +238,16 @@ long int getArtistIdFromData(ArtistData* a);
  * @return Retorna o total de reproduções do artista.
  */
 int getArtistTotalReproduction(ArtistData* a);
+
+/**
+ * @brief Função que devolve o tipo de um artistaData.
+ * @details Função que devolve o tipo de um artistaData.
+ * 
+ * @param a Ponteiro para o artistaData.
+ * 
+ * @return Retorna o tipo do artistaData.
+ */
+ArtistType getArtistTypeFromData(ArtistData* a);
 
 /**
  * @brief Função que atualiza o ID de um artista numa hashtable.

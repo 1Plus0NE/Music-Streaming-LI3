@@ -66,6 +66,7 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
     FILE* outputQ1;
     FILE* outputQ2;
     FILE* outputQ3;
+    FILE* outputQ4;
     FILE* outputQ5;
     FILE* outputQ6;
     int command = 0; // Para escrita individual de ficheiros de output
@@ -78,7 +79,11 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
     Discography* disco = NULL; // Discografia para a query 2
     int ageMin = 0; // Idade mínima para a query 3
     int ageMax = 0; // Idade máxima para a query 3
-    
+    char* start_week;
+    char* end_week;
+
+    populateWeekTop10(gestorHistory);
+
     // Variaveis utilizadas no calculo do tempo de execução de cada query
     struct timespec query_start, query_end;
     double total_time_query1 = 0;
@@ -186,10 +191,29 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
                 fclose(outputQ3);
                 break;
             }
-        
+            
+            case '4':{
+                outputQ4 = fopen(outputPath, "w");
+                if(!outputQ4){
+                    perror("Erro ao criar o ficheiro de output da query 4.\n");
+                    exit(EXIT_FAILURE);
+                }
+                strsep(&linePtr, " "); 
+
+                start_week = verifyAndConvertWeekToKey(strsep(&linePtr, " "));
+                end_week = verifyAndConvertWeekToKey(strsep(&linePtr, " "));
+                
+                query4(gestorHistory, start_week, end_week, delimiter, outputQ4);
+                
+                free(start_week);
+                free(end_week);
+                fclose(outputQ4);
+                break;
+            }
+                       
             case '5':{
-                // Tratamento da linha para a 1ª Query
-                strsep(&linePtr, " "); // Ignora o id da Query e o espaço
+                
+                strsep(&linePtr, " "); 
                 user = strsep(&linePtr, " ");
                 int numRecommendations = atoi(strsep(&linePtr, "\n"));
                 outputQ5 = fopen(outputPath, "w");
@@ -201,7 +225,7 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
                 fclose(outputQ5);
                 break;
             }
-            
+            /*       
             case '6':{
                 outputQ6 = fopen(outputPath, "w");
                 if(!outputQ6){
@@ -238,7 +262,7 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
 
                 fclose(outputQ6);
             }
-            
+            */
             default:
                 continue;
         }
