@@ -2,7 +2,7 @@
 
 #define MAX_LINE_LENGTH 1024
 
-//função principal para executar testes
+// Função principal para executar testes
 int main(int argc, char *argv[]) {
     if (argc < 4) {
         fprintf(stderr, "Uso: %s <dataDir> <queriesFile> <expectedDir>\n", argv[0]);
@@ -14,6 +14,7 @@ int main(int argc, char *argv[]) {
     char *expectedDir = argv[3];
 
     // Inicializar os gestores necessários
+    printf("Initializing data structures...\n");
     GestorArtist* gestorArtist = createGestorArtist();
     GestorMusic* gestorMusic = createGestorMusic();
     GestorUser* gestorUser = createGestorUser();
@@ -21,16 +22,17 @@ int main(int argc, char *argv[]) {
     GestorHistory* gestorHistory = createGestorHistory();
 
     // Carregar dados iniciais com parse_all
+    printf("Parsing csv files...\n\n");
     parse_all(dataDir, gestorArtist, gestorMusic, gestorUser, gestorAlbum, gestorHistory);
-    printf("Parsing inicial completo.\n");
 
     // Medir tempo inicial do programa completo
     struct timespec start_time, end_time;
     clock_gettime(CLOCK_REALTIME, &start_time);
 
     // Execução das queries e comparação dos resultados com os esperados
+    printf("\nExecuting queries...\n");
     parse_queries(queriesFile, gestorUser, gestorMusic, gestorArtist, gestorAlbum, gestorHistory, 1);
-
+    printf("Queries executed with success!\n\n");
     // Caminho do arquivo de saída para comparar
     FILE *query_file = fopen(queriesFile, "r");
     if (!query_file) {
@@ -89,6 +91,7 @@ int main(int argc, char *argv[]) {
     printf("Memória utilizada: %ld MB\n", (r_usage.ru_maxrss/1024));
 
     // Libera memória dos gestores
+    printf("Cleaning data structures...\n");
     freeGestorArtist(gestorArtist);
     freeGestorMusic(gestorMusic);
     freeGestorUser(gestorUser);
@@ -98,7 +101,7 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 
-//função auxiliar para comparar as saídas obtidas e esperadas
+// Função auxiliar para comparar as saídas obtidas e esperadas
 void compare_outputs(FILE *result_file, FILE *expected_file, int *correct_count, int *line_diff) {
     char result_line[256];
     char expected_line[256];
