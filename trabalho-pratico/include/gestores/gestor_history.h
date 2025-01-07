@@ -89,6 +89,77 @@ bool containsHistoryID(GestorHistory* gestorHistory, long int id);
  */
 bool validateHistoryIDs(GestorHistory* gestorHistory, long int *idList, int N);
 
+
+/**
+ * @brief Função que adiciona uma lista de top 10 artistas mais ouvidos numa dada semana na tabela de semanas.
+ * 
+ * @param gestorHistory Apontador para a entidade do tipo gestor de históricos.
+ * @param week uma chave que representa a semana.
+ * @param top10List lista de top 10 artistas.
+ */
+void addWeekToTop10(GestorHistory* gestorHistory, const char* week, GList* top10List);
+
+/**
+ * @brief Função que faz sort de artistas conforme a reprodução de cada artista.
+ * 
+ * @param a Artista "A" a ser comparado.
+ * @param b Artista "B" a ser comparado.
+ */
+gint compareArtistData(ArtistData* a, ArtistData* b);
+
+/**
+ * @brief Função que cria a lista de top 10 artistas já ordenados conforme a reprodução.
+ * 
+ * @param artistTable Apontador para a entidade do tipo ArtistTable
+ * @return GList que contém a lista dos top 10 artistas
+ */
+GList* extractTop10Artists(ArtistTable* artistTable);
+
+/**
+ * @brief Função que popula a tabela que representa para cada semana os top 10 artistas já pré-calculados.
+ * 
+ * @param gestorHistory Apontador para a entidade do tipo gestor de históricos.
+ */
+void populateWeekTop10(GestorHistory* gestorHistory);
+
+/**
+ * @brief Função que devolve o artista que esteve no top 10 mais vezes.
+ * 
+ * @param gestorHistory Apontador para a entidade do tipo gestor de históricos.
+ * @param max_count Contador para saber quantas vezes o artista esteve no top 10
+ * 
+ * @return Uma entidade do tipo ArtistData que representa o artista que esteve no top 10 mais vezes.
+ */
+ArtistData* findMostFrequentArtist(GestorHistory* gestorHistory, int* max_count);
+
+/**
+ * @brief Função auxiliar que faz a contagem para cada Artista o número de vezes que esteve no top 10.
+ * 
+ * @param gestorHistory Apontador para a entidade do tipo gestor de históricos.
+ * @param artist_id Id do artista.
+ * 
+ * @return Uma entidade do tipo ArtistData que representa o artista que esteve no top 10 mais vezes.
+ */
+void updateArtistCount(GestorHistory* gestorHistory, long int artist_id);
+
+
+
+/**
+ * @brief Função para determinar quantas vezes cada artista esteve no top 10, com ou sem intervalo de semanas.
+ * 
+ * @param gestorHistory Apontador para a entidade do tipo gestor de históricos.
+ * @param start_week Intervalo de quando a semana começa (pondendo ser null).
+ * @param end_week Intervalo de quando a semana acaba (podendo ser null).
+ */
+void countTop10Appearances(GestorHistory* gestorHistory, const char* start_week, const char* end_week);
+
+/**
+ * @brief Função reseta a size da tabela, de modo a ser utilizada nas próximas vezes
+ * 
+ * @param gestorHistory Apontador para a entidade do tipo gestor de históricos.
+ */
+void resetArtistCountTable(GestorHistory* gestorHistory);
+
 /**
  * @brief Função que cria uma tabela de artistas.
  * 
@@ -110,8 +181,9 @@ void destroyArtistTable(gpointer value);
  * @param week_key Chave da semana.
  * @param artist_id Id do artista.
  * @param duration Duração ouvida.
+ * @param type Tipo do artista.
  */
-void addArtistDurationWeek(GestorHistory* gestorHistory, char* week_key, long int artist_id, int duration);
+void addArtistDurationWeek(GestorHistory* gestorHistory, char* week_key, long int artist_id, int duration, ArtistType type);
 
 /**
  * @brief Função que adiciona um artista à tabela de artistas.
@@ -119,8 +191,9 @@ void addArtistDurationWeek(GestorHistory* gestorHistory, char* week_key, long in
  * @param artistTable Apontador para a entidade do tipo tabela de artistas.
  * @param artist_id Id do artista.
  * @param duration Duração ouvida.
+ * @param type Tipo do artista.
  */
-void addToArtistTable(ArtistTable* artistTable, long int artist_id, int duration);
+void addToArtistTable(ArtistTable* artistTable, long int artist_id, int duration, ArtistType type);
 
 /**
  * @brief Função que procura os genéros ouvidos por um utilizador.

@@ -382,7 +382,7 @@ char* secondsToString(int totSeconds){
 
     // Aloca memória para a string de resultado
     char* timeString = (char*)malloc(9 * sizeof(char)); // "hh:mm:ss" + '\0' = 9 caracteres
-    if (!timeString) {
+    if(!timeString){
         perror("Erro ao alocar memória para timeString");
         exit(EXIT_FAILURE);
     }
@@ -496,32 +496,32 @@ int allGenresMatch(char** targetGenres, int targetSize, char** userGenres, int u
             }
         }
         if(!found){
-            return 0; // At least one genre did not match
+            return 0; // Pelo menos um genero não deu match
         }
     }
-    return 1; // All genres matched
+    return 1; // Todos deram match
 }
 
+// Função que calcula o score de similaridade entre um utilizador alvo e um utilizador novo
 int calculateSimilarityScore(char** targetGenres, int* targetListened, int targetSize,
                              char** newGenres, int* newListened, int newSize){
     int similarityScore = 0;
 
-    // Check for missing genres and calculate listening discrepancy
+    // Verifica a falta de generos e calcula a descrepância 
     for(int i = 0; i < targetSize; i++){
         int found = 0;
         for(int j = 0; j < newSize; j++){
             if(strcmp(targetGenres[i], newGenres[j]) == 0){
                 found = 1;
 
-                // Calculate listening discrepancy penalty
+                // Calcula a diferença em módulo
                 int diff = abs(targetListened[i] - newListened[j]);
                 similarityScore += diff;
-
                 break;
             }
         }
         if(!found){
-            // Penalize for missing genre
+            // Penalização por cada genero que falta
             similarityScore += targetListened[i];
         }
     }
@@ -579,23 +579,23 @@ char** longArrayToStringArray(const long* array, int size){
 }
 
 // Função que dado um array de strings, liberta a memória de cada string do array
-void freeStringArray(char** string_array, int size) {
-    if (!string_array) {
+void freeStringArray(char** string_array, int size){
+    if(!string_array){
         fprintf(stderr, "Erro: string_array é NULL.\n");
         return;
     }
 
-    for (int i = 0; i < size; i++) {
+    for(int i = 0; i < size; i++){
         if (string_array[i]) {
             free(string_array[i]);
-            string_array[i] = NULL; // Prevenir uso posterior do ponteiro
-        } else {
+            string_array[i] = NULL; // Prevenir uso posterior do apontador
+        }else{
             fprintf(stderr, "Aviso: string_array[%d] já é NULL.\n", i);
         }
     }
 
     free(string_array);
-    string_array = NULL; // Prevenir uso posterior do ponteiro
+    string_array = NULL; // Prevenir uso posterior do apontador
 }
 
 // Função que cria a diretoria "dataset-errors" e respetivos ficheiros com cabeçalhos
@@ -680,45 +680,93 @@ void writeErrors(char* line, int csvFile){
     }
 }
 
-// Função que gerar a chave de semana a partir de um timestamp.
-char* getWeekKey(const char* timestamp) {
+// Função gera a chave da semana a partir de um timestamp.
+char* getWeekKey(const char* timestamp){
+    
+    char* old_locale = setlocale(LC_TIME, NULL);
+    old_locale = strdup(old_locale); 
+
+    // Set the desired locale
+    setlocale(LC_TIME, "en_US.UTF-8");
+
     struct tm tm_date = {0};
-    char* week_key = g_new(char, 8); // "YYYY-WW" = 8 bytes incluindo '\0'
+    char* week_key = g_new(char, 10); // "YYYY-WW" = 8 bytes incluindo '\0'
 
     // Parse do timestamp no formato "YYYY/MM/DD HH:MM:SS"
-    if (strptime(timestamp, "%Y/%m/%d %H:%M:%S", &tm_date) == NULL) {
-        fprintf(stderr, "Erro ao parsear o timestamp: %s\n", timestamp);
-        return NULL;
+    if(strptime(timestamp, "%Y/%m/%d %H:%M:%S", &tm_date) == NULL){
+        // Se falhar, teste o formato "YYYY/MM/DD"
+        if(strptime(timestamp, "%Y/%m/%d", &tm_date) == NULL){
+            fprintf(stderr, "Erro ao parsear o timestamp: %s\n", timestamp);
+            free(week_key);
+            free(old_locale);
+            return NULL;
+        }
     }
 
     // Determinar o dia da semana (0 = domingo, 1 = segunda, ..., 6 = sábado)
     time_t raw_time = mktime(&tm_date);
-    if (raw_time == -1) {
+    if(raw_time == -1){
         fprintf(stderr, "Erro ao converter para time_t\n");
+        free(week_key);
+        free(old_locale);
         return NULL;
     }
+    localtime_r(&raw_time, &tm_date);
 
-    localtime_r(&raw_time, &tm_date); // Garantir que tm_date é atualizado com dia da semana
-    int day_of_week = tm_date.tm_wday;
+    // Para 31 de dezembro
+    if (tm_date.tm_mon == 11 && tm_date.tm_mday == 31){ // 
+        char week_number[4];
+        strftime(week_number, sizeof(week_number), "%V", &tm_date);
+        if (strcmp(week_number, "01") == 0){ 
+            tm_date.tm_year += 1; 
+            tm_date.tm_mon = 0;   
+            tm_date.tm_mday = 1;  
+            mktime(&tm_date);     
+        }
+    }
+    
+    char week_number[4]; // Semana (ex, 01, 52)
+    char year_number[5]; // Ano (ex, 2025)
+    strftime(week_number, sizeof(week_number), "%V", &tm_date);
+    strftime(year_number, sizeof(year_number), "%Y", &tm_date);
+    
+    snprintf(week_key, 10, "%s-W%s", year_number, week_number);
 
-    // Ajustar para o início da semana (domingo)
-    tm_date.tm_mday -= day_of_week; // Subtrair dias até chegar no domingo
-    mktime(&tm_date);               // Normalizar data para domingo
-
-    // Criar chave no formato "YYYY-WW"
-    int year = tm_date.tm_year + 1900;
-    int week = (tm_date.tm_yday / 7) + 1; // Estimativa simples do número da semana
-    snprintf(week_key, 8, "%d-W%02d", year, week);
+    setlocale(LC_TIME, old_locale);
+    free(old_locale);
 
     return week_key;
 }
 
+// Função que verifica se a timestamp é null e converte para uma WeekKey se não for
+char* verifyAndConvertWeekToKey(char* timestamp){
+    if(timestamp && *timestamp != '\0'){ 
+        timestamp = getWeekKey(timestamp);
+        return timestamp;
+    }
+    return NULL;
+}
+
+// Função que recria o id do artista
+char* rebuildArtistId(long int artist_id){
+    
+    char* artist_str = malloc(9 * sizeof(char)); 
+    if(!artist_str){
+        perror("Error allocating memory for artist ID");
+        return NULL;
+    }
+
+    snprintf(artist_str, 9, "A%07ld", artist_id);
+
+    return artist_str;
+}
+
 // Função para converter duração no formato "HH:MM:SS" para segundos
-int duration_to_seconds(const char* duration) {
+int duration_to_seconds(const char* duration){
     int hours = 0, minutes = 0, seconds = 0;
 
     // Usamos sscanf para extrair as partes da string
-    if (sscanf(duration, "%d:%d:%d", &hours, &minutes, &seconds) != 3) {
+    if(sscanf(duration, "%d:%d:%d", &hours, &minutes, &seconds) != 3){
         fprintf(stderr, "Erro: Formato de duração inválido. Use 'HH:MM:SS'.\n");
         return -1;
     }

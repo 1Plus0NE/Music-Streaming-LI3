@@ -66,6 +66,7 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
     FILE* outputQ1;
     FILE* outputQ2;
     FILE* outputQ3;
+    FILE* outputQ4;
     FILE* outputQ5;
     FILE* outputQ6;
     int command = 0; // Para escrita individual de ficheiros de output
@@ -78,12 +79,18 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
     Discography* disco = NULL; // Discografia para a query 2
     int ageMin = 0; // Idade mínima para a query 3
     int ageMax = 0; // Idade máxima para a query 3
-    
+    char* start_week;
+    char* end_week;
+
+    populateWeekTop10(gestorHistory);
+
     // Variaveis utilizadas no calculo do tempo de execução de cada query
     struct timespec query_start, query_end;
     double total_time_query1 = 0;
     double total_time_query2 = 0;
     double total_time_query3 = 0;
+    double total_time_query4 = 0;
+    double total_time_query5 = 0;
     double query_elapsed;
 
     // Abertura ficheiro de input das queries
@@ -186,10 +193,34 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
                 fclose(outputQ3);
                 break;
             }
-        
+            
+            case '4':{
+                outputQ4 = fopen(outputPath, "w");
+                if(!outputQ4){
+                    perror("Erro ao criar o ficheiro de output da query 4.\n");
+                    exit(EXIT_FAILURE);
+                }
+                strsep(&linePtr, " "); 
+
+                start_week = verifyAndConvertWeekToKey(strsep(&linePtr, " "));
+                end_week = verifyAndConvertWeekToKey(strsep(&linePtr, " "));
+                if(measure_flag) clock_gettime(CLOCK_REALTIME, &query_start);
+                query4(gestorHistory, start_week, end_week, delimiter, outputQ4);
+                if(measure_flag){
+                    clock_gettime(CLOCK_REALTIME, &query_end);
+                    query_elapsed = (query_end.tv_sec - query_start.tv_sec) +
+                                    (query_end.tv_nsec - query_start.tv_nsec) / 1e9;
+                    total_time_query4 += query_elapsed;
+                }
+                free(start_week);
+                free(end_week);
+                fclose(outputQ4);
+                break;
+            }
+                       
             case '5':{
-                // Tratamento da linha para a 1ª Query
-                strsep(&linePtr, " "); // Ignora o id da Query e o espaço
+                
+                strsep(&linePtr, " "); 
                 user = strsep(&linePtr, " ");
                 int numRecommendations = atoi(strsep(&linePtr, "\n"));
                 outputQ5 = fopen(outputPath, "w");
@@ -197,11 +228,18 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
                     perror("Erro ao criar o ficheiro de output da query 3.\n");
                     exit(EXIT_FAILURE);
                 }
+                if(measure_flag) clock_gettime(CLOCK_REALTIME, &query_start);
                 query5(gestorHistory, user, numRecommendations, outputQ5);
+                if(measure_flag){
+                    clock_gettime(CLOCK_REALTIME, &query_end);
+                    query_elapsed = (query_end.tv_sec - query_start.tv_sec) +
+                                    (query_end.tv_nsec - query_start.tv_nsec) / 1e9;
+                    total_time_query5 += query_elapsed;
+                }
                 fclose(outputQ5);
                 break;
             }
-            /*
+            /*       
             case '6':{
                 outputQ6 = fopen(outputPath, "w");
                 if(!outputQ6){
@@ -233,12 +271,12 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
                     clock_gettime(CLOCK_REALTIME, &query_end);
                     query_elapsed = (query_end.tv_sec - query_start.tv_sec) +
                                     (query_end.tv_nsec - query_start.tv_nsec) / 1e9;
-                    total_time_query2 += query_elapsed;
+                    total_time_query6 += query_elapsed;
                 }
 
                 fclose(outputQ6);
-            }*/
-            
+            }
+            */
             default:
                 continue;
         }
@@ -253,7 +291,9 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
         printf("Tempo de execucao da Query 1: %.6f segundos\n", total_time_query1);
         printf("Tempo de execucao da Query 2: %.6f segundos\n", total_time_query2);
         printf("Tempo de execucao da Query 3: %.6f segundos\n", total_time_query3);
-        double total_time = (total_time_query1 + total_time_query2 + total_time_query3)/3;
+        printf("Tempo de execucao da Query 4: %.6f segundos\n", total_time_query4);
+        printf("Tempo de execucao da Query 5: %.6f segundos\n", total_time_query5);
+        double total_time = (total_time_query1 + total_time_query2 + total_time_query3 + total_time_query4 + total_time_query5)/5;
         printf("Tempo medio de execucao de cada query: %.6f segundos\n", total_time);
     }
 }

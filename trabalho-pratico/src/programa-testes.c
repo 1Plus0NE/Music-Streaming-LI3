@@ -15,7 +15,7 @@ int* resizeArray(int* array, int* capacity) {
     return new_array;
 }
 
-//função principal para executar testes
+// Função principal para executar testes
 int main(int argc, char *argv[]) {
     if (argc < 4) {
         fprintf(stderr, "Uso: %s <dataDir> <queriesFile> <expectedDir>\n", argv[0]);
@@ -34,6 +34,7 @@ int main(int argc, char *argv[]) {
     int capacity_6 = INITIAL_CAPACITY;
 
     // Inicializar os gestores necessários
+    printf("Initializing data structures...\n");
     GestorArtist* gestorArtist = createGestorArtist();
     GestorMusic* gestorMusic = createGestorMusic();
     GestorUser* gestorUser = createGestorUser();
@@ -41,16 +42,17 @@ int main(int argc, char *argv[]) {
     GestorHistory* gestorHistory = createGestorHistory();
 
     // Carregar dados iniciais com parse_all
+    printf("Parsing csv files...\n\n");
     parse_all(dataDir, gestorArtist, gestorMusic, gestorUser, gestorAlbum, gestorHistory);
-    printf("Parsing inicial completo.\n");
 
     // Medir tempo inicial do programa completo
     struct timespec start_time, end_time;
     clock_gettime(CLOCK_REALTIME, &start_time);
 
     // Execução das queries e comparação dos resultados com os esperados
+    printf("\nExecuting queries...\n");
     parse_queries(queriesFile, gestorUser, gestorMusic, gestorArtist, gestorAlbum, gestorHistory, 1);
-
+    printf("Queries executed with success!\n\n");
     // Caminho do arquivo de saída para comparar
     FILE *query_file = fopen(queriesFile, "r");
     if (!query_file) {
@@ -311,6 +313,7 @@ int main(int argc, char *argv[]) {
     printf("Memória utilizada: %ld MB\n", (r_usage.ru_maxrss/1024));
 
     // Libera memória dos gestores
+    printf("Cleaning data structures...\n");
     freeGestorArtist(gestorArtist);
     freeGestorMusic(gestorMusic);
     freeGestorUser(gestorUser);
