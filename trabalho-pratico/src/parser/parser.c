@@ -91,7 +91,7 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
     double total_time_query3 = 0;
     double total_time_query4 = 0;
     double total_time_query5 = 0;
-    double total_time_query6 = 0;
+    //double total_time_query6 = 0;
     double query_elapsed;
 
     // Abertura ficheiro de input das queries
@@ -246,6 +246,16 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
                 }
                 fclose(outputQ5);
                 break;
+            }
+            case '6':{
+                outputQ6 = fopen(outputPath, "w");
+                if(!outputQ6){
+                    perror("Erro ao criar o ficheiro de output da query 6.\n");
+                    exit(EXIT_FAILURE);
+                }
+
+                genericOutputWriter(outputQ6, delimiter, NULL);
+                fclose(outputQ6);
             }
             /*      
             case '6':{
