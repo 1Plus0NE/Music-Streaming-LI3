@@ -117,12 +117,12 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
         snprintf(outputPath, MAX_FILENAME, "resultados/command%d_output.txt", command);
 
         
-        // Para query 6
+        /*// Para query 6
         if(getMusicWrap(gestorMusic)){
             freeMusicWrap(gestorMusic);
             createGestorMusicWrapped(gestorMusic);
         }
-        else createGestorMusicWrapped(gestorMusic);
+        else createGestorMusicWrapped(gestorMusic);*/
 
         char delimiter = getDelimiter(line); // obter o delimitador que irá ser utilizado no writing
         // Identificação da Query
