@@ -91,6 +91,7 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
     double total_time_query3 = 0;
     double total_time_query4 = 0;
     double total_time_query5 = 0;
+    double total_time_query6 = 0;
     double query_elapsed;
 
     // Abertura ficheiro de input das queries
@@ -108,13 +109,20 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
     // discografia pronta para a 2ª query
 
     // Leitura query a query
-    int i=1; //Eliminar antes de submeter
     while(fgets(line, sizeof(line), queries) != NULL){ 
 
         linePtr = line;
         // Atualização do path para o ficheiro de output da query 
         command++;
         snprintf(outputPath, MAX_FILENAME, "resultados/command%d_output.txt", command);
+
+        
+        // Para query 6
+        if(getMusicWrap(gestorMusic)){
+            freeMusicWrap(gestorMusic);
+            createGestorMusicWrapped(gestorMusic);
+        }
+        else createGestorMusicWrapped(gestorMusic);
 
         char delimiter = getDelimiter(line); // obter o delimitador que irá ser utilizado no writing
         // Identificação da Query
@@ -239,7 +247,7 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
                 fclose(outputQ5);
                 break;
             }
-            /*       
+            /*      
             case '6':{
                 outputQ6 = fopen(outputPath, "w");
                 if(!outputQ6){
@@ -252,7 +260,6 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
                 char* userQ6 = strsep(&linePtr, " "); // Id do utilizador
                 char* yearQ6 = strsep(&linePtr, " "); // Ano
                 char* listQ6 = strsep(&linePtr, "\n"); // argumento opcional
-                //char* listQ6 = NULL;
                 if(listQ6 == NULL){
                     yearQ6[4]='\0';
                 }
@@ -260,11 +267,7 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
                 if(measure_flag) clock_gettime(CLOCK_REALTIME, &query_start);
 
                 // Execução da 6ª Query
-                setMusicWrap(gestorMusic, wrappedInit());
-                printf("Começa a %dª linha da 6ª Query\n", i);
                 query6(userQ6,yearQ6,listQ6,gestorHistory,gestorMusic,delimiter,outputQ6);
-                printf("Termina a %dªlinha da 6ª Query\n", i);
-                i++;
                 freeMusicWrap(gestorMusic);
 
                 if(measure_flag){
@@ -277,6 +280,7 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
                 fclose(outputQ6);
             }
             */
+            
             default:
                 continue;
         }
@@ -293,6 +297,7 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
         printf("Tempo de execucao da Query 3: %.6f segundos\n", total_time_query3);
         printf("Tempo de execucao da Query 4: %.6f segundos\n", total_time_query4);
         printf("Tempo de execucao da Query 5: %.6f segundos\n", total_time_query5);
+        //printf("Tempo de execucao da Query 6: %.6f segundos\n", total_time_query6);
         double total_time = (total_time_query1 + total_time_query2 + total_time_query3 + total_time_query4 + total_time_query5)/5;
         printf("Tempo medio de execucao de cada query: %.6f segundos\n", total_time);
     }

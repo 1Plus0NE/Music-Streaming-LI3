@@ -21,6 +21,7 @@ GestorMusic* createGestorMusic(){
         free(gestorMusic);
         return NULL;
     }
+    gestorMusic->wrap = NULL;
     return gestorMusic;
 }
 
@@ -147,9 +148,17 @@ Wrapped* getMusicWrap(GestorMusic* gestorMusic){
     return gestorMusic->wrap;
 }
 
-GHashTable* getMusicTable(GestorMusic* gestorMusic){
-    if(!gestorMusic) return NULL;
-    return gestorMusic->table;
+void setMusicWrap(GestorMusic* gestorMusic, Wrapped* wrap){
+    if(gestorMusic && wrap){
+        gestorMusic->wrap = wrap;
+    }
+}
+
+void freeMusicWrap(GestorMusic* gestorMusic){
+    if(gestorMusic && gestorMusic->wrap){
+        freeWrapped(gestorMusic->wrap);
+        gestorMusic->wrap = NULL;
+    }
 }
 
 
@@ -158,8 +167,9 @@ void yearResumed(G_GNUC_UNUSED gpointer key, gpointer value, gpointer q6data){
 
     History* history = (History*)value; // Possível erro
     GestorMusic** query6Data = (GestorMusic**)q6data;
-    Wrapped* wrap = (Wrapped*) getMusicWrap(*query6Data); // NOVO
-    GestorMusic* table = (GestorMusic*) (*query6Data); // NOVO
+
+    Wrapped* wrap = (Wrapped*) getMusicWrap(*query6Data); 
+    GestorMusic* table = (GestorMusic*) (*query6Data); 
 
     // Obtenção dos userId para comparação wrap
     long int userId = getHistoryUserId(history);
@@ -167,24 +177,23 @@ void yearResumed(G_GNUC_UNUSED gpointer key, gpointer value, gpointer q6data){
         perror("Erro getHistoryUserId, função 'yearResumed'\n");
     }
     
-    long int userIdWrap = getWrapUserId(wrap); //(*query6Data)->wrap
+    long int userIdWrap = getWrapUserId(wrap); 
     if(userIdWrap==0){
         perror("Erro getWrapUserId, função 'yearResumed'\n");
     }
     // Ano do wrap/query para comparação ...
     char* anoWrap = getWrapAno(wrap);
     
+    
     // Obtenção e formatação propriamente ditas
     char* timeStampPtr = getHistoryTimestamp(history); // LEAK 
-    char* anoTimeStamp = (char*)malloc(5*sizeof(char));
+    char* anoTimeStamp =(char*)malloc(4*sizeof(char));
     strncpy(anoTimeStamp, timeStampPtr, 4);
     anoTimeStamp[4] = '\0';
 
     //Verificar se o registo do histórico é relevante
     if(userId==userIdWrap && strcmp(anoTimeStamp,anoWrap)==0){
-        printf("Historico encontrado!\n");
         long int musicId = getHistoryMusicId(history);
-        printf("getHistoryMusicId ... Done\n");
         Music* music = searchMusic(table, musicId);
         long int albumId = getMusicAlbumId(music);
         int numArtists = getMusicNumArtists(music);
@@ -202,41 +211,17 @@ void yearResumed(G_GNUC_UNUSED gpointer key, gpointer value, gpointer q6data){
 
         //Preennchimento do Wrapped e consequentemente da Query6data
         setWrapAlbum(wrap, albumId, segundos);
-        printf("setWrapAlbum ... Done\n");
         setWrapHoras(wrap, timeStampPtr, segundos);
-        printf("setWrapHoras ... Done\n");
         setWrapGeneros(wrap, genre, segundos);
-        printf("setWrapGeneros ... Done\n");
         setWrapDias(wrap, timeStampPtr, segundos);
-        printf("setWrapDias ... Done\n");
         setWrapArtistTime(wrap, artist_id, numArtists, musicId, segundos);
-        printf("setWrapArtistTime ... Done\n\n");
 
         free(duration);
         free(genre);
         free(artist_id);
     }
-
-    //free(aux);
-
-    //free(timeStampPtr);
-    //printf("free 1\n");
-    //free(timeStampPtrCopy);
-    //printf("free 2\n");
+    //free(timeStampPtr); // double free, usar apenas getHistoryTimestamp
     free(anoTimeStamp);
-    //printf("free 3\n");
     free(anoWrap);
 }
 
-void setMusicWrap(GestorMusic* gestorMusic, Wrapped* wrap){
-    if(gestorMusic && wrap){
-        gestorMusic->wrap = wrap;
-    }
-}
-
-void freeMusicWrap(GestorMusic* gestorMusic){
-    if(gestorMusic && gestorMusic->wrap){
-        freeWrapped(gestorMusic->wrap);
-        gestorMusic->wrap = NULL;
-    }
-}

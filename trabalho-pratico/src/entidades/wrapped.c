@@ -28,7 +28,7 @@ Wrapped* wrappedInit(){
         exit(EXIT_FAILURE);
     }
 
-    newWrapped->ano = (char*)malloc(5*sizeof(char)); // Possivel causa de erro 5 para 2025+'\0'
+    newWrapped->ano = (char*)malloc(5*sizeof(char));
     newWrapped->userId = 0;
     if(newWrapped->ano == NULL) {
         free(newWrapped->ano);
@@ -46,7 +46,6 @@ Wrapped* wrappedInit(){
         perror("Erro ao alocar memória para o array de horas, função 'wrappedInit'\n");
         exit(EXIT_FAILURE);
     }
-    // Inicialização com 0s
     for (int i = 0; i < 24; i++) {
         newWrapped->horas[i] = 0;
     }
@@ -86,7 +85,7 @@ Wrapped* wrappedInit(){
             free(newWrapped->horas);
             free(newWrapped->generos);
             for (int j = 0; j < i; j++) {
-                free(newWrapped->dias[j]);  // Libera a memória já alocada 
+                free(newWrapped->dias[j]); 
             }
             free(newWrapped->dias);
             free(newWrapped);    
@@ -94,7 +93,7 @@ Wrapped* wrappedInit(){
             exit(EXIT_FAILURE);
         }
     
-        // Inicializa a memória com 0 (mes individual)
+        // Inicializa com 0 (mes individual)
         for (int j = 0; j < 31; j++) {
             newWrapped->dias[i][j] = 0;
         }
@@ -118,8 +117,8 @@ Wrapped* wrappedInit(){
         exit(EXIT_FAILURE);
     }
 
-    newWrapped->albuns[0] = (int*)malloc(1*sizeof(int)); // 1ª linha: códigos dos álbuns, inicializada com 0
-    newWrapped->albuns[1] = (int*)malloc(1*sizeof(int)); // 2ª linha: segundos, inicializada com 0
+    newWrapped->albuns[0] = (int*)malloc(1*sizeof(int));
+    newWrapped->albuns[1] = (int*)malloc(1*sizeof(int));
 
     if (!newWrapped->albuns[0] || !newWrapped->albuns[1]) {
         free(newWrapped->ano);
@@ -148,50 +147,45 @@ Wrapped* wrappedInit(){
 
 void freeWrapped(Wrapped* wrapped) {
     if (wrapped == NULL) {
-        return; // Se o ponteiro for NULL, não faz nada.
+        return;
     }
 
-    // Liberação da memória para 'ano'
     if (wrapped->ano != NULL) {
         free(wrapped->ano);
     }
 
-    // Liberação do array de 'horas'
     if (wrapped->horas != NULL) {
         free(wrapped->horas);
     }
 
-    // Liberação do array 'generos'
     if (wrapped->generos != NULL) {
         free(wrapped->generos);
     }
 
-    // Liberação da matriz 'dias' (12 meses e 31 dias por mês)
+    // 12 meses e 31 dias 
     if (wrapped->dias != NULL) {
         for (int i = 0; i < 12; i++) {
             if (wrapped->dias[i] != NULL) {
-                free(wrapped->dias[i]); // Libera as colunas de cada mês
+                free(wrapped->dias[i]); //coluna a coluna
             }
         }
-        free(wrapped->dias); // Libera o array de ponteiros para os meses
+        free(wrapped->dias); 
     }
 
-    // Liberação da matriz 'albuns' (2 linhas: códigos e tempos)
+    // Free da matriz códigos e tempos
     if (wrapped->albuns != NULL) {
         if (wrapped->albuns[0] != NULL) {
-            free(wrapped->albuns[0]); // Libera a 1ª linha (códigos dos álbuns)
+            free(wrapped->albuns[0]);
         }
         if (wrapped->albuns[1] != NULL) {
-            free(wrapped->albuns[1]); // Libera a 2ª linha (tempos dos álbuns)
+            free(wrapped->albuns[1]);
         }
-        free(wrapped->albuns); // Libera o array de ponteiros
+        free(wrapped->albuns); 
     }
 
-    // Liberação da lista ligada 'artistsTimes'
     while (wrapped->artistsTimes != NULL) {
         ArtistsTimes* next = wrapped->artistsTimes->next;
         
-        // Libera os arrays na estrutura 'ArtistsTimes'
         if (wrapped->artistsTimes->listMus != NULL) {
             free(wrapped->artistsTimes->listMus);
         }
@@ -199,11 +193,9 @@ void freeWrapped(Wrapped* wrapped) {
             free(wrapped->artistsTimes->artistId);
         }
         
-        free(wrapped->artistsTimes); // Libera a própria estrutura 'ArtistsTimes'
-        wrapped->artistsTimes = next; // Avança para o próximo nó
+        free(wrapped->artistsTimes); 
+        wrapped->artistsTimes = next;
     }
-
-    // Libera o ponteiro principal 'Wrapped'
     free(wrapped);
 }
 
@@ -277,7 +269,6 @@ long int getWrapUserId(Wrapped* wrap){
     return wrap ? wrap->userId : 0;
 }
 
-// Como evitar enviar diretamente apontadores para arrays de inteiros
 int** getWrapAlbuns(Wrapped* wrap){
     return wrap->albuns ? wrap->albuns : NULL;
 }
@@ -371,7 +362,6 @@ void setWrapHoras(Wrapped* wrap, char* hora, int segundos){
         char* horaCopia = (char*)malloc(20*sizeof(char));
         strcpy(horaCopia, hora);
         char* horaCopiaAux = horaCopia;
-        //char* horaCopiaAux = horaCopia;
         
         strsep(&horaCopia, " ");
         char* horaStr;
@@ -379,14 +369,12 @@ void setWrapHoras(Wrapped* wrap, char* hora, int segundos){
         int horaInt = atoi(horaStr);
         if(horaInt < 0 || horaInt > 23){
             free(horaCopiaAux);
-            //free(horaStr);
             perror("Hora invalida apos conversão, função 'setWrapHoras'\n");
             exit(EXIT_FAILURE);
         }
 
         wrap->horas[horaInt] += segundos;
         free(horaCopiaAux);
-        //free(horaStr);
 }
 
 void setWrapGeneros(Wrapped* wrap, char* genero, int segundos){
@@ -410,11 +398,9 @@ void setWrapGeneros(Wrapped* wrap, char* genero, int segundos){
 
 void setWrapDias(Wrapped* wrap, char* data, int segundos){
         // Processo para retirar apenas o mes e o dia em formato int do timeStamp
-        char* dataCopia = (char*)malloc(20*sizeof(char)); 
+        char* dataCopia = (char*)malloc(20*sizeof(char));
         strcpy(dataCopia, data);
         char* dataCopiaAux = dataCopia;
-        //char* mes = (char*)malloc(3*sizeof(char));
-        //char* dia = (char*)malloc(3*sizeof(char));
         
         strsep(&dataCopia, "/");
         char* mes = strsep(&dataCopia, "/");
@@ -422,16 +408,12 @@ void setWrapDias(Wrapped* wrap, char* data, int segundos){
         int mesInt = atoi(mes);
         int diaInt = atoi(dia);
         if(mesInt < 1 || mesInt > 12 || diaInt < 1 || diaInt > 31){
-            //free(mes);
-            //free(dia);
             free(dataCopiaAux);
             perror("Data invalida apos conversão, função 'setWrapDias'\n");
             exit(EXIT_FAILURE);
-            //return;
         }
         wrap->dias[mesInt-1][diaInt-1] = segundos;
-        //free(mes);
-        //free(dia);
+        
         free(dataCopiaAux);
 }
 
@@ -577,7 +559,7 @@ char* getWrapTotalHour(Wrapped* wrap){
 }
 
 
-// ----------------------------------------------------------------PRINT E SORT----------------------------------------------------------------
+// ----------------------------------------------------------------SORT----------------------------------------------------------------
 
 // Função para ordenar a lista de artistas por ordem decrescente de tempo de listening time
 void sortWrap(Wrapped* wrap){
@@ -607,78 +589,8 @@ void sortWrap(Wrapped* wrap){
             current->next = temp->next;
             temp->next = current;
         }
-        current = next;  // Passa para o próximo nó
+        current = next;
     }
 
-    wrap->artistsTimes = sorted;  // Atualiza o ponteiro da lista original para a lista ordenada
-}
-
-void printWrapped(Wrapped* wrap) {
-    if (wrap == NULL) {
-        printf("Estrutura Wrapped nula.\n");
-        return;
-    }
-
-    // Imprimir o ano e o userId
-    printf("Ano: %s\n", wrap->ano ? wrap->ano : "Não disponível");
-    printf("User ID: %ld\n", wrap->userId);
-
-    // Imprimir os albuns até encontrar 0 no índice [0][x]
-    printf("Álbuns: \n");
-    for (int i = 0; wrap->albuns != NULL && wrap->albuns[0][i] != 0; i++) {
-        printf("  Álbum %d: %d\n", wrap->albuns[0][i], wrap->albuns[1][i]);
-    }
-
-    // Imprimir as horas
-    printf("Horas: \n");
-    for (int i = 0; i < 24; i++) {
-        printf("  Hora %d: %d\n", i, wrap->horas[i]);
-    }
-
-    // Imprimir os gêneros
-    printf("Gêneros: \n");
-    for (int i = 0; i < 10; i++) {
-        if(i==0) printf("  Blues: %d\n", wrap->generos[i]);
-        else if(i==1) printf("  Classical: %d\n", wrap->generos[i]);
-        else if(i==2) printf("  Country: %d\n", wrap->generos[i]);
-        else if(i==3) printf("  Electronic: %d\n", wrap->generos[i]);
-        else if(i==4) printf("  Hip Hop: %d\n", wrap->generos[i]);
-        else if(i==5) printf("  Jazz: %d\n", wrap->generos[i]);
-        else if(i==6) printf("  Metal: %d\n", wrap->generos[i]);
-        else if(i==7) printf("  Pop: %d\n", wrap->generos[i]);
-        else if(i==8) printf("  Reggae: %d\n", wrap->generos[i]);
-        else if(i==9) printf("  Rock: %d\n", wrap->generos[i]);
-    }
-
-    // Imprimir os dias [12][31]
-    printf("Dias: \n");
-    for (int i = 0; i < 12; i++) {
-        printf("  Mês %d:\n", i + 1);
-        for (int j = 0; j < 31; j++) {
-            if (wrap->dias[i][j] != 0) {
-                printf("    Dia %d: %d\n", j+1, wrap->dias[i][j]);
-            }
-        }
-    }
-
-    // Imprimir os artistas
-    printf("Artistas: \n");
-    ArtistsTimes* current = wrap->artistsTimes;
-    while (current != NULL) {
-        printf("  Artista ID(s): ");
-        for (int i = 0; current->artistId[i] != 0; i++) {
-            printf("%ld ", current->artistId[i]);
-        }
-        printf("\n");
-
-        printf("  Tempo: %d\n", current->listTime);
-
-        printf("  Música(s): ");
-        for (int i = 0; current->listMus[i] != 0; i++) {
-            printf("%ld ", current->listMus[i]);
-        }
-        printf("\n\n");
-
-        current = current->next;
-    }
+    wrap->artistsTimes = sorted; 
 }

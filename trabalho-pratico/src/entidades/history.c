@@ -55,7 +55,10 @@ void freeHistory(History* history){
 void freeHistoryInTable(gpointer value){
     History* history = (History*)value;
     free(history -> duration);
-    free(history -> timestamp);
+    if(history -> timestamp){
+        free(history -> timestamp);
+    }
+    //free(history -> timestamp);
     free(history);
 }
 

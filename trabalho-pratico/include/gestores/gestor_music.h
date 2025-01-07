@@ -119,10 +119,37 @@ bool validateMusicId(GestorMusic* gestorMusic, long int* id, int N);
  * @return true Se a música existir.
  */
 bool containsMusicID(GestorMusic* gestorMusic, long int id);
+
+/**
+ * @brief Função que devolve o wrap de músicas de um gestor music.
+ * 
+ * @param gestorMusic Apontador para a entidade do tipo gestor de músicas.
+ * @return Apontador para o wrap de músicas.
+ */
 Wrapped* getMusicWrap(GestorMusic* gestorMusic);
-GHashTable* getMusicTable(GestorMusic* gestorMusic);
+
+/**
+ * @brief Função USada pelo foreachHistory para preenchimento da estrutura Wrapped.
+ * 
+ * @param key Chave da tabela.
+ * @param value Valor da chave.
+ * @param q6data Dados fornecidos para a função.
+ */
 void yearResumed(G_GNUC_UNUSED gpointer key, gpointer value, gpointer q6data);
+
+/**
+ * @brief Função que define o wrap de músicas de um gestor music.
+ * 
+ * @param gestorMusic Apontador para a entidade do tipo gestor de músicas.
+ * @param wrap Apontador para o wrap de músicas.
+ */
 void setMusicWrap(GestorMusic* gestorMusic, Wrapped* wrap);
+
+/**
+ * @brief Função que liberta a memória alocada para o wrap de músicas de um gestor music.
+ * 
+ * @param gestorMusic Apontador para o gestor de músicas.
+ */
 void freeMusicWrap(GestorMusic* gestorMusic);
 
 #endif
