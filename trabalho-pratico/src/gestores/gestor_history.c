@@ -4,13 +4,15 @@
 struct gestor_history{
     GHashTable* table;
     GHashTable* genres_listened_table;
-    GHashTable* week_artist_duration_table;
+    GHashTable* week_artist_duration_table; // pre-calcula todos os artistas numa dada semana
     GPtrArray* genres_listened_array;
     GPtrArray* similar_users_array;
+    GHashTable* week_top10_table; // top 10 artistas para cada semana
+    GHashTable* artist_count_table; // table auxiliar para determinar o artista que esteve + vezes no top10
 };
 
 struct artist_table{
-    GHashTable* artist_ht; // Key: artist_id, Value: ArtistData
+    GHashTable* artist_ht; // Key: artist_id, Valor: ArtistData
 };
 
 // Função para criar um gestor de histórico.
@@ -60,7 +62,28 @@ GestorHistory* createGestorHistory(){
         g_hash_table_destroy(gestorHistory -> table);
         g_hash_table_destroy(gestorHistory -> week_artist_duration_table);
         g_hash_table_destroy(gestorHistory -> genres_listened_table);
-        g_ptr_array_free(gestorHistory->genres_listened_array, TRUE);
+        g_ptr_array_free(gestorHistory -> genres_listened_array, TRUE);
+    }
+
+    gestorHistory -> week_top10_table = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, (GDestroyNotify)g_list_free);
+    if(gestorHistory -> week_top10_table == NULL){
+        perror("Falha ao criar a tabela de top10.\n");
+        g_hash_table_destroy(gestorHistory -> table);
+        g_hash_table_destroy(gestorHistory -> week_artist_duration_table);
+        g_hash_table_destroy(gestorHistory -> genres_listened_table);
+        g_ptr_array_free(gestorHistory -> genres_listened_array, TRUE);
+        g_ptr_array_free(gestorHistory-> similar_users_array, TRUE);
+    }
+
+    gestorHistory-> artist_count_table = g_hash_table_new_full(g_int_hash, g_int_equal, free, free);
+    if(gestorHistory -> artist_count_table == NULL){
+        perror("Falha ao criar a tabela de artistas auxiliar.\n");
+        g_hash_table_destroy(gestorHistory -> table);
+        g_hash_table_destroy(gestorHistory -> week_artist_duration_table);
+        g_hash_table_destroy(gestorHistory -> genres_listened_table);
+        g_ptr_array_free(gestorHistory -> genres_listened_array, TRUE);
+        g_ptr_array_free(gestorHistory-> similar_users_array, TRUE);
+        g_hash_table_destroy(gestorHistory -> week_top10_table);
     }
 
     return gestorHistory;
@@ -122,6 +145,169 @@ bool validateHistoryIDs(GestorHistory* gestorHistory, long int* idList, int N){
     return false;
 }
 
+// Função que adiciona uma lista de top 10 artistas mais ouvidos numa dada semana na tabela de semanas
+void addWeekToTop10(GestorHistory* gestorHistory, const char* week, GList* top10List){
+    char* weekKey = g_strdup(week);
+    g_hash_table_insert(gestorHistory->week_top10_table, weekKey, top10List);
+}
+
+// Função que faz sort de artistas conforme a reprodução de cada artista.
+gint compareArtistData(ArtistData* a, ArtistData* b){
+    int total_repA = getArtistTotalReproduction(a);
+    int total_repB = getArtistTotalReproduction(b);
+    if(total_repA != total_repB){
+        return total_repB - total_repA; 
+    }
+    long int idA = getArtistIdFromData(a);
+    long int idB = getArtistIdFromData(b);
+
+    return (idA > idB) - (idA < idB); 
+}
+
+// Função que cria a lista de top 10 artistas já ordenados conforme a reprodução.
+GList* extractTop10Artists(ArtistTable* artistTable){
+    GList* artist_list = NULL;
+
+    // Iterar pela tabela de artistas contidos em cada semana e colecioná-los
+    GHashTableIter artist_iter;
+    gpointer key, value;
+    g_hash_table_iter_init(&artist_iter, artistTable->artist_ht);
+
+    while(g_hash_table_iter_next(&artist_iter, &key, &value)){
+        ArtistData* artist = (ArtistData*)value;
+        artist_list = g_list_prepend(artist_list, artist);
+    }
+
+    // Ordenar a lista conforme a reprodução de cada artista
+    artist_list = g_list_sort(artist_list, (GCompareFunc)compareArtistData);
+
+    // Truncar a lista para apenas 10 artistas.
+    GList* top10List = NULL;
+    GList* iter_node = artist_list;
+    int count = 0;
+    while(iter_node != NULL && count < 10){
+        top10List = g_list_append(top10List, iter_node->data);
+        iter_node = iter_node->next;
+        count++;
+    }
+
+    g_list_free(artist_list);
+
+    return top10List;
+}
+
+// Função que popula a tabela que representa para cada semana os top 10 artistas já pré-calculados
+void populateWeekTop10(GestorHistory* gestorHistory){
+    // Iterar pela tabela "week_artist_duration_table" que contém para cada semana todos os artistas
+    GHashTableIter week_iter;
+    gpointer week_key, artist_table_value;
+
+    g_hash_table_iter_init(&week_iter, gestorHistory->week_artist_duration_table);
+    while(g_hash_table_iter_next(&week_iter, &week_key, &artist_table_value)){
+        char* week = (char*)week_key;
+        ArtistTable* artistTable = (ArtistTable*)artist_table_value;
+
+        // Cria a lista de top 10
+        GList* top10List = extractTop10Artists(artistTable);
+
+        // Adiciona a lista de top 10 à respetiva semana
+        addWeekToTop10(gestorHistory, week, top10List);
+    }
+}
+
+// Função que devolve o artista que esteve no top 10 mais vezes
+ArtistData* findMostFrequentArtist(GestorHistory* gestorHistory, int* max_count){
+    if(!gestorHistory || !gestorHistory->artist_count_table) return NULL;
+
+    GHashTableIter iter;
+    gpointer key, value;
+    ArtistData* most_frequent_artist = NULL;
+    *max_count = 0;
+
+    g_hash_table_iter_init(&iter, gestorHistory->artist_count_table);
+    while(g_hash_table_iter_next(&iter, &key, &value)){
+        long int artist_id = *(long int*)key;
+        int count = *(int*)value;
+
+        ArtistData* artistData = NULL;
+        GHashTableIter week_iter;
+        gpointer week_key, week_value;
+
+        g_hash_table_iter_init(&week_iter, gestorHistory->week_artist_duration_table);
+        while(g_hash_table_iter_next(&week_iter, &week_key, &week_value)){
+            ArtistTable* artist_table = (ArtistTable*)week_value;
+            artistData = g_hash_table_lookup(artist_table->artist_ht, &artist_id);
+            if(artistData) break; 
+        }
+
+        if(!artistData) continue; // Se o artista não foi encontrado, continuamos
+
+        // Critério para definir o artista que teve no top 10 mais vezes
+        if(count > *max_count || 
+            (count == *max_count && getArtistIdFromData(artistData) < getArtistIdFromData(most_frequent_artist))) {
+            most_frequent_artist = artistData;
+            *max_count = count;
+        }
+    }
+
+    return most_frequent_artist;
+}
+
+// Função auxiliar que faz a contagem para cada Artista o número de vezes que esteve no top 10
+void updateArtistCount(GestorHistory* gestorHistory, long int artist_id){
+    if(!gestorHistory || !gestorHistory->artist_count_table) return;
+
+    int* count = g_hash_table_lookup(gestorHistory->artist_count_table, &artist_id);
+    if(count){
+        (*count)++;
+    }else{
+        long int* key = malloc(sizeof(long int));
+        int* value = malloc(sizeof(int));
+        if (!key || !value) {
+            perror("Error allocating memory for artist count");
+            free(key);
+            free(value);
+            return;
+        }
+        *key = artist_id;
+        *value = 1;
+        g_hash_table_insert(gestorHistory->artist_count_table, key, value);
+    }
+}
+
+// Função para determinar quantas vezes cada artista esteve no top 10, com ou sem intervalo de semanas
+void countTop10Appearances(GestorHistory* gestorHistory, const char* start_week, const char* end_week){
+    if (!gestorHistory || !gestorHistory->week_top10_table) return;
+
+    GHashTableIter iter;
+    gpointer week_key, top10_list;
+
+    g_hash_table_iter_init(&iter, gestorHistory->week_top10_table);
+    while (g_hash_table_iter_next(&iter, &week_key, &top10_list)){
+        char* week = (char*)week_key;
+
+        // Filter as semanas baseado no intervalo fornecido
+        if((start_week && strcmp(week, start_week) < 0) ||  // Week < start_week
+            (end_week && strcmp(week, end_week) > 0)) {      // Week > end_week
+            continue;
+        }
+
+        // Atualização do contador para cada artista que esteve no top 10
+        GList* list = (GList*)top10_list;
+        for (GList* node = list; node != NULL; node = node->next) {
+            ArtistData* artistData = (ArtistData*)node->data;
+            updateArtistCount(gestorHistory, getArtistIdFromData(artistData));
+        }
+    }
+}
+
+// Função reseta a size da tabela, de modo a ser utilizada nas próximas vezes
+void resetArtistCountTable(GestorHistory* gestorHistory) {
+    if (gestorHistory && gestorHistory->artist_count_table) {
+        g_hash_table_remove_all(gestorHistory->artist_count_table);
+    }
+}
+
 // Função que cria uma tabela de artistas.
 ArtistTable* createArtistTable(){
     ArtistTable* table = malloc(sizeof(ArtistTable));
@@ -130,12 +316,12 @@ ArtistTable* createArtistTable(){
 }
 
 // funcao que destroi a tabela de artistas
-void destroyArtistTable(gpointer value) {
-    if (value) {
+void destroyArtistTable(gpointer value){
+    if(value){
         ArtistTable* artist_table = (ArtistTable*) value;
 
         // Destruir a tabela de artistas
-        if (artist_table->artist_ht) {
+        if(artist_table->artist_ht){
             g_hash_table_destroy(artist_table->artist_ht);
         }
 
@@ -145,17 +331,17 @@ void destroyArtistTable(gpointer value) {
 }
 
 // Função que adiciona um artista e a sua duração ouvida numa semana.
-void addArtistDurationWeek(GestorHistory* gestorHistory, char* week_key, long int artist_id, int duration){
+void addArtistDurationWeek(GestorHistory* gestorHistory, char* week_key, long int artist_id, int duration, ArtistType type){
     ArtistTable* artist_duration_table = g_hash_table_lookup(gestorHistory -> week_artist_duration_table, week_key);
     if(!artist_duration_table){
         artist_duration_table = createArtistTable();
         g_hash_table_insert(gestorHistory -> week_artist_duration_table, g_strdup(week_key), artist_duration_table);
     }
-    addToArtistTable(artist_duration_table, artist_id, duration);
+    addToArtistTable(artist_duration_table, artist_id, duration, type);
 }
 
 // Função que adiciona um artista à tabela de artistas.
-void addToArtistTable(ArtistTable* artistTable, long int artist_id, int duration){
+void addToArtistTable(ArtistTable* artistTable, long int artist_id, int duration, ArtistType type){
     long int key_lookup = artist_id;
     ArtistData* artist_data_found = g_hash_table_lookup(artistTable -> artist_ht, &key_lookup);
     if(!artist_data_found){
@@ -165,7 +351,7 @@ void addToArtistTable(ArtistTable* artistTable, long int artist_id, int duration
             return;
         }
         *key = artist_id;
-        ArtistData* artist_data = createArtistData(artist_id, duration);
+        ArtistData* artist_data = createArtistData(artist_id, duration, type);
         g_hash_table_insert(artistTable -> artist_ht, key, artist_data);
     }else{
         int duration_found = getArtistTotalReproduction(artist_data_found);
@@ -349,16 +535,23 @@ void freeGestorHistory(GestorHistory* gestorHistory){
         if(gestorHistory -> genres_listened_table){
             g_hash_table_destroy(gestorHistory -> genres_listened_table);
         }
+        if(gestorHistory -> week_top10_table){
+            g_hash_table_destroy(gestorHistory -> week_top10_table);
+        }
         if(gestorHistory -> week_artist_duration_table){
             g_hash_table_destroy(gestorHistory -> week_artist_duration_table);
+        }
+        if(gestorHistory->artist_count_table){
+            g_hash_table_destroy(gestorHistory->artist_count_table);
         }
         if(gestorHistory -> genres_listened_array){
             g_ptr_array_free(gestorHistory->genres_listened_array, TRUE);
         }
         if(gestorHistory -> similar_users_array){
-            g_ptr_array_set_size(gestorHistory->similar_users_array, 0);
+            g_ptr_array_set_size(gestorHistory -> similar_users_array, 0);
             freeSimilarUsersArray(gestorHistory); 
         }
+
         free(gestorHistory);
     }
 }

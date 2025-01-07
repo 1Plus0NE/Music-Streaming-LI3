@@ -178,6 +178,35 @@ void query3(int ageMin, int ageMax, GestorUser* gestorUser, char delimiter, FILE
     freeStringArray(genres, size);
 }
 
+void query4(GestorHistory* gestorHistory, char* start_week, char* end_week, char delimiter, FILE* output){
+
+    countTop10Appearances(gestorHistory, start_week, end_week);
+    
+    int max_count = 0;
+    long int artistID;
+    char* artistID_rebuilt;
+    char* max_count_str;
+    char* artistType;
+    ArtistData* most_frequent_artist = findMostFrequentArtist(gestorHistory, &max_count);
+
+    if(most_frequent_artist){
+        artistID = getArtistIdFromData(most_frequent_artist);
+        artistID_rebuilt = rebuildArtistId(artistID);
+        max_count_str = longToString(max_count);
+        artistType = typeToString(getArtistTypeFromData(most_frequent_artist));
+        genericOutputWriter(output, delimiter, artistID_rebuilt, max_count_str, artistType, NULL);
+    }else{
+        genericOutputWriter(output, delimiter, NULL);
+    }
+
+    free(artistID_rebuilt);
+    free(max_count_str);
+    free(artistType);
+    // Reseta a table para queries futuras
+    resetArtistCountTable(gestorHistory);
+
+}
+
 void query5(GestorHistory* gestorHistory, char* username, int numRecommendations, FILE* output){
 
     if(numRecommendations <= 0){

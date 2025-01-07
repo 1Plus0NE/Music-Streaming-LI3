@@ -63,7 +63,9 @@ void process_history_line(char* line, void* gestor, void* aux_dataX, void* aux_d
     int num_artists = getMusicNumArtists(m);
     for(int i = 0; i < num_artists; i++){
         long int artist_id = artists_ids[i];
-        addArtistDurationWeek(gestorHistory, week_key, artist_id, duration_int);
+        Artist* a = searchArtist(gestorArtist, artist_id);
+        ArtistType type = getArtistType(a);
+        addArtistDurationWeek(gestorHistory, week_key, artist_id, duration_int, type);
         int count = getMusicReps(gestorArtist, artist_id);
         count++;
         updateMusicReps(gestorArtist, artist_id, count);

@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <time.h>
+#include <locale.h>
 #include <math.h>
 #include "entidades/artist.h"
 #include "entidades/user.h"
@@ -299,6 +300,24 @@ void freeStringArray(char** string_array, int size);
  * @return Retorna a chave da semana.
  */
 char* getWeekKey(const char* timestamp);
+
+/**
+ * @brief Função que verifica e converte uma timestamp para uma chave da semana.
+ * @details Função que verifica se uma timestamp é null, se não for, converte para uma chave da semana.
+ * 
+ * @param timestamp Timestamp.
+ * @return Retorna a chave da semana.
+ */
+char* verifyAndConvertWeekToKey(char* timestamp);
+
+/**
+ * @brief Função que converte um long int artist_id para uma string artist_id.
+ * @details Função que converte um long int artist_id para uma string artist_id reconstruíndo-a de acordo com o formato original.
+ * 
+ * @param artist_id artist_id.
+ * @return Retorna o artist_id formatado em string.
+ */
+char* rebuildArtistId(long int artist_id);
 
 /**
  * @brief Função que converte a duração no formato "HH:MM:SS" para segundos.
