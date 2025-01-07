@@ -71,7 +71,7 @@ void query4(GestorHistory* gestorHistory, char* start_week, char* end_week, char
  * @param delimiter Delimitador.
  * @param output Ficheiro de output.
  */
-void query5(GestorHistory* gestorHistory, char* username, int numRecommendations, FILE* output);
+void query5(GestorHistory* gestorHistory, char* username, int numRecommendations, char delimiter, FILE* output);
 
 /**
  * @brief Função que responde á query 6

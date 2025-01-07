@@ -237,7 +237,7 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
                     exit(EXIT_FAILURE);
                 }
                 if(measure_flag) clock_gettime(CLOCK_REALTIME, &query_start);
-                query5(gestorHistory, user, numRecommendations, outputQ5);
+                query5(gestorHistory, user, numRecommendations, delimiter, outputQ5);
                 if(measure_flag){
                     clock_gettime(CLOCK_REALTIME, &query_end);
                     query_elapsed = (query_end.tv_sec - query_start.tv_sec) +
