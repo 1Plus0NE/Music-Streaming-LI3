@@ -289,7 +289,7 @@ int countTop10Appearances(GestorHistory* gestorHistory, const char* start_week, 
 
         // Filter as semanas baseado no intervalo fornecido
         if((start_week && strcmp(week, start_week) < 0) ||  // Week < start_week
-            (end_week && strcmp(week, end_week) > 0)) {      // Week > end_week
+            (end_week && strcmp(week, end_week) > 0)){      // Week > end_week
             continue;
         }
         
