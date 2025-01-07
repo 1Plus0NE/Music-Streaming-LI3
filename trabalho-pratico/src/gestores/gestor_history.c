@@ -276,29 +276,34 @@ void updateArtistCount(GestorHistory* gestorHistory, long int artist_id){
 }
 
 // Função para determinar quantas vezes cada artista esteve no top 10, com ou sem intervalo de semanas
-void countTop10Appearances(GestorHistory* gestorHistory, const char* start_week, const char* end_week){
-    if (!gestorHistory || !gestorHistory->week_top10_table) return;
+int countTop10Appearances(GestorHistory* gestorHistory, const char* start_week, const char* end_week){
+    if(!gestorHistory || !gestorHistory->week_top10_table) return 0;
 
     GHashTableIter iter;
     gpointer week_key, top10_list;
+    bool found_weeks_in_interval = false; // processo de verificação se existem semanas entre o intervalo 
 
     g_hash_table_iter_init(&iter, gestorHistory->week_top10_table);
-    while (g_hash_table_iter_next(&iter, &week_key, &top10_list)){
+    while(g_hash_table_iter_next(&iter, &week_key, &top10_list)){
         char* week = (char*)week_key;
 
         // Filter as semanas baseado no intervalo fornecido
         if((start_week && strcmp(week, start_week) < 0) ||  // Week < start_week
-            (end_week && strcmp(week, end_week) > 0)) {      // Week > end_week
+            (end_week && strcmp(week, end_week) > 0)){      // Week > end_week
             continue;
         }
+        
+        found_weeks_in_interval = true; // foi encontrada pelo menos uma semana
 
         // Atualização do contador para cada artista que esteve no top 10
         GList* list = (GList*)top10_list;
-        for (GList* node = list; node != NULL; node = node->next) {
+        for(GList* node = list; node != NULL; node = node->next){
             ArtistData* artistData = (ArtistData*)node->data;
             updateArtistCount(gestorHistory, getArtistIdFromData(artistData));
         }
     }
+    // retorna 1 ou 0 dependendo se foi encontrada uma semana ou não
+    return found_weeks_in_interval ? 1 : 0;
 }
 
 // Função reseta a size da tabela, de modo a ser utilizada nas próximas vezes
@@ -315,7 +320,7 @@ ArtistTable* createArtistTable(){
     return table;
 }
 
-// funcao que destroi a tabela de artistas
+// Funcão que destroi a tabela de artistas
 void destroyArtistTable(gpointer value){
     if(value){
         ArtistTable* artist_table = (ArtistTable*) value;
@@ -480,7 +485,7 @@ int compareUsersBySizeAndSimilarity(gconstpointer a, gconstpointer b){
     int sizeA = getGenresListenedArraysSize(userA);
     int sizeB = getGenresListenedArraysSize(userB);
 
-    // Compare by size (descending order)
+    // Comparar a size dos arrays 
     if(sizeA != sizeB){
         return sizeB - sizeA;
     }
@@ -488,7 +493,7 @@ int compareUsersBySizeAndSimilarity(gconstpointer a, gconstpointer b){
     int similarityA = getGenresListenedSimilarity(userA);
     int similarityB = getGenresListenedSimilarity(userB);
 
-    // Compare by similarity (ascending order)
+    // Comparação por similaridade
     if(similarityA != similarityB){
         return similarityA - similarityB;
     }
@@ -501,7 +506,7 @@ int compareUsersBySizeAndSimilarity(gconstpointer a, gconstpointer b){
     long idB = strtol(usernameB + 1, NULL, 10);
     free(usernameB);
 
-    // Compare by numeric order of IDs (ascending order)
+    // Comparar pelo ID do menor ao maior
     return (idA > idB) - (idA < idB);
 }
 

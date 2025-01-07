@@ -142,16 +142,16 @@ ArtistData* findMostFrequentArtist(GestorHistory* gestorHistory, int* max_count)
  */
 void updateArtistCount(GestorHistory* gestorHistory, long int artist_id);
 
-
-
 /**
  * @brief Função para determinar quantas vezes cada artista esteve no top 10, com ou sem intervalo de semanas.
  * 
  * @param gestorHistory Apontador para a entidade do tipo gestor de históricos.
  * @param start_week Intervalo de quando a semana começa (pondendo ser null).
  * @param end_week Intervalo de quando a semana acaba (podendo ser null).
+ * 
+ * @return 1 se existem semanas entre o intervalo, 0 se não.
  */
-void countTop10Appearances(GestorHistory* gestorHistory, const char* start_week, const char* end_week);
+int countTop10Appearances(GestorHistory* gestorHistory, const char* start_week, const char* end_week);
 
 /**
  * @brief Função reseta a size da tabela, de modo a ser utilizada nas próximas vezes

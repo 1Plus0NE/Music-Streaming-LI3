@@ -180,8 +180,13 @@ void query3(int ageMin, int ageMax, GestorUser* gestorUser, char delimiter, FILE
 
 void query4(GestorHistory* gestorHistory, char* start_week, char* end_week, char delimiter, FILE* output){
 
-    countTop10Appearances(gestorHistory, start_week, end_week);
-    
+    int exists = countTop10Appearances(gestorHistory, start_week, end_week);
+
+    if(!exists){
+        genericOutputWriter(output, delimiter, NULL);
+        return;
+    }
+
     int max_count = 0;
     long int artistID;
     char* artistID_rebuilt;
