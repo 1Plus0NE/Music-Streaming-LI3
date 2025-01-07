@@ -149,7 +149,7 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
 
                 if(measure_flag) clock_gettime(CLOCK_REALTIME, &query_start);
 
-                query2(nArtists, country, disco, delimiter, outputQ2); // query 2 sem especificação de país
+                query2(nArtists, country, disco, delimiter, outputQ2); 
 
                 if(measure_flag){
                     clock_gettime(CLOCK_REALTIME, &query_end);
@@ -209,7 +209,7 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
                     exit(EXIT_FAILURE);
                 }
 
-                // Tratamento da linha da 2ª Query
+                // Tratamento da linha da 6ª Query
                 strsep(&linePtr, " ");
                 char* userQ6 = strsep(&linePtr, " "); // Id do utilizador
                 char* yearQ6 = strsep(&linePtr, " "); // Ano

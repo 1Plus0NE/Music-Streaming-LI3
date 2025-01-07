@@ -20,28 +20,6 @@ struct wrapped{
     ArtistsTimes* artistsTimes;
 };
 
-// Estrutura com os dados para resolver a Query 6
-// Possui a estrutura com a resposta da Query 6 (wrap)
-// Possui a Hash de musicas necessária para passar como argumento para o foreachHistory
-/*struct query6Data{
-    Wrapped* wrap;
-    GestorMusic* gestorMusic;
-};*/
-
-// ----------------------------------------------------------------INITS E FREES----------------------------------------------------------------
-// Inicialização da estrutura para a Query 6
-/*Query6Data* query6DataInit(){
-    Query6Data* query6Data = (Query6Data*)malloc(sizeof(Query6Data));
-    if(!query6Data){
-        perror("Erro ao alocar memória na Query 6\n");
-        exit(EXIT_FAILURE);
-    }
-    query6Data->wrap = wrappedInit();
-    //query6Data->gestorMusic = NULL;
-    query6Data->gestorMusic = createGestorMusic(); //NUU»LL?
-    return query6Data;
-}*/
-
 // Inicializa a subestructura Wrapped
 Wrapped* wrappedInit(){
     Wrapped* newWrapped = (Wrapped*)malloc(sizeof(Wrapped));
@@ -168,39 +146,6 @@ Wrapped* wrappedInit(){
     return newWrapped;
 }
 
-// Libertação de memória da subestrutura Wrapped
-/*void freeWrapped(Wrapped* wrap) {
-    if(!wrap) return;
-
-    free(wrap->ano);
-
-    // Liberta memória alocada para os álbuns
-    free(wrap->albuns[0]); // Liberta os códigos dos álbuns
-    free(wrap->albuns[1]); // Liberta o tempo dos álbuns
-    free(wrap->albuns);    // Liberta o array principal
-
-
-    free(wrap->horas);
-    free(wrap->generos);
-
-    // Liberta a memoria alocada para dias
-    for(int i = 0; i < 12; i++){    // Liberta Mes a mes
-        free(wrap->dias[i]);
-    }
-    free(wrap->dias);
-
-    // Liberta memória alocada para a lista de ArtistsTimes
-    while (wrap->artistsTimes != NULL){
-        ArtistsTimes* aux = wrap->artistsTimes;
-        wrap->artistsTimes = wrap->artistsTimes->next;
-        // Liberta memória alocada para artistId
-        free(aux->artistId);
-        free(aux->listMus);
-        free(aux);
-    }
-    // liberta o ponteiro para a estrutura principal ?
-    free(wrap);
-}*/
 void freeWrapped(Wrapped* wrapped) {
     if (wrapped == NULL) {
         return; // Se o ponteiro for NULL, não faz nada.

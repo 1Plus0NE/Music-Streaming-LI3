@@ -208,23 +208,14 @@ void query5(GestorHistory* gestorHistory, char* username, int numRecommendations
 }
 // Função para a Query 6
 void query6(char* idUser, char* year, char* n, GestorHistory* gestorHistory, GestorMusic* gestorMusic, char delimiter, FILE* output){
-    // Cria listaLigada 
-    //Query6Data* query6Data = query6DataInit();
-    //GestorMusic* gestorMusicAux = gestorMusic;
+    // Cria listaLigada
     printf("Entrou na função da query 6\n");
-    //printf("%p\n",(void*)getMusicTable(gestorMusic));
-    //printf("%p\n",(void*)getMusicWrap(gestorMusic));
-    //setMusicWrap(gestorMusic, wrappedInit());
     Wrapped* wrap = getMusicWrap(gestorMusic);
-    //printf("%p", (void*)wrap);
 
     // Dados para a estrutura para a query 6
     long int convertedUserId = strtol(idUser+1, NULL, 10);
-    //query6Data->gestorMusic = gestorMusicAux;
-    //gestorMusic->wrap->userId = convertedUserId;
     setWrapUserId(wrap, convertedUserId);
     setWrapAno(wrap, year);
-    //strcpy(gestorMusic->wrap->ano, year);
     
     printf("----------------------------Execução da função query 6\n");
     printf("                            Antes do Wrap preenchido\n");
@@ -242,35 +233,20 @@ void query6(char* idUser, char* year, char* n, GestorHistory* gestorHistory, Ges
     // Formatar os valores para o output individual
     char* totalGenre = (char*)malloc(20*sizeof(char)); // Suporta um possivel "genero desconhecido"
     char* totalListTime = getWrapTotalListTime(wrap, &totalGenre); // Altera o valor do genero para o + ouvido
-    // Cenário sem históricos encontrados
     if(totalListTime==NULL){
         printf("Cenário sem históricos encontrados\n");
-        //strcpy(totalListTime, "\n");
         genericOutputWriter(output, delimiter, NULL);
-        //printf("Output feito\n");
         free(totalGenre);
         totalGenre = NULL;
-        //printf("free Genre\n");
         free(totalListTime);
         totalListTime = NULL;
-        //printf("free ListTime\n");
-        //freeWrapped(wrap);
-        //printf("free Wrap\n");
-        //freeQuery6Data(query6Data);
-        //printf("free Query6Data\n");
         return;
     }    
-    //printf("totalListTime = %s ... Done\n", totalListTime);
     char* nMusics = getWrapTotalMusics(wrap);
-    //printf("nMusics = %s ... Done\n", nMusics);
     char* totalArtist = getWrapTotalArtist(wrap);
-    //printf("totalArtist = %s ... Done\n", totalArtist);
     char* totalDay = getWrapTotalDay(wrap);
-    //printf("totalDay = %s ... Done\n", totalDay);
     char* totalAlbum = getWrapTotalAlbum(wrap);
-    //printf("totalAlbum = %s ... Done\n", totalAlbum);
     char* totalHour = getWrapTotalHour(wrap);
-    //printf("totalHour = %s ... Done\n", totalHour);
     printf("Antes output\n");
     genericOutputWriter(output, delimiter, totalListTime, nMusics, totalArtist, totalDay, totalGenre,totalAlbum, totalHour, NULL);
     printf("Antes dos frees\n");
@@ -294,7 +270,6 @@ void query6(char* idUser, char* year, char* n, GestorHistory* gestorHistory, Ges
         Wrapped* aux = wrap;
         ArtistsTimes* auxList = getWrapArtistsTimes(aux);
         int nInt = atoi(n);
-        //printf("Numero de listas : %d\n", nInt);
         while (auxList != NULL && nInt>0){
             // Lista a lista
             char* totalArtist2 = getWrapTotalArtist(aux);
@@ -312,9 +287,5 @@ void query6(char* idUser, char* year, char* n, GestorHistory* gestorHistory, Ges
             totalListTime2 = NULL;
         }
     }
-    //printf("Free wrapped ... Done\n");
-    //printf("Pointer da estrutura :%p\n", (void*)gestorMusic);
-    //printf("Pointer da tabela : %p\n", (void*)getMusicTable(gestorMusic));
-    //printf("Pointer do Wrap : %p\n", (void*)getMusicWrap(gestorMusic));
     printf("-----------------------------Fim da execução da função query6\n");  
 }

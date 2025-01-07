@@ -160,7 +160,6 @@ void yearResumed(G_GNUC_UNUSED gpointer key, gpointer value, gpointer q6data){
     GestorMusic** query6Data = (GestorMusic**)q6data;
     Wrapped* wrap = (Wrapped*) getMusicWrap(*query6Data); // NOVO
     GestorMusic* table = (GestorMusic*) (*query6Data); // NOVO
-    //GHashTable* table = (GHashTable*) getMusicTable(*query6Data); // NOVO
 
     // Obtenção dos userId para comparação wrap
     long int userId = getHistoryUserId(history);
@@ -168,44 +167,29 @@ void yearResumed(G_GNUC_UNUSED gpointer key, gpointer value, gpointer q6data){
         perror("Erro getHistoryUserId, função 'yearResumed'\n");
     }
     
-    //printf("UserID: %ld\n", userId);
-    //printf("getUserId ... Done\n");
     long int userIdWrap = getWrapUserId(wrap); //(*query6Data)->wrap
     if(userIdWrap==0){
         perror("Erro getWrapUserId, função 'yearResumed'\n");
     }
-    //printf("getUserIdWrap ... Done\n");
     // Ano do wrap/query para comparação ...
     char* anoWrap = getWrapAno(wrap);
     
     // Obtenção e formatação propriamente ditas
     char* timeStampPtr = getHistoryTimestamp(history); // LEAK 
-    //char* aux = strdup(timeStampPtr);
-    //char* anoTimeStamp = strsep(&aux, "/");
     char* anoTimeStamp = (char*)malloc(5*sizeof(char));
     strncpy(anoTimeStamp, timeStampPtr, 4);
-    //for(int i=0;i<4;i++){
-    //    anoTimeStamp[i] = timeStampPtr[i];
-    //}
     anoTimeStamp[4] = '\0';
 
     //Verificar se o registo do histórico é relevante
     if(userId==userIdWrap && strcmp(anoTimeStamp,anoWrap)==0){
         printf("Historico encontrado!\n");
-        // Extrair o id da musica do historico
         long int musicId = getHistoryMusicId(history);
         printf("getHistoryMusicId ... Done\n");
-        // Extrair de musicas, o id, o album_id e o artist_id e o genero
         Music* music = searchMusic(table, musicId);
-        //printf("Variável musica criada com o ID: %ld\n", musicId);
         long int albumId = getMusicAlbumId(music);
-        //printf("getMusicAlbumId ... Done\n");
         int numArtists = getMusicNumArtists(music);
-        //printf("getMusicNumArtists ... Done\n");
         long int* artist_id = getMusicArtistIDs(music);
-        //printf("getMusicArtistIDs ... Done\n");
         char* genre = getMusicGenre(music);
-        //printf("getMusicGenre ... Done\n");
 
         // Extrair e calcular a duração a incrementar (segundos)
         char* duration = getHistoryDuration(history);
@@ -216,7 +200,6 @@ void yearResumed(G_GNUC_UNUSED gpointer key, gpointer value, gpointer q6data){
         }
         int segundos = h*3600 + m*60 + s;
 
-        //printf("Antes do setWrapAlbum \n");
         //Preennchimento do Wrapped e consequentemente da Query6data
         setWrapAlbum(wrap, albumId, segundos);
         printf("setWrapAlbum ... Done\n");
