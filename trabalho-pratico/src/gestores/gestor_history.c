@@ -276,11 +276,12 @@ void updateArtistCount(GestorHistory* gestorHistory, long int artist_id){
 }
 
 // Função para determinar quantas vezes cada artista esteve no top 10, com ou sem intervalo de semanas
-void countTop10Appearances(GestorHistory* gestorHistory, const char* start_week, const char* end_week){
-    if (!gestorHistory || !gestorHistory->week_top10_table) return;
+int countTop10Appearances(GestorHistory* gestorHistory, const char* start_week, const char* end_week){
+    if(!gestorHistory || !gestorHistory->week_top10_table) return 0;
 
     GHashTableIter iter;
     gpointer week_key, top10_list;
+    bool found_weeks_in_interval = false; // processo de verificação se existem semanas entre o intervalo 
 
     g_hash_table_iter_init(&iter, gestorHistory->week_top10_table);
     while (g_hash_table_iter_next(&iter, &week_key, &top10_list)){
@@ -291,6 +292,8 @@ void countTop10Appearances(GestorHistory* gestorHistory, const char* start_week,
             (end_week && strcmp(week, end_week) > 0)) {      // Week > end_week
             continue;
         }
+        
+        found_weeks_in_interval = true; // foi encontrada pelo menos uma semana
 
         // Atualização do contador para cada artista que esteve no top 10
         GList* list = (GList*)top10_list;
@@ -299,6 +302,8 @@ void countTop10Appearances(GestorHistory* gestorHistory, const char* start_week,
             updateArtistCount(gestorHistory, getArtistIdFromData(artistData));
         }
     }
+    // retorna 1 ou 0 dependendo se foi encontrada uma semana ou não
+    return found_weeks_in_interval ? 1 : 0;
 }
 
 // Função reseta a size da tabela, de modo a ser utilizada nas próximas vezes
