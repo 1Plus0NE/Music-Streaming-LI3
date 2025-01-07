@@ -284,7 +284,7 @@ int countTop10Appearances(GestorHistory* gestorHistory, const char* start_week, 
     bool found_weeks_in_interval = false; // processo de verificação se existem semanas entre o intervalo 
 
     g_hash_table_iter_init(&iter, gestorHistory->week_top10_table);
-    while (g_hash_table_iter_next(&iter, &week_key, &top10_list)){
+    while(g_hash_table_iter_next(&iter, &week_key, &top10_list)){
         char* week = (char*)week_key;
 
         // Filter as semanas baseado no intervalo fornecido
@@ -297,7 +297,7 @@ int countTop10Appearances(GestorHistory* gestorHistory, const char* start_week, 
 
         // Atualização do contador para cada artista que esteve no top 10
         GList* list = (GList*)top10_list;
-        for (GList* node = list; node != NULL; node = node->next) {
+        for(GList* node = list; node != NULL; node = node->next){
             ArtistData* artistData = (ArtistData*)node->data;
             updateArtistCount(gestorHistory, getArtistIdFromData(artistData));
         }
@@ -320,7 +320,7 @@ ArtistTable* createArtistTable(){
     return table;
 }
 
-// funcao que destroi a tabela de artistas
+// Funcão que destroi a tabela de artistas
 void destroyArtistTable(gpointer value){
     if(value){
         ArtistTable* artist_table = (ArtistTable*) value;
@@ -485,7 +485,7 @@ int compareUsersBySizeAndSimilarity(gconstpointer a, gconstpointer b){
     int sizeA = getGenresListenedArraysSize(userA);
     int sizeB = getGenresListenedArraysSize(userB);
 
-    // Compare by size (descending order)
+    // Comparar a size dos arrays 
     if(sizeA != sizeB){
         return sizeB - sizeA;
     }
@@ -493,7 +493,7 @@ int compareUsersBySizeAndSimilarity(gconstpointer a, gconstpointer b){
     int similarityA = getGenresListenedSimilarity(userA);
     int similarityB = getGenresListenedSimilarity(userB);
 
-    // Compare by similarity (ascending order)
+    // Comparação por similaridade
     if(similarityA != similarityB){
         return similarityA - similarityB;
     }
@@ -506,7 +506,7 @@ int compareUsersBySizeAndSimilarity(gconstpointer a, gconstpointer b){
     long idB = strtol(usernameB + 1, NULL, 10);
     free(usernameB);
 
-    // Compare by numeric order of IDs (ascending order)
+    // Comparar pelo ID do menor ao maior
     return (idA > idB) - (idA < idB);
 }
 

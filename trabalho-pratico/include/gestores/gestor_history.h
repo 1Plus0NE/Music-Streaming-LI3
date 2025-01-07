@@ -142,8 +142,6 @@ ArtistData* findMostFrequentArtist(GestorHistory* gestorHistory, int* max_count)
  */
 void updateArtistCount(GestorHistory* gestorHistory, long int artist_id);
 
-
-
 /**
  * @brief Função para determinar quantas vezes cada artista esteve no top 10, com ou sem intervalo de semanas.
  * 
