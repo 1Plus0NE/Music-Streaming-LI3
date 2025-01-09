@@ -201,7 +201,7 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
                 fclose(outputQ3);
                 break;
             }
-            
+            // No caso do big dataset demorar muito tempo, comentar a query 4 para o case '4'.
             case '4':{
                 outputQ4 = fopen(outputPath, "w");
                 if(!outputQ4){
@@ -237,7 +237,7 @@ void parse_queries(char* path, GestorUser* gestorUser, GestorMusic* gestorMusic,
                     exit(EXIT_FAILURE);
                 }
                 if(measure_flag) clock_gettime(CLOCK_REALTIME, &query_start);
-                query5(gestorHistory, user, numRecommendations, outputQ5);
+                query5(gestorHistory, user, numRecommendations, delimiter, outputQ5);
                 if(measure_flag){
                     clock_gettime(CLOCK_REALTIME, &query_end);
                     query_elapsed = (query_end.tv_sec - query_start.tv_sec) +

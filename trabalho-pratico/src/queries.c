@@ -212,16 +212,16 @@ void query4(GestorHistory* gestorHistory, char* start_week, char* end_week, char
 
 }
 
-void query5(GestorHistory* gestorHistory, char* username, int numRecommendations, FILE* output){
+void query5(GestorHistory* gestorHistory, char* username, int numRecommendations, char delimiter, FILE* output){
 
     if(numRecommendations <= 0){
-        fprintf(output, "\n");
+        genericOutputWriter(output, delimiter, NULL);
         return;
     }
 
     GenresListened* targetUser = searchGenresListened(gestorHistory, username);
     if(!targetUser){
-        fprintf(output, "\n");
+        genericOutputWriter(output, delimiter, NULL);
         return;
     }
     // Processo de adicionar os utilizadores semelhantes num GPtrArray auxiliar
@@ -233,7 +233,8 @@ void query5(GestorHistory* gestorHistory, char* username, int numRecommendations
     for(guint i = 0; i < similarUsers->len && i < (guint)numRecommendations; i++){
         GenresListened* similarUser = getSimilarUsersFromArray(gestorHistory, i);
         char* printUsername = getGenresListenedUsername(similarUser);
-        fprintf(output, "%s\n", printUsername);
+        //fprintf(output, "%s\n", printUsername);
+        genericOutputWriter(output, delimiter, printUsername, NULL);
         free(printUsername);
     }
     

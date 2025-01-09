@@ -111,7 +111,7 @@ int main(){
                 scanf("%49s", username);
                 printf(COLOR_CYAN"Introduza o número de utilizadores a recomendar: " COLOR_RESET);
                 scanf("%d", &numUsers);
-                query5(gestorHistory, username, numUsers, stdout);
+                query5(gestorHistory, username, numUsers, delimiter, stdout);
                 break;
             case 6:
                 char userId[50];
